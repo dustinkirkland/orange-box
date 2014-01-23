@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -e
+set -x
+
+# Install all of MAAS, and add amtterm for amttool power management of NUCs
+debconf maas/default-maas-url 10.0.0.1
+sudo apt-get install -y maas maas-cluster-controller amtterm
+#sudo dpkg-reconfigure maas-region-controller
+
+sudo maas createsuperuser --username admin --email maas-admin@example.com
+
+sed -e d/^RELEASES=/ -e d/^ARCHES=/ /etc/maas/import_pxe_files
+cat >> /etc/maas/import_pxe_files <<EOF
+RELEASES="precise trusty"
+ARCHES="amd64/generic i386/generic"
+EOF
+run-this-one maas-import-pxe-files
