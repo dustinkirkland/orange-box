@@ -1,0 +1,34 @@
+#!/bin/sh -e
+#
+#    micro-cluster-add-all-nodes - add all local nodes in the micro-cluster
+#    Copyright (C) 2014 Canonical Ltd.
+#
+#    Authors: Dustin Kirkland <kirkland@canonical.com>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, version 3 of the License.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+set -e
+set -x
+
+export AMT_PASSWORD=Password1+
+ips=$(grep "^lease " /var/lib/maas/dhcp/dhcpd.leases | awk '{print $2}' | sort -u -r)
+for ip in $ips; do
+	[ "$ip" != "10.0.0.13" ] && continue
+	mac=$(grep -A20 "^lease $ip {" /var/lib/maas/dhcp/dhcpd.leases | grep -B20 "}" | grep -m1 "hardware ethernet " | sed -e "s/.* //" -e "s/;//")
+	echo "$ip $mac"
+	maas-cli admin nodes new architecture=amd64 power_type=amt mac_addresses=$mac power_parameters_power_address=$ip power_parameters_power_pass=$AMT_PASSWORD
+	(yes | amttool $ip powerdown) || true
+	sleep 1
+	yes | run-one-until-success amttool $ip powerup pxe
+done
