@@ -24,7 +24,6 @@ set -x
 export AMT_PASSWORD=Password1+
 ips=$(grep "^lease " /var/lib/maas/dhcp/dhcpd.leases | awk '{print $2}' | sort -u -r)
 for ip in $ips; do
-	[ "$ip" != "10.0.0.13" ] && continue
 	mac=$(grep -A20 "^lease $ip {" /var/lib/maas/dhcp/dhcpd.leases | grep -B20 "}" | grep -m1 "hardware ethernet " | sed -e "s/.* //" -e "s/;//")
 	echo "$ip $mac"
 	maas-cli admin nodes new architecture=amd64 power_type=amt mac_addresses=$mac power_parameters_power_address=$ip power_parameters_power_pass=$AMT_PASSWORD
