@@ -21,11 +21,25 @@
 set -e
 set -x
 
-export AMT_PASSWORD=Password1+
+export AMT_PASSWORD="Password1+"
+export VNC_PASSWORD="$AMT_PASSWORD"
+sudo apt-get install -y wsmancli amtterm
 ips=$(grep "^lease " /var/lib/maas/dhcp/dhcpd.leases | awk '{print $2}' | sort -u)
 for ip in $ips; do
 	mac=$(grep -A20 "^lease $ip {" /var/lib/maas/dhcp/dhcpd.leases | grep -B20 "}" | grep -m1 "hardware ethernet " | sed -e "s/.* //" -e "s/;//")
 	echo "$ip $mac"
+	# Enable remote VNC to each node
+	# set the vnc password
+	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k RFBPassword=${VNC_PASSWORD}
+	# enable KVM redirection to port 5900
+	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k Is5900PortEnabled=true
+	# disable opt-in policy
+	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k OptInPolicy=false
+	# disable session timeout
+	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k SessionTimeout=0
+	# enable KVM
+	wsman invoke -a RequestStateChange http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_KVMRedirectionSAP -h ${AMT_HOST} -P 16992 -u admin -p ${AMT_PASSWORD} -k RequestedState=2
+	# Add the node to MAAS
 	maas-cli admin nodes new architecture=amd64 power_type=amt mac_addresses=$mac power_parameters_power_address=$ip power_parameters_power_pass=$AMT_PASSWORD
 	(yes | amttool $ip powerdown) || true
 	sleep 1
