@@ -38,4 +38,6 @@ sudo chsh maas -s /bin/bash
 [ -d /home/maas/.ssh ] || echo -e "\n\n\n" | sudo -u maas ssh-keygen -N "" -t rsa -f /home/maas/.ssh/id_rsa
 grep 'maas@' ~/.ssh/authorized_keys || sudo cat /home/maas/.ssh/id_rsa.pub | tee -a /home/ubuntu/.ssh/authorized_keys
 # 10.0.0.1 known hosts
-#sudo virt-install --name juju-bootstrap --ram 4096 --disk path=/dev/BigDisk/juju_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br1
+sudo virsh list --all --name | grep juju-bootstrap || sudo virt-install --name juju-bootstrap --ram 4096 --disk path=/dev/BigDisk/juju_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br1 || true
+sudo virsh list --all --name | grep lds || sudo virt-install --name lds --ram 4096 --disk path=/dev/BigDisk/lds_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br0,bridge=br1 || true
+sudo virsh list --all --name | grep neutron || sudo virt-install --name neutron --ram 4096 --disk path=/dev/BigDisk/neutron_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br0,bridge=br1 || true
