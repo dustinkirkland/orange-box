@@ -8,11 +8,14 @@ if [ "$(id -u)" != "0" ]; then
     return 127
 fi
 
+# Seed package with proper values
+apt-get install debconf-utils
+debconf-set-selections etc/debconf-selections
+
 # Install all of MAAS, and add amtterm for amttool power management of NUCs
-debconf maas-region-controller/default-maas-url 10.0.0.1
 apt-get install -y maas maas-cluster-controller amtterm
 
-maas createsuperuser --username admin --email maas-admin@example.com
+maas createsuperuser --username admin --email maas-admin@example.com || true
 
 sed -i -e /^RELEASES=/d -e /^ARCHES=/d /etc/maas/import_pxe_files
 
