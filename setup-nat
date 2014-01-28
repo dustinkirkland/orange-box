@@ -41,7 +41,7 @@ echo "DNS server I should forward to when I don't know the answer: "
 read dnsserver
 
 if [ "$dnsserver" != "" ]; then
-	cat > /etc/bind/resolv.conf.options << EOF
+	cat > /etc/bind/named.conf.options << EOF
 options {
 	directory "/var/cache/bind";
 	forwarders {
