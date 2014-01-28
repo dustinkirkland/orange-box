@@ -1,12 +1,12 @@
 #!/bin/sh
 
-set -e
-set -x
-
 if [ "$(id -u)" != "0" ]; then
     echo "Must be run with sudo or by root"
-    return 127
+    exit 127
 fi
+
+set -e
+set -x
 
 # Seed package with proper values
 apt-get install debconf-utils
@@ -15,7 +15,9 @@ debconf-set-selections etc/debconf-selections
 # Install all of MAAS, and add amtterm for amttool power management of NUCs
 apt-get install -y maas maas-cluster-controller amtterm
 
-maas createsuperuser --username admin --email maas-admin@example.com || true
+# Just run createadmin, since we can feed it a password
+#maas createsuperuser --username root --email maas-root@example.com || true
+maas createadmin --username admin --email maas-admin@example.com --password="Password1+ || true
 
 sed -i -e /^RELEASES=/d -e /^ARCHES=/d /etc/maas/import_pxe_files
 
