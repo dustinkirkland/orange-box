@@ -1,0 +1,13 @@
+# List of nodes in CloudFour
+# Format: <macaddr> <hostname>
+ec:a8:6b:fd:11:d8 node0
+ec:a8:6b:f8:da:76 node1
+ec:a8:6b:fd:11:df node2
+ec:a8:6b:f8:db:a1 node3
+ec:a8:6b:fd:11:d5 node4
+ec:a8:6b:fd:11:ee node5
+ec:a8:6b:fd:11:37 node6
+ec:a8:6b:fd:12:75 node7
+ec:a8:6b:f8:db:dc node8
+ec:a8:6b:fd:11:42 node9
+

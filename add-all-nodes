@@ -24,6 +24,7 @@ set -x
 export AMT_PASSWORD="Password1+"
 export VNC_PASSWORD="$AMT_PASSWORD"
 sudo apt-get install -y wsmancli amtterm
+nodelist=nodelists/`hostname`-nodelist
 ips=$(grep "^lease " /var/lib/maas/dhcp/dhcpd.leases | awk '{print $2}' | sort -u)
 for ip in $ips; do
 	mac=$(grep -A20 "^lease $ip {" /var/lib/maas/dhcp/dhcpd.leases | grep -B20 "}" | grep -m1 "hardware ethernet " | sed -e "s/.* //" -e "s/;//")
@@ -41,7 +42,9 @@ for ip in $ips; do
 	# enable KVM
 	wsman invoke -a RequestStateChange http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_KVMRedirectionSAP -h ${ip} -P 16992 -u admin -p ${AMT_PASSWORD} -k RequestedState=2
 	# Add the node to MAAS
-	maas-cli admin nodes new architecture=amd64 power_type=amt mac_addresses=$mac power_parameters_power_address=$ip power_parameters_power_pass=$AMT_PASSWORD
+	# dap: added hostname parameter which pulls from a file named
+	# `hostname`-nodelist in the nodelists subdirectory
+	maas-cli admin nodes new architecture=amd64 power_type=amt mac_addresses=$mac power_parameters_power_address=$ip power_parameters_power_pass=$AMT_PASSWORD hostname="`grep $mac $nodelist | awk '{print $2}'`"
 	(yes | amttool $ip powerdown) || true
 	sleep 1
 	yes | run-one-until-success amttool $ip powerup pxe
