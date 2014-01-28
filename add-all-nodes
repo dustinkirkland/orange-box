@@ -24,7 +24,7 @@ if [ "$auth_points" == "" ]; then
 	exit 1
 fi
 
-set -ex
+set -e
 
 export AMT_PASSWORD="Password1+"
 # VNC Password MUST BE *exactly 8 characters long and contain 1 capital letter, a number, and a special character!!!

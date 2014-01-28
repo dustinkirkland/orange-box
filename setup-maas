@@ -6,7 +6,6 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 set -e
-set -x
 
 # Seed package with proper values
 apt-get install debconf-utils
