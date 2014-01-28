@@ -21,6 +21,31 @@ maas createadmin --username admin --email maas-admin@example.com --password="Pas
 
 sed -i -e /^RELEASES=/d -e /^ARCHES=/d /etc/maas/import_pxe_files
 
+for i in 0..5; do
+	echo "Checking eth$i..."
+	if [ ifconfig eth$i ]; then
+		echo -n 'found!'
+		iface="eth$i"
+	fi
+done
+
+iface=""
+
+for i in {0..5}; do
+	echo -n "Checking eth$i...";
+	if ifconfig eth$i > /dev/null 2>&1; then
+		echo 'found!';
+		iface="eth$i";
+	else
+		echo
+	fi
+done
+
+if [ "$iface" == "" ]; then
+	echo "Unable to detech eth interface"
+	exit 1
+fi
+
 cat > /etc/network/interfaces <<EOF
 auto lo
 iface lo inet loopback
@@ -33,8 +58,8 @@ iface em1 inet static
     broadcast 10.0.0.255
 
 # USB NIC; connect to LAN.
-auto eth0
-iface eth0 inet dhcp
+auto $iface
+iface $iface inet dhcp
 
 EOF
 
