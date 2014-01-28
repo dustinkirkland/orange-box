@@ -1,6 +1,6 @@
 #!/bin/bash
 set -ex
-sudo apt-get install --yes libvirt-bin virtinst qemu-kvm
+sudo apt-get install --yes libvirt-bin virtinst qemu-kvm juju
 [ -d ~/isos ] || mkdir ~/isos
 [ -f ~/isos/ubuntu-12.04.3-server-amd64.iso ] || wget http://releases.ubuntu.com/precise/ubuntu-12.04.3-server-amd64.iso -O ~/isos/ubuntu-12.04.3-server-amd64.iso
 
@@ -13,6 +13,22 @@ sudo lvdisplay | grep neutron_disk || sudo lvcreate -L20G -n neutron_disk BigDis
 # Setup networking
 # Add to /etc/network/interfaces
 grep br0 /etc/network/interfaces || sudo tee -a /etc/network/interfaces <<EOF
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+
+# USB NIC; connect to LAN.
+#auto em1
+#iface em1 inet dhcp
+
+#auto eth0
+#iface eth0 inet dhcp
+
+# External connectivity
 auto br0
 iface br0 inet dhcp
     bridge_ports eth0
@@ -20,6 +36,7 @@ iface br0 inet dhcp
     bridge_fd 0
     bridge_maxwait 0
 
+# The interface to the internal network.
 auto br1
 iface br1 inet static
     address 10.0.0.1
@@ -30,7 +47,11 @@ iface br1 inet static
     bridge_stp off
     bridge_fd 0
     bridge_maxwait 0
+    dns-nameservers 10.0.0.1
+    dns-search orangebox.org
 EOF
+sudo sed -ie 's/#prepend domain-name-servers 127.0.0.1;/prepend domain-name-servers 10.0.0.1;/' /etc/dhcp/dhclient.conf
+virsh net-info default && virsh net-destroy default && virsh net-undefine default
 sudo ifup br0
 sudo ifup br1
 [ -d /home/maas ] || sudo install -d /home/maas --owner maas --group maas
@@ -49,6 +70,25 @@ for system in juju-bootstrap lds neutron; do
     maas-cli admin tags new name=$system || true
     maas-cli admin tag update-nodes $system add=$system_id
     maas-cli admin tag update-nodes use-fastpath-installer add=$system_id
-    maas-cli admin node commission $system_id
+    maas-cli admin node commission $system_id || true
 done
+# DNS forwarding, /etc/bind/named.conf.options
 
+[ -d ~/.juju ] || mkdir ~/.juju
+
+maas_oauth=$(maas-cli list | awk '{ print $3 }')
+
+cat > ~/.juju/environments.yaml <<EOF
+environments:
+    maas:
+        type: maas
+      
+        # maas-server specifies the location of the MAAS server. It must
+        # specify the base path.
+        maas-server: 'http://10.0.0.1/MAAS/'
+        
+        # maas-oauth holds the OAuth credentials from MAAS.
+        maas-oauth: '$maas_oauth'
+EOF
+
+./havana/demo-prep.sh

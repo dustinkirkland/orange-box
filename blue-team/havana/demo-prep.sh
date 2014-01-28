@@ -5,19 +5,14 @@ date
 echo "checking for existing Juju environment..."
 juju status && echo "Existing deployment found, exiting." && exit
 
-echo "Deploying Juju Bootstrap node to Virtual machine: juju.local using tags=bootstrap"
-juju bootstrap --upload-tools=true --constraints "tags=bootstrap"
+echo "Deploying Juju Bootstrap node to Virtual machine: juju.local using tags=juju-bootstrap"
+juju bootstrap --upload-tools=true --constraints "tags=juju-bootstrap"
 
-echo "Waiting for bootstrap node to deploy (5 minutes)"
-sleep 300
-date
 echo "unset constraints"
 juju set-constraints tags=""
 echo "Deploying Juju-gui to bootstrap node"
 juju deploy --to 0 juju-gui
 sleep 10
-
-juju expose juju-gui
 
 echo "Now deploying landscape-client charm to register Bootstrap node to LDS"
 

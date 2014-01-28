@@ -4,16 +4,13 @@
 date
 echo "Pre-deployment script to add machines to environment in advance of a demo"
 
+juju add-machine --constraints tags=lds
+juju add-machine --constraints tags=neutron
+juju add-machine
 
-juju add-machine --constraints tags=physical
-juju add-machine --constraints tags=virtual
-juju add-machine --constraints tags=virtual
-
-sleep 3
 for v in `seq 1 7`;
        	do
-               	juju add-machine lxc:1
-                sleep 3
+               	juju add-machine lxc:3
        	done
 date
 juju status
