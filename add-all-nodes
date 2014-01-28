@@ -38,7 +38,7 @@ for ip in $ips; do
 	# disable session timeout
 	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k SessionTimeout=0
 	# enable KVM
-	wsman invoke -a RequestStateChange http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_KVMRedirectionSAP -h ${AMT_HOST} -P 16992 -u admin -p ${AMT_PASSWORD} -k RequestedState=2
+	wsman invoke -a RequestStateChange http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_KVMRedirectionSAP -h ${ip} -P 16992 -u admin -p ${AMT_PASSWORD} -k RequestedState=2
 	# Add the node to MAAS
 	maas-cli admin nodes new architecture=amd64 power_type=amt mac_addresses=$mac power_parameters_power_address=$ip power_parameters_power_pass=$AMT_PASSWORD
 	(yes | amttool $ip powerdown) || true
