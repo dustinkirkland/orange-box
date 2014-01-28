@@ -4,7 +4,6 @@
 # check for that in a future revision.
 
 set -e
-set -x
 
 # Configure NAT and IP forwarding, giving slave NUCs external network access 
 # through the master.
