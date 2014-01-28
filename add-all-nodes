@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash
 #
 #    micro-cluster-add-all-nodes - add all local nodes in the micro-cluster
 #    Copyright (C) 2014 Canonical Ltd.
@@ -17,14 +17,21 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+auth_points="$(maas-cli list)"
 
-set -e
-set -x
+if [ "$auth_points" == "" ]; then
+	echo "You must first log in with sudo maas-cli login <maas-key>"
+	exit 1
+fi
+
+set -ex
 
 export AMT_PASSWORD="Password1+"
 export VNC_PASSWORD="$AMT_PASSWORD"
-sudo apt-get install -y wsmancli amtterm
+
+apt-get install -y wsmancli amtterm
 nodelist=nodelists/`hostname`-nodelist
+
 ips=$(grep "^lease " /var/lib/maas/dhcp/dhcpd.leases | awk '{print $2}' | sort -u)
 for ip in $ips; do
 	mac=$(grep -A20 "^lease $ip {" /var/lib/maas/dhcp/dhcpd.leases | grep -B20 "}" | grep -m1 "hardware ethernet " | sed -e "s/.* //" -e "s/;//")
