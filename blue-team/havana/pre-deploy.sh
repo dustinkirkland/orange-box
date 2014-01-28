@@ -8,6 +8,9 @@ juju add-machine --constraints tags=lds
 juju add-machine --constraints tags=neutron
 juju add-machine
 
+
+echo "Waiting for Juju to add-machine"
+sleep 30 # wait for br0 to come up or not
 for v in `seq 1 7`;
        	do
                	juju add-machine lxc:3

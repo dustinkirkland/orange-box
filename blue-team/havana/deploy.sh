@@ -2,28 +2,26 @@
 
 
 echo "Deploying services to compute nodes"
-juju deploy cs:mysql-29 --to 2/lxc/0
-juju deploy cs:rabbitmq-server-16 --to 2/lxc/1
+juju deploy cs:mysql-29 --to 3/lxc/7
+juju deploy cs:rabbitmq-server-16 --to 3/lxc/8
 
-echo "waiting 30 seconds to deploy the rest of the services"
-sleep 30
+juju deploy cs:keystone-23 --config=havana.yaml --to 3/lxc/9
+juju deploy cs:glance-26 --config=havana.yaml --to 3/lxc/10
+juju deploy cs:openstack-dashboard-11 --config=havana.yaml --to 3/lxc/11
 
-juju deploy cs:keystone-23 --config=havana.yaml --to 2/lxc/2
-juju deploy cs:glance-26 --config=havana.yaml --to 2/lxc/3
-juju deploy cs:openstack-dashboard-11 --config=havana.yaml --to 2/lxc/4
-
-juju deploy cs:nova-cloud-controller-19 --config=havana.yaml --to 2/lxc/5
-juju deploy cs:cinder-14 --config=havana.yaml --to 2/lxc/6
+juju deploy cs:nova-cloud-controller-19 --config=havana.yaml --to 3/lxc/12
+juju deploy cs:cinder-14 --config=havana.yaml --to 3/lxc/13
 
 echo "Deploying Neutron"
-juju deploy cs:quantum-gateway-12 --config=havana.yaml neutron-gateway --to 1
+juju deploy cs:quantum-gateway-12 --config=havana.yaml neutron-gateway --to 2
 
 echo "Deploying nova-compute"
-juju deploy nova-compute --config=havana.yaml --to 3
+juju deploy nova-compute --config=havana.yaml
 juju add-unit --num-units 3 nova-compute
 
 echo "Deploying Ceph Storage nodes"
 juju deploy ceph --config=havana.yaml 
+juju add-unit --num-units 2 ceph
 
 echo "Adding Openstack relationships"
 juju add-relation mysql keystone

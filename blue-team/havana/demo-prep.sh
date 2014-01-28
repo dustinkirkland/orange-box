@@ -12,7 +12,6 @@ echo "unset constraints"
 juju set-constraints tags=""
 echo "Deploying Juju-gui to bootstrap node"
 juju deploy --to 0 juju-gui
-sleep 10
 
 echo "Now deploying landscape-client charm to register Bootstrap node to LDS"
 
@@ -29,7 +28,7 @@ echo "Now deploying landscape-client charm to register Bootstrap node to LDS"
 
 date
 echo "Running pre-deployment"
-./pre-deploy.sh
+
 
 
 

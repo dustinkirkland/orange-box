@@ -1,6 +1,6 @@
 #!/bin/bash
 set -ex
-sudo apt-get install --yes libvirt-bin virtinst qemu-kvm juju
+sudo apt-get install --yes libvirt-bin virtinst qemu-kvm juju iptables-persistent
 [ -d ~/isos ] || mkdir ~/isos
 [ -f ~/isos/ubuntu-12.04.3-server-amd64.iso ] || wget http://releases.ubuntu.com/precise/ubuntu-12.04.3-server-amd64.iso -O ~/isos/ubuntu-12.04.3-server-amd64.iso
 
@@ -52,6 +52,28 @@ iface br1 inet static
 EOF
 sudo sed -ie 's/#prepend domain-name-servers 127.0.0.1;/prepend domain-name-servers 10.0.0.1;/' /etc/dhcp/dhclient.conf
 virsh net-info default && virsh net-destroy default && virsh net-undefine default
+# cat >/tmp/maas-private.xml <<EOF
+# <network>
+#   <name>maas-private</name>
+#   <uuid>c46a86d4-3111-ddfa-1118-922b78d37600</uuid>
+#   <bridge name='virbr1' stp='on' delay='0' />
+#   <mac address='52:54:11:26:F2:BC'/>
+# </network>
+# EOF
+
+# cat >/tmp/maas-external.xml <<EOF
+# <network>
+#   <name>maas-external</name>
+#   <uuid>c46a86d4-3111-ddfa-1118-922b78201208</uuid>
+#   <bridge name='virbr2' stp='on' delay='0' />
+#   <mac address='52:54:11:26:F2:BD'/>
+# </network>
+# EOF
+# for net in maas-private maas-external; do
+#     sudo virsh net-create /tmp/$net.xml
+#     sudo virsh net-define /tmp/$net.xml
+#     sudo virsh net-autostart $net
+# done
 sudo ifup br0
 sudo ifup br1
 [ -d /home/maas ] || sudo install -d /home/maas --owner maas --group maas
@@ -59,9 +81,9 @@ sudo chsh maas -s /bin/bash
 [ -d /home/maas/.ssh ] || echo -e "\n\n\n" | sudo -u maas ssh-keygen -N "" -t rsa -f /home/maas/.ssh/id_rsa
 grep 'maas@' ~/.ssh/authorized_keys || sudo cat /home/maas/.ssh/id_rsa.pub | tee -a /home/ubuntu/.ssh/authorized_keys
 # 10.0.0.1 known hosts
-sudo virsh list --all --name | grep juju-bootstrap || sudo virt-install --name juju-bootstrap --ram 4096 --disk path=/dev/BigDisk/juju_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br0,bridge=br1 || true
-sudo virsh list --all --name | grep lds || sudo virt-install --name lds --ram 4096 --disk path=/dev/BigDisk/lds_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br0,bridge=br1 || true
-sudo virsh list --all --name | grep neutron || sudo virt-install --name neutron --ram 4096 --disk path=/dev/BigDisk/neutron_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br0,bridge=br1 || true
+sudo virsh list --all --name | grep juju-bootstrap || sudo virt-install --name juju-bootstrap --ram 4096 --disk path=/dev/BigDisk/juju_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br0,bridge=br1 --boot network || true
+sudo virsh list --all --name | grep lds || sudo virt-install --name lds --ram 4096 --disk path=/dev/BigDisk/lds_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br0,bridge=br1 --boot network || true
+sudo virsh list --all --name | grep neutron || sudo virt-install --name neutron --ram 4096 --disk path=/dev/BigDisk/neutron_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br0,bridge=br1 --boot network || true
 
 for system in juju-bootstrap lds neutron; do
     mac=$(sudo virsh dumpxml $system | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
@@ -71,6 +93,8 @@ for system in juju-bootstrap lds neutron; do
     maas-cli admin tag update-nodes $system add=$system_id
     maas-cli admin tag update-nodes use-fastpath-installer add=$system_id
     maas-cli admin node commission $system_id || true
+    echo "Waiting for $system to be Ready"
+    until maas-cli admin node read $system_id | grep status | awk {'print $2'} | grep '4,'; do echo -n '.'; sleep 5; done
 done
 # DNS forwarding, /etc/bind/named.conf.options
 
@@ -82,7 +106,8 @@ cat > ~/.juju/environments.yaml <<EOF
 environments:
     maas:
         type: maas
-      
+        admin-secret: Password1+
+
         # maas-server specifies the location of the MAAS server. It must
         # specify the base path.
         maas-server: 'http://10.0.0.1/MAAS/'
@@ -92,3 +117,4 @@ environments:
 EOF
 
 ./havana/demo-prep.sh
+./havana/pre-deploy.sh
