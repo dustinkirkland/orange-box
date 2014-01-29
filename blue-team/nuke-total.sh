@@ -29,11 +29,14 @@ for node in $nodes;do
 done
 
 echo -e "Deleting KVMs from node 0"
+
+set +e # We want to try all of these
 sudo virsh destroy juju-bootstrap
 sudo virsh destroy lds
 sudo virsh destroy neutron
 sudo virsh undefine juju-bootstrap
 sudo virsh undefine lds
 sudo virsh undefine neutron
+set -e
 
 echo -e "Done."
