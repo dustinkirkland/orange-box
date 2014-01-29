@@ -1,7 +1,7 @@
 nova-compute: 
   openstack-origin: "cloud:precise-havana"
 cinder:
-  block-device: "None"
+  block-device: "/srv"
   openstack-origin: "cloud:precise-havana"
   overwrite: "true"
 neutron-gateway:

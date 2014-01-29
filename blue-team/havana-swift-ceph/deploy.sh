@@ -9,7 +9,7 @@ juju deploy ubuntu --to 1
 echo "Deploying Neutron"
 juju deploy cs:quantum-gateway-12 --config=havana.yaml neutron-gateway --to 2
 
-echo "Deploying services to management node"
+echo "Deploying services to compute nodes"
 juju deploy cs:mysql-29 --to 3/lxc/0
 juju deploy cs:rabbitmq-server-16 --to 3/lxc/1
 
@@ -20,15 +20,20 @@ juju deploy cs:openstack-dashboard-11 --config=havana.yaml --to 3/lxc/4
 juju deploy cs:nova-cloud-controller-19 --config=havana.yaml --to 3/lxc/5
 juju deploy cs:cinder-14 --config=havana.yaml --to 3/lxc/6
 
-#now safe to use the rest of the nodes without numbering.
+#safe to deploy without numbering from here
 
 echo "Deploying nova-compute"
 juju deploy nova-compute --config=havana.yaml
-juju add-unit --num-units 3 nova-compute
+juju add-unit nova-compute
 
 echo "Deploying Ceph Storage nodes"
-juju deploy ceph --config=havana.yaml
+juju deploy ceph --config=havana.yaml 
 juju add-unit --num-units 2 ceph
+
+echo "Deploying Swift Storage nodes"
+juju deploy swift-proxy --config=havana.yaml 
+juju deploy swift-storage --config=havana.yaml swift-storage-z1
+juju deploy swift-storage --config=havana.yaml swift-storage-z2
 
 echo "Adding Openstack relationships"
 juju add-relation mysql keystone
@@ -47,10 +52,15 @@ juju add-relation nova-cloud-controller glance
 juju add-relation nova-cloud-controller cinder
 juju add-relation nova-cloud-controller neutron-gateway
 
-
 echo "Adding Ceph relationships"
 juju add-relation ceph mysql
 juju add-relation ceph rabbitmq-server
 juju add-relation ceph glance
 juju add-relation ceph cinder
 juju add-relation ceph nova-compute
+
+echo "Adding Swift relationships"
+juju add-relation swift-proxy keystone
+juju add-relation swift-proxy swift-storage-z1
+juju add-relation swift-proxy swift-storage-z2
+

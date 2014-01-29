@@ -18,17 +18,16 @@ juju deploy cs:glance-26 --config=havana.yaml --to 3/lxc/3
 juju deploy cs:openstack-dashboard-11 --config=havana.yaml --to 3/lxc/4
 
 juju deploy cs:nova-cloud-controller-19 --config=havana.yaml --to 3/lxc/5
-juju deploy cs:cinder-14 --config=havana.yaml --to 3/lxc/6
 
 #now safe to use the rest of the nodes without numbering.
 
+echo "Deploying Cinder node"
+juju deploy cs:cinder-14 --config=havana.yaml
+
 echo "Deploying nova-compute"
 juju deploy nova-compute --config=havana.yaml
-juju add-unit --num-units 3 nova-compute
+juju add-unit --num-units 6 nova-compute
 
-echo "Deploying Ceph Storage nodes"
-juju deploy ceph --config=havana.yaml
-juju add-unit --num-units 2 ceph
 
 echo "Adding Openstack relationships"
 juju add-relation mysql keystone
@@ -48,9 +47,3 @@ juju add-relation nova-cloud-controller cinder
 juju add-relation nova-cloud-controller neutron-gateway
 
 
-echo "Adding Ceph relationships"
-juju add-relation ceph mysql
-juju add-relation ceph rabbitmq-server
-juju add-relation ceph glance
-juju add-relation ceph cinder
-juju add-relation ceph nova-compute

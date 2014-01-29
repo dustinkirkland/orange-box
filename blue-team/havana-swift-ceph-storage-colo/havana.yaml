@@ -25,4 +25,13 @@ ceph:
   "monitor-secret": AQAAvoJSOAv/NRAAgvXP8d7iXN7lWYbvDZzm2Q==
   "osd-devices": "/srv"
   "osd-reformat": "yes"
+swift-proxy:
+  openstack-origin: "cloud:precise-havana"
+  replicas: 2
+swift-storage-z1:
+  openstack-origin: "cloud:precise-havana"
+  block-device: /srv
+swift-storage-z2:
+  openstack-origin: "cloud:precise-havana"
+  block-device: /srv
 
