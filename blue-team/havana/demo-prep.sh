@@ -27,7 +27,7 @@ landscape-client:
      script-users: ALL
      include-manager-plugins: ScriptExecution
 EOF
-juju deploy --config=landscape-client.yaml landscape-client
+juju deploy --config=landscape-client.yaml cs:landscape-client
 
 #Let's add the bootstrap node, which runs the juju-gui service
 juju add-relation landscape-client:container juju-gui
