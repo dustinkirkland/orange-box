@@ -93,7 +93,8 @@ maas_logged_in() {
 
 oauth_key() {
   local user="${1:-admin}"
-  local oauth=$(su - postgres -c "scripts/maas-oauth-key.py $user")
+  local root=`dirname $(pwd -P)`
+  local oauth=$(su - postgres -c "$root/scripts/maas-oauth-key.py $user")
   echo "$oauth"
 }
 
