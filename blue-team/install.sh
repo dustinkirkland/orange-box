@@ -81,9 +81,9 @@ sudo chsh maas -s /bin/bash
 [ -d /home/maas/.ssh ] || echo -e "\n\n\n" | sudo -u maas ssh-keygen -N "" -t rsa -f /home/maas/.ssh/id_rsa
 grep 'maas@' ~/.ssh/authorized_keys || sudo cat /home/maas/.ssh/id_rsa.pub | tee -a /home/ubuntu/.ssh/authorized_keys
 # 10.0.0.1 known hosts
-sudo virsh list --all --name | grep juju-bootstrap || sudo virt-install --name juju-bootstrap --ram 4096 --disk path=/dev/BigDisk/juju_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br0 --network=bridge=br1 --boot network || true
-sudo virsh list --all --name | grep lds || sudo virt-install --name lds --ram 4096 --disk path=/dev/BigDisk/lds_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br0 --network=bridge=br1 --boot network || true
-sudo virsh list --all --name | grep neutron || sudo virt-install --name neutron --ram 4096 --disk path=/dev/BigDisk/neutron_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br0 --network=bridge=br1 --boot network || true
+sudo virsh list --all --name | grep juju-bootstrap || sudo virt-install --name juju-bootstrap --ram 4096 --disk path=/dev/BigDisk/juju_disk,cache=unsafe --vcpus=2 --os-type=linux --pxe --network=bridge=br0 --network=bridge=br1 --boot network || true
+sudo virsh list --all --name | grep lds || sudo virt-install --name lds --ram 4096 --disk path=/dev/BigDisk/lds_disk,cache=unsafe --vcpus=2 --os-type=linux --pxe --network=bridge=br0 --network=bridge=br1 --boot network || true
+sudo virsh list --all --name | grep neutron || sudo virt-install --name neutron --ram 4096 --disk path=/dev/BigDisk/neutron_disk,cache=unsafe --vcpus=2 --os-type=linux --pxe --network=bridge=br0 --network=bridge=br1 --boot network || true
 
 for system in juju-bootstrap lds neutron; do
     mac=$(sudo virsh dumpxml $system | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
@@ -96,6 +96,15 @@ for system in juju-bootstrap lds neutron; do
     echo "Waiting for $system to be Ready"
     until maas-cli admin node read $system_id | grep status | awk {'print $2'} | grep '4,'; do echo -n '.'; sleep 5; done
 done
+
+# set all physical nodes to use fast installer
+
+for system in node1 node2 node3 node4 node5 node6 node7 node8 node9; do
+   system_id=$(maas-cli admin nodes list hostname=$system.local | grep system_id | cut -d'"' -f4)
+   maas-cli admin tag update-nodes use-fastpath-installer add=$system_id
+done
+
+
 # DNS forwarding, /etc/bind/named.conf.options
 
 [ -d ~/.juju ] || mkdir ~/.juju
