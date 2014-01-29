@@ -74,6 +74,10 @@ config_set() {
     return 72
   fi
 
+  if [ ! -f "$_SETTINGS_FILE" ]; then
+    mkdir -p $(dirname $_SETTINGS_FILE)
+  fi
+
   if config_key_exists "$1"; then
     sed -i "s/^$1: .*$/$1: $2/" $_SETTINGS_FILE
   else
