@@ -1,11 +1,13 @@
 #!/bin/bash
 
 if [ "$(id -u)" != "0" ]; then
-    echo "Must be run with sudo or by root"
-    exit 127
+  echo "Must be run with sudo or by root"
+  exit 77
 fi
 
 set -e
+
+. inc/common
 
 # Seed package with proper values
 apt-get install debconf-utils
@@ -20,29 +22,12 @@ maas createadmin --username admin --email maas-admin@example.com --password="Pas
 
 sed -i -e /^RELEASES=/d -e /^ARCHES=/d /etc/maas/import_pxe_files
 
-for i in 0..5; do
-	echo "Checking eth$i..."
-	if [ ifconfig eth$i ]; then
-		echo -n 'found!'
-		iface="eth$i"
-	fi
-done
-
-iface=""
-
-for i in {0..5}; do
-	echo -n "Checking eth$i...";
-	if ifconfig eth$i > /dev/null 2>&1; then
-		echo 'found!';
-		iface="eth$i";
-	else
-		echo
-	fi
-done
-
-if [ "$iface" == "" ]; then
-	echo "Unable to detech eth interface"
-	exit 1
+if ! config_get "iface"; then
+  iface=`detect_inet`
+  # Save the value so we don't have to look it up each time
+  config_set iface="$iface"
+else
+  iface=`config_get "iface"`
 fi
 
 cat > /etc/network/interfaces <<EOF

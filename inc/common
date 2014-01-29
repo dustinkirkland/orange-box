@@ -1,0 +1,82 @@
+#!/bin/bash
+#
+#    inc/common - helper bash functions, because Python is too good
+#    Copyright (C) 2014 Canonical Ltd.
+#
+#    Authors: Marco Ceppi <marco.ceppi@canonical.com>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, version 3 of the License.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+_SETTINGS_FILE="${MICRO_CLUSTER_CFG:-~/.config/micro-cluster/settings.cfg}"
+
+detect_inet() {
+  # $1 inet preface (eg: eth)
+  # $2 max range (eg: 5)
+
+  local tpl="${1:-eth}"
+  local max=${2:-5}
+
+  local iface=""
+
+  for i in {0..$max}; do
+    if ifconfig ${tpl}${i} > /dev/null 2>&1; then
+      echo "${tpl}${i}";
+      return 0
+    fi
+  done
+
+  return 1
+}
+
+config_get() {
+  # $1 configuration key
+  if [ ! -f "$_SETTINGS_FILE" ]; then
+    return 72
+  fi
+
+  if ! config_key_exists "$1"; then
+    return 1
+  fi
+
+  local kv=$(egrep "^$1: .*" $_SETTINGS_FILE)
+  local v=$(echo "$kv" | sed -e 's/^.*: //')
+  echo $v
+}
+
+config_key_exists() {
+  # $1 configuration key
+  if [ ! -f "$_SETTINGS_FILE" ]; then
+    return 72
+  fi
+
+  if ! egrep "^$1: .*$" $_SETTINGS_FILE > /dev/null; then
+    return 1
+  fi
+
+  return 0
+}
+
+config_set() {
+  # $1 configuration key
+  # $2 value
+  if [ ! -f "$_SETTINGS_FILE" ]; then
+    return 72
+  fi
+
+  if config_key_exists "$1"; then
+    sed -i "s/^$1: .*$/$1: $2/" $_SETTINGS_FILE
+  else
+    echo "$1: $2" >> $_SETTINGS_FILE
+  fi
+}
