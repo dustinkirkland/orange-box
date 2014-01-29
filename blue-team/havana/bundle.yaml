@@ -5,6 +5,14 @@ openstack:
     openstack-origin: cloud:precise-havana
     source: cloud:precise-updates/havana
   services:
+    lds-quickstart:
+      charm: local:lds-quickstart
+      options:
+        server_fqdn: lds.orangebox.org
+        admin_email: admin@lds.orangebox.org
+        admin_name: admin
+        admin_password: Password1+
+      to: 1
     mysql:
       charm: cs:precise/mysql-29
       options:
@@ -192,3 +200,7 @@ openstack:
       - mysql:juju-info
     - - ntp:juju-info
       - openstack-dashboard:juju-info
+    - - landscape-client:container
+      - [ lds, neutron-gateway, mysql, cinder, keystone, rabbitmq-server, glance, nova-cloud-computer, openstack-dashboard, nova-cloud-controller, nova-compute, ceph ]
+    - - landscape-client:registration
+      - [ lds, neutron-gateway, mysql, cinder, keystone, rabbitmq-server, glance, nova-cloud-computer, openstack-dashboard, nova-cloud-controller, nova-compute, ceph ]
