@@ -18,7 +18,7 @@ echo "Now deploying landscape-client charm to register Bootstrap node to LDS"
 #Create a landscape.yaml file
 
 #Deploy it
-[ -f landscape-client.yaml ] || echo > landscape-client.yaml <<EOF
+[ -f landscape-client.yaml ] || cat > landscape-client.yaml <<EOF
 landscape-client:
      origin: ppa:landscape/trunk
      exchange-interval: 60
@@ -38,7 +38,3 @@ echo "Landscape client charm deployed"
 
 date
 echo "Running pre-deployment"
-
-
-
-
