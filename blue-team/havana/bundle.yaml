@@ -12,6 +12,7 @@ openstack:
         admin_email: admin@lds.orangebox.org
         admin_name: admin
         admin_password: Password1+
+        license: include-file://license.txt
       to: 1
     mysql:
       charm: cs:precise/mysql-29
