@@ -80,3 +80,41 @@ config_set() {
     echo "$1: $2" >> $_SETTINGS_FILE
   fi
 }
+
+maas_logged_in() {
+  if [ ! -f ~/.maascli.db ]; then
+    return 72
+  fi
+
+  if [ "$(maas-cli list)" == "" ]; then
+    return 1
+  fi
+}
+
+oauth_key() {
+  local user="${1:-admin}"
+  local oauth=$(su - postgres -c "scripts/maas-oauth-key.py $user")
+  echo "$oauth"
+}
+
+oauth_login() {
+  if maas_logged_in; then
+    return 0
+  fi
+
+  local user="${1:-admin}"
+  # 10.0.0.1/MAAS is hardcoded, dealwithit.gif
+  local auth=`oauth_key "$user"`
+  if [ "$auth" == "" ]; then
+    echo "Unable to find user creds, does user exist?"
+    return 1
+  fi
+
+  maas-cli login http://10.0.0.1/MAAS "$user" "$auth"
+}
+
+wake_me_up_before_you_go_go() {
+  for i in {0..3}; do
+    amttool $1 info > /dev/null 2>&1
+  done
+}
