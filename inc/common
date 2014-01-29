@@ -29,7 +29,7 @@ detect_inet() {
 
   local iface=""
 
-  for i in {0..$max}; do
+  for i in `seq 0 $max`; do
     if ifconfig ${tpl}${i} > /dev/null 2>&1; then
       echo "${tpl}${i}";
       return 0
@@ -70,10 +70,6 @@ config_key_exists() {
 config_set() {
   # $1 configuration key
   # $2 value
-  if [ ! -f "$_SETTINGS_FILE" ]; then
-    return 72
-  fi
-
   if [ ! -f "$_SETTINGS_FILE" ]; then
     mkdir -p $(dirname $_SETTINGS_FILE)
   fi
