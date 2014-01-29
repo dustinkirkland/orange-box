@@ -93,6 +93,11 @@ for system in juju-bootstrap lds neutron; do
     maas-cli admin tag update-nodes $system add=$system_id
     maas-cli admin tag update-nodes use-fastpath-installer add=$system_id
     maas-cli admin node commission $system_id || true
+done
+
+for system in juju-bootstrap lds neutron; do
+    mac=$(sudo virsh dumpxml $system | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
+    system_id=$(maas-cli admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
     echo "Waiting for $system to be Ready"
     until maas-cli admin node read $system_id | grep status | awk {'print $2'} | grep '4,'; do echo -n '.'; sleep 5; done
 done
