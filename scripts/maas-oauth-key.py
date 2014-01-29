@@ -29,7 +29,7 @@ def get_user_oauth(user='admin'):
 def main():
     parser = argparse.ArgumentParser(description='Do something naughty, pull '
                                      'from db.')
-    parser.add_argument('user', nargs=1, default='admin', help='MAAS user')
+    parser.add_argument('user', nargs='?', default='admin', help='MAAS user')
 
     a = parser.parse_args()
 
