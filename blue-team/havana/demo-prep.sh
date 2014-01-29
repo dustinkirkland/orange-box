@@ -18,13 +18,23 @@ echo "Now deploying landscape-client charm to register Bootstrap node to LDS"
 #Create a landscape.yaml file
 
 #Deploy it
-#juju deploy --config=landscape.yaml landscape-client
+[ -f landscape-client.yaml ] || echo > landscape-client.yaml <<EOF
+landscape-client:
+     origin: ppa:landscape/trunk
+     exchange-interval: 60
+     urgent-exchange-interval: 30
+     ping-interval: 10
+     script-users: ALL
+     include-manager-plugins: ScriptExecution
+EOF
+juju deploy --config=landscape-client.yaml landscape-client
 
 #Let's add the bootstrap node, which runs the juju-gui service
-#juju add-relation landscape-client:container juju-gui
+juju add-relation landscape-client:container juju-gui
+juju add-relation landscape-client:registration juju-gui
 
 
-#echo "Landscape charm deployed"
+echo "Landscape client charm deployed"
 
 date
 echo "Running pre-deployment"
