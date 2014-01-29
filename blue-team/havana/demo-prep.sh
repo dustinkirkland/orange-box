@@ -31,7 +31,6 @@ juju deploy --config=landscape-client.yaml cs:landscape-client
 
 #Let's add the bootstrap node, which runs the juju-gui service
 juju add-relation landscape-client:container juju-gui
-juju add-relation landscape-client:registration juju-gui
 
 
 echo "Landscape client charm deployed"
