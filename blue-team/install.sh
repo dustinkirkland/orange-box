@@ -116,5 +116,7 @@ environments:
         maas-oauth: '$maas_oauth'
 EOF
 
-./havana/demo-prep.sh
-./havana/pre-deploy.sh
+cd ~/micro-cluster/blue-team/havana
+./demo-prep.sh
+./pre-deploy.sh
+popd
