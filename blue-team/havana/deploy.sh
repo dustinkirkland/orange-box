@@ -18,8 +18,9 @@ lds-quickstart:
 EOF
 
 echo "Deploy LDS"
-juju deploy local:lds-quickstart --config=landscape.yaml --to 1
+juju deploy local:lds-quickstart --config=landscape.yaml --to 1 landscape
 cd -
+juju add-relation landscape-client:registration landscape
 
 echo "Deploying Neutron"
 juju deploy cs:quantum-gateway-12 --config=havana.yaml neutron-gateway --to 2
@@ -71,7 +72,6 @@ juju add-relation ceph cinder
 juju add-relation ceph nova-compute
 
 echo "Adding Landscape client relationships"
-for service in lds neutron-gateway mysql cinder keystone rabbitmq-server glance nova-cloud-computer openstack-dashboard nova-cloud-controller nova-compute ceph; do
+for service in landscape neutron-gateway mysql cinder keystone rabbitmq-server glance nova-cloud-computer openstack-dashboard nova-cloud-controller nova-compute ceph; do
     juju add-relation $service landscape-client:container
-    juju add-relation $service landscape-client:registration
 done
