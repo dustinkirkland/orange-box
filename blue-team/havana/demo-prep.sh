@@ -1,5 +1,5 @@
 #!/bin/bash
-#Darryl weaver, 26th January 2014
+#Canonical
 export PATH=~/test-bin:$PATH
 date
 echo "checking for existing Juju environment..."
