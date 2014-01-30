@@ -52,6 +52,7 @@ sudo chsh maas -s /bin/bash
 grep 'maas@' ~/.ssh/authorized_keys || sudo cat /home/maas/.ssh/id_rsa.pub | tee -a /home/ubuntu/.ssh/authorized_keys
 # 10.0.0.1 known hosts
 
+maas-cli login "admin" http://10.0.0.1/MAAS "$ADMIN_CLI"
 maas-cli admin zones create name="$NODE-vms"
 
 for i in {0..3}; do
