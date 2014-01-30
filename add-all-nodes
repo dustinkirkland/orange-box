@@ -57,6 +57,8 @@ for ip in $ips; do
 	yes | run-one-until-success amttool $ip powerup pxe
 done
 
+maas-cli admin tags new name=use-fastpath-installer || true
+
 # Cool, everything is added, lets make them fastpath
 # Get JSON, then push it to a little python script
 nodes=`maas-cli admin nodes list`
