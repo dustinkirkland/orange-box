@@ -64,6 +64,9 @@ juju add-relation keystone openstack-dashboard
 juju add-relation nova-cloud-controller glance 
 juju add-relation nova-cloud-controller cinder
 juju add-relation nova-cloud-controller neutron-gateway
+juju add-relation nova-compute nova-cloud-controller
+juju add-relation nova-compute glance
+juju add-relation nova-compute rabbitmq-server:amqp
 
 
 echo "Adding Ceph relationships"
