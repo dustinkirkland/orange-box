@@ -1,0 +1,150 @@
+havana-swift:
+  series: precise
+  overrides:
+    openstack-origin: cloud:precise-havana
+    source: cloud:precise-updates/havana
+  services:
+    lds:
+      branch: local:precise/lds-quickstart
+      options:
+        server_fqdn: lds.orangebox.org
+        admin_email: admin@lds.orangebox.org
+        admin_name: admin
+        admin_password: Password1+
+        license: include-file://license.txt
+      to: 1
+    mysql:
+      charm: cs:precise/mysql-29
+      options:
+        dataset-size: 50%
+      to: lxc:3
+    rabbitmq-server:
+      charm: cs:precise/rabbitmq-server-16
+      constraints: mem=1G
+      to: lxc:3
+    keystone:
+      charm: cs:precise/keystone-23
+      options:
+        admin-password: Password1+
+        admin-token: ubuntutesting
+      to: lxc:3
+    openstack-dashboard:
+      charm: cs:precise/openstack-dashboard-11
+      options:
+        offline-compression: "no"
+      to: lxc:3
+    nova-compute:
+      charm: cs:precise/nova-compute
+      num_units: 4
+      options:
+        config-flags: "auto_assign_floating_ip=False"
+        enable-live-migration: False
+        virt-type: kvm
+    nova-cloud-controller:
+      charm: cs:precise/nova-cloud-controller-19
+      options:
+        network-manager: Neutron
+        quantum-security-groups: "yes"
+      to: lxc:3
+    neutron-gateway:
+      charm: cs:precise/quantum-gateway-12
+      options:
+        ext-port: eth1
+      to: 2
+    cinder:
+      charm: cs:precise/cinder-14
+      options:
+        block-device: "None"
+        overwrite: "true"
+      to: lxc:3
+    glance:
+      charm: cs:precise/glance-26
+      to: lxc:3
+    ceilometer:
+      charm: cs:precise/ceilometer
+      to: lxc:3
+    ceilometer-agent:
+      charm: cs:precise/ceilometer-agent
+    mongodb:
+      charm: cs:precise/mongodb
+      to: lxc:3
+    ntp:
+      charm: cs:precise/ntp
+      to: lxc:3
+  relations:
+    - - keystone
+      - mysql
+    - - nova-cloud-controller
+      - mysql
+    - - nova-cloud-controller
+      - rabbitmq-server
+    - - nova-cloud-controller
+      - glance
+    - - nova-cloud-controller
+      - keystone
+    - - nova-compute
+      - nova-cloud-controller
+    - - nova-compute
+      - mysql
+    - - nova-compute
+      - rabbitmq-server:amqp
+    - - nova-compute
+      - glance
+    - - glance
+      - mysql
+    - - glance
+      - keystone
+    - - glance
+      - cinder
+    - - cinder
+      - mysql
+    - - cinder
+      - rabbitmq-server
+    - - cinder
+      - nova-cloud-controller
+    - - cinder
+      - keystone
+    - - neutron-gateway
+      - mysql
+    - - neutron-gateway
+      - rabbitmq-server
+    - - neutron-gateway
+      - nova-cloud-controller
+    - - openstack-dashboard
+      - keystone
+    - - ceilometer
+      - keystone
+    - - ceilometer
+      - rabbitmq-server
+    - - ceilometer
+      - mongodb
+    - - ceilometer-agent:nova-ceilometer
+      - nova-compute:nova-ceilometer
+    - - ceilometer-agent:ceilometer-service
+      - ceilometer:ceilometer-service
+    - - ntp:juju-info
+      - nova-compute:juju-info
+    - - ntp:juju-info
+      - nova-cloud-controller:juju-info
+    - - ntp:juju-info
+      - neutron-gateway:juju-info
+    - - ntp:juju-info
+      - cinder:juju-info
+    - - ntp:juju-info
+      - keystone:juju-info
+    - - ntp:juju-info
+      - glance:juju-info
+    - - ntp:juju-info
+      - ceilometer:juju-info
+    - - ntp:juju-info
+      - mongodb:juju-info
+    - - ntp:juju-info
+      - rabbitmq-server:juju-info
+    - - ntp:juju-info
+      - mysql:juju-info
+    - - ntp:juju-info
+      - openstack-dashboard:juju-info
+    - - landscape-client:container
+      - [ lds, neutron-gateway, mysql, cinder, keystone, rabbitmq-server, glance, nova-cloud-computer, openstack-dashboard, nova-cloud-controller, nova-compute ]
+    - - landscape-client:registration
+      - lds
