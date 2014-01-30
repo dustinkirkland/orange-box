@@ -6,7 +6,7 @@ openstack:
     source: cloud:precise-updates/havana
   services:
     lds:
-      branch: local:precise/lds-quickstart
+      charm_url: local:precise/lds-quickstart
       options:
         server_fqdn: lds.orangebox.org
         admin_email: admin@lds.orangebox.org
