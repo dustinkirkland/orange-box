@@ -31,7 +31,7 @@ havana-swift-ceph-storage-colo:
         monitor-secret: AQAAvoJSOAv/NRAAgvXP8d7iXN7lWYbvDZzm2Q==
         osd-devices: /srv
         osd-reformat: "yes"
-      to: 4 5 6 7 8
+      to: [4, 5, 6, 7, 8]
     keystone:
       charm: cs:precise/keystone-23
       options:
