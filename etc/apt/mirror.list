@@ -1,12 +1,12 @@
 ############# config ##################
 #
 # set base_path    /var/spool/apt-mirror
-set base_path    /var/www/ubuntu/
+set base_path    /srv/
 #
-# set mirror_path  $base_path/mirror
-# set skel_path    $base_path/skel
-# set var_path     $base_path/var
-# set cleanscript $var_path/clean.sh
+set mirror_path  $base_path/mirrors
+set skel_path    $base_path/skel
+set var_path     $base_path/var
+set cleanscript $var_path/bin/clean.sh
 # set defaultarch  <running host architecture>
 # set postmirror_script $var_path/postmirror.sh
 # set run_postmirror 0
@@ -15,20 +15,29 @@ set _tilde 0
 #
 ############# end config ##############
 
+## Trusty
 deb http://archive.ubuntu.com/ubuntu trusty main restricted universe multiverse
 deb http://archive.ubuntu.com/ubuntu trusty-security main restricted universe multiverse
 deb http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe multiverse
+
+## precise
 deb http://archive.ubuntu.com/ubuntu precise main restricted universe multiverse
 deb http://archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
 deb http://archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse
 
+## Saucy
+deb http://archive.ubuntu.com/ubuntu saucy main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu saucy-security main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu saucy-updates main restricted universe multiverse
+
+## Cloud-archive
 deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/folsom main
 deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/grizzly main
 deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/havana main
 deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/icehouse main
 
-#deb-src http://archive.ubuntu.com/ubuntu trusty main restricted universe multiverse
-#deb-src http://archive.ubuntu.com/ubuntu trusty-security main restricted universe multiverse
+#deb-src http://archive.ubuntu.com/ubuntu saucy main restricted universe multiverse
+#deb-src http://archive.ubuntu.com/ubuntu saucy-security main restricted universe multiverse
 #deb-src http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe multiverse
 
 clean http://archive.ubuntu.com/ubuntu
