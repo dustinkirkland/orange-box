@@ -1,0 +1,57 @@
+#!/bin/bash -xe
+# Utility script to:
+# - Upload an image to glance, cirros by default.  
+#   Since our Jenkins host is cut off from the outside
+#   world, images are hard-coded and expected to exist in
+#   following locations locally:
+#     $HOME/images/precise-server-cloudimg-amd64.tar.gz
+#     $HOME/images/ttylinux-uec-i686-12.1_2.6.35-22_1.tar.gz
+#     $HOME/images/cirros-0.3.0-x86_64-uec.tar.gz
+#
+# - Configure networks in Nova's database.  Also hard-coded here
+#   to configure:
+#     - private instance network 10.0.0.24,
+#        multi_host, bridge=br100, bridge_interface=eth1
+#     - default floating ip pool 192.168.20.224/27
+#     - secondary floating ip pool 192.168.20.223/27
+#
+# This script expects:
+#   - Environment contains any variables needed by glance's client tools
+#     (use inspect_environment.sh to generate envrc containing these)
+#   - Passwordless ssh access to nova-cloud-controller, and passwordless
+#     sudo access for the ubuntu user (to call nova-manage)
+
+cwd=`dirname $0`
+
+function error_out() {
+  echo "* [ERROR prepare_cloud]: $@" && exit 1
+}
+
+function log() {
+  echo "- [prepare_cloud]: $@"
+}
+
+OS_RELEASE="$1"
+
+# These hosts should have all been set in environment, via envrc
+missing=""
+[[ -z "$NOVA_HOST" ]] && missing="$missing NOVA_HOST"
+[[ -z "$OS_USERNAME" ]] && missing="$missing OS_USERNAME"
+[[ -z "$OS_PASSWORD" ]] && missing="$missing OS_PASSWORD"
+[[ -z "$OS_AUTH_URL" ]] && missing="$missing OS_AUTH_URL"
+[[ -z "$OS_TENANT_NAME" ]] && missing="$missing OS_TENANT_NAME"
+[[ -n "$missing" ]] && error_out "Missing from environment: $missing"
+
+export IMG_DIR=${IMG_DIR:-$HOME/images}
+export DEFAULT_IMAGE=${DEFAULT_IMAGE:-$IMG_DIR/quantal-server-cloudimg-amd64-disk1.img}
+export VMWARE_IMAGE=${VMWARE_IMAGE:-$IMG_DIR/vmware/precise.vmdk}
+export LXC_IMAGE=${LXC_IMAGE:-$IMG_DIR/lxc/precise-server-cloudimg-amd64.img
+}
+
+[[ ! -e $cwd/prepare_cloud/$OS_RELEASE ]] &&
+  error_out "Could not load prep library from $cwd/prepare_cloud/$OS_RELEASE"
+
+. $cwd/prepare_cloud/$OS_RELEASE
+
+setup_network
+publish_image ubuntu
