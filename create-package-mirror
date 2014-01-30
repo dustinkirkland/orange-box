@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Only run this as root 
+if [ $EUID -ne 0 ]
+then
+	echo Execute as root or with \"sudo $0\"
+	exit 1
+fi
+
 # Set up structure
 if [ $(mount | grep /dev/sdb1 | wc -l) -ne 1 ]
 then
