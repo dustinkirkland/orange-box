@@ -23,13 +23,18 @@ sudo juju destroy-environment maas || true
 rm -rf ~/.juju/environments
 
 echo -e "Removing the ssh known_hosts file"
-rm ~/.ssh/known_hosts
+rm -f ~/.ssh/known_hosts
 
 echo -e " Delete virtual nodes from MAAS state"
-nodes=$(maas-cli admin tag nodes virtual | grep system_id | sed -e 's/", $//' -e 's/^.*"//')
-for node in $nodes;do 
-	echo "Deleting virtual node: $node from MAAS."
-	maas-cli admin node delete $node
+#nodes=$(maas-cli admin tag nodes virtual | grep system_id | sed -e 's/", $//' -e 's/^.*"//')
+#for node in $nodes;do 
+#	echo "Deleting virtual node: $node from MAAS."
+#	maas-cli admin node delete $node
+#done
+for nodename in juju lds neutron; do
+	system_id=$(maas-cli admin nodes list hostname=$nodename.local | grep system_id | cut -d'"' -f4)
+	echo -e  "Deleting virtual node: $nodename == $system_id from MAAS."
+	maas-cli admin node delete $system_id
 done
 
 echo -e "Deleting KVMs from node 0"
@@ -42,5 +47,10 @@ sudo virsh undefine juju
 sudo virsh undefine lds
 sudo virsh undefine neutron
 set -e
+
+echo -e "Removing virtual bridge2"
+sudo virsh net-destroy bridge2
+sudo virsh net-undefine bridge2
+
 
 echo -e "Done."

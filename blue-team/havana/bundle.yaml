@@ -60,7 +60,7 @@ openstack:
     neutron-gateway:
       charm: cs:precise/quantum-gateway-12
       options:
-        ext-port: eth1
+        ext-port: eth0
       to: 2
     cinder:
       charm: cs:precise/cinder-14

@@ -6,7 +6,7 @@ cinder:
   overwrite: "true"
 neutron-gateway:
   openstack-origin: "cloud:precise-havana"
-  ext-port: eth1
+  ext-port: eth0
 nova-cloud-controller: 
   network-manager: Neutron
   openstack-origin: "cloud:precise-havana"

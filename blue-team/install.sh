@@ -7,9 +7,13 @@ sudo apt-get install --yes libvirt-bin virtinst qemu-kvm juju iptables-persisten
 
 # Make Logical Volumes for the guests
 sudo vgscan | grep BigDisk || sudo vgcreate BigDisk /dev/sdb1
-sudo lvdisplay | grep juju_disk || sudo lvcreate -L20G -n juju_disk BigDisk
-sudo lvdisplay | grep lds_disk || sudo lvcreate -L800G -n lds_disk BigDisk
-sudo lvdisplay | grep neutron_disk || sudo lvcreate -L20G -n neutron_disk BigDisk
+
+for service in juju lds neutron; do
+    sudo lvdisplay | grep ${service}_disk && sudo lvremove -f BigDisk/${service}_disk
+done
+sudo lvcreate -L20G -n juju_disk BigDisk
+sudo lvcreate -L800G -n lds_disk BigDisk
+sudo lvcreate -L20G -n neutron_disk BigDisk
 
 sudo tee /etc/init/maas-pserv.override << EOF
 # Don't start maas-pserv until bridge has started
@@ -55,9 +59,16 @@ iface br1 inet static
     bridge_maxwait 0
     dns-nameservers 10.0.0.1
     dns-search orangebox.org
+
 EOF
+
 sudo sed -ie 's/#prepend domain-name-servers 127.0.0.1;/prepend domain-name-servers 10.0.0.1;/' /etc/dhcp/dhclient.conf
 virsh net-info default && virsh net-destroy default && virsh net-undefine default
+
+# create bridge on 172.16.1.0/24 for neutron
+virsh net-info bridge2 || virsh net-create bridge2.xml
+virsh net-autostart bridge2
+
 # cat >/tmp/maas-private.xml <<EOF
 # <network>
 #   <name>maas-private</name>
@@ -88,17 +99,27 @@ sudo chsh maas -s /bin/bash
 grep 'maas@' ~/.ssh/authorized_keys || sudo cat /home/maas/.ssh/id_rsa.pub | tee -a /home/ubuntu/.ssh/authorized_keys
 # 10.0.0.1 known hosts
 
-# new loop for virsh then create then name etc. 
+# create the kvms, not in loop due to neutron being different
+echo -e "virt-install juju instance"
+sudo virsh list --all --name | grep juju || sudo virt-install --name juju --ram 4096 --disk path=/dev/BigDisk/juju_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br1 --boot network || true
+echo -e "virt-install lds instance"
+sudo virsh list --all --name | grep lds || sudo virt-install --name lds --ram 4096 --disk path=/dev/BigDisk/lds_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br1 --boot network || true
+echo -e "virt-install neutron instance"
+sudo virsh list --all --name | grep neutron || sudo virt-install --name neutron --ram 4096 --disk path=/dev/BigDisk/neutron_disk --vcpus=2 --os-type=linux --pxe --network=bridge=virbr1 --network=bridge=br1 --boot network || true
 
+# loop to fixup the kvms
 for system in juju lds neutron; do
-   sudo virsh list --all --name | grep $system || sudo virt-install --name $system --ram 4096 --disk path=/dev/BigDisk/${system}_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br0 --network=bridge=br1 --boot network || true
-   mac=$(sudo virsh dumpxml $system | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
-   system_id=$(maas-cli admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
-   maas-cli admin node update $system_id hostname=$system.local power_type=virsh power_parameters_power_address=qemu+ssh://ubuntu@10.0.0.1/system power_parameters_power_id=$system
-   maas-cli admin tags new name=$system || true
-   maas-cli admin tag update-nodes $system add=$system_id
-   maas-cli admin tag update-nodes use-fastpath-installer add=$system_id
-   maas-cli admin node commission $system_id || true
+    mac=$(sudo virsh dumpxml $system | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
+    system_id=$(maas-cli admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
+    # until [ $system_id ]; do
+    #     system_id=$(maas-cli admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
+    #     sleep 10
+    # done
+    maas-cli admin node update $system_id hostname=$system.local power_type=virsh power_parameters_power_address=qemu+ssh://ubuntu@10.0.0.1/system power_parameters_power_id=$system
+    maas-cli admin tags new name=$system || true
+    maas-cli admin tag update-nodes $system add=$system_id
+    maas-cli admin tag update-nodes use-fastpath-installer add=$system_id
+    maas-cli admin node commission $system_id || true
 done
 
 

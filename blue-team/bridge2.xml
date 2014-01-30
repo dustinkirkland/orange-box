@@ -1,0 +1,11 @@
+<network>
+  <name>bridge2</name>
+  <uuid>406212bb-45f7-4af7-91b6-0edfb6e5908c</uuid>
+  <forward dev='eth0' mode='nat'>
+    <interface dev='eth0'/>
+  </forward>
+  <bridge name='virbr1' stp='on' delay='0'/>
+  <mac address='52:54:00:e7:ee:1e'/>
+  <ip address='172.16.1.1' netmask='255.255.255.0'>
+  </ip>
+</network>
