@@ -63,7 +63,7 @@ MISSING_HOSTS=""
 # They could potentially be extracted from Juju on the go, via
 # juju-get
 export OS_USERNAME='admin'
-export OS_PASSWORD='openstack'
+export OS_PASSWORD='Password1+'
 export OS_TENANT_NAME='admin'
 export OS_AUTH_URL="http://$KEYSTONE_HOST:5000/v2.0/"
 export ADMIN_TOKEN='ubuntutesting'
