@@ -5,23 +5,24 @@
 #nodes 4-11 are the rest of the physical nodes.
 set -ex
 export PATH=~/test-bin:$PATH
-# [ -d ~/landscape ] || bzr branch lp:landscape
-# cd ~/landscape/dev/charms
-# [ -f license.txt ] || (echo "Need to create license.txt" && false)
-# [ -f landscape.yaml ] || echo > landscape.yaml <<EOF
-# lds-quickstart:
-#   server_fqdn: lds.orangebox.org
-#   admin_email: admin@lds.orangebox.org
-#   admin_name: admin
-#   admin_password: Password1+
-#   license: |
-#     $(sed -e 's/^/    /' < license.txt)
-# EOF
+[ -d ~/landscape ] || bzr branch lp:landscape
+cd ~/landscape/dev/charms
+[ -f license.txt ] || (echo "Need to create license.txt" && false)
+[ -f landscape.yaml ] || echo > landscape.yaml <<EOF
+lds-quickstart:
+  server_fqdn: lds.orangebox.org
+  admin_email: admin@lds.orangebox.org
+  admin_name: admin
+  admin_password: Password1+
+  sample_data: False
+  license: |
+    $(sed -e 's/^/    /' < license.txt)
+EOF
 
-# echo "Deploy LDS"
-# juju deploy local:lds-quickstart --config=landscape.yaml --to 1 landscape
-# cd -
-# juju add-relation landscape-client:registration landscape
+echo "Deploy LDS"
+juju deploy local:lds-quickstart --config=landscape.yaml --to 1 landscape
+cd -
+juju add-relation landscape-client:registration landscape
 
 echo "Deploying Neutron"
 juju deploy cs:quantum-gateway-12 --config=havana.yaml neutron-gateway --to 2
