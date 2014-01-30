@@ -11,6 +11,11 @@ sudo lvdisplay | grep juju_disk || sudo lvcreate -L20G -n juju_disk BigDisk
 sudo lvdisplay | grep lds_disk || sudo lvcreate -L800G -n lds_disk BigDisk
 sudo lvdisplay | grep neutron_disk || sudo lvcreate -L20G -n neutron_disk BigDisk
 
+sudo tee /etc/init/maas-pserv.override << EOF
+# Don't start maas-pserv until bridge has started
+start on net-device-up IFACE=br1
+EOF
+
 # Setup networking
 # Add to /etc/network/interfaces
 grep br0 /etc/network/interfaces || sudo tee /etc/network/interfaces <<EOF
