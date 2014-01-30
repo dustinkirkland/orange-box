@@ -4,16 +4,16 @@
 if [ $(mount | grep /dev/sdb1 | wc -l) -ne 1 ]
 then
 	echo Mounting /dev/sdb1 under /mnt...
-	mount /dev/sdb1 /mnt || (echo Error mounting /dev/sdb1 && exit 1)
+	mount /dev/sdb1 /mnt || echo Error mounting /dev/sdb1 && exit 1
 fi
 
-mkdir -p /mnt/mirror/precise || (echo Error creating /mnt/mirror/precise && exit 1)
+mkdir -p /mnt/mirror/precise || echo Error creating /mnt/mirror/precise && exit 1
 
 # install charm-tools if not already there
 if [ $(dpkg -l | grep charm-tools | grep ^ii) -ne 0 ]
 then
 	echo Installing charm-tools
-	apt-get -y install charm-tools || (echo Error installing charm-tools && exit 1)
+	apt-get -y install charm-tools || echo Error installing charm-tools && exit 1
 fi
 
 # rsync the mirror into /mnt/mirror
