@@ -1,4 +1,4 @@
-openstack:
+havana-swift-ceph-storage-colo:
   series: precise
   overrides:
     openstack-origin: cloud:precise-havana
@@ -82,14 +82,12 @@ openstack:
       charm: cs:precise/swift-storage
       options:
         zone: 1
-        block-device: /srv
-        overwrite: "true"
+        block-device: "/srv/swift.img|10G"
     swift-storage-z2:
       charm: cs:precise/swift-storage
       options:
         zone: 2
-        block-device: /srv
-        overwrite: "true"
+        block-device: "/srv/swift.img|10G"
     ceilometer:
       charm: cs:precise/ceilometer
       to: lxc:3

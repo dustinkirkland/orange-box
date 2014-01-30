@@ -35,7 +35,7 @@ havana-swift:
       to: lxc:3
     nova-compute:
       charm: cs:precise/nova-compute
-      num_units: 4
+      num_units: 5 
       options:
         config-flags: "auto_assign_floating_ip=False"
         enable-live-migration: False
@@ -64,27 +64,19 @@ havana-swift:
       charm: cs:precise/swift-proxy
       options:
         zone-assignment: manual
-        replicas: 3
+        replicas: 2 
         use-https: 'no'
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
     swift-storage-z1:
       charm: cs:precise/swift-storage
       options:
         zone: 1
-        block-device: /srv
-        overwrite: "true"
+        block-device: "/srv/swift.img|10G"
     swift-storage-z2:
       charm: cs:precise/swift-storage
       options:
         zone: 2
-        block-device: /srv
-        overwrite: "true"
-    swift-storage-z3:
-      charm: cs:precise/swift-storage
-      options:
-        zone: 3
-        block-device: /srv
-        overwrite: "true"
+        block-device: "/srv/swift.img|10G"
     ceilometer:
       charm: cs:precise/ceilometer
       to: lxc:3
@@ -143,8 +135,6 @@ havana-swift:
       - swift-storage-z1
     - - swift-proxy
       - swift-storage-z2
-    - - swift-proxy
-      - swift-storage-z3
     - - ceilometer
       - keystone
     - - ceilometer
@@ -174,8 +164,6 @@ havana-swift:
     - - ntp:juju-info
       - swift-storage-z2:juju-info
     - - ntp:juju-info
-      - swift-storage-z3:juju-info
-    - - ntp:juju-info
       - ceilometer:juju-info
     - - ntp:juju-info
       - mongodb:juju-info
@@ -186,6 +174,6 @@ havana-swift:
     - - ntp:juju-info
       - openstack-dashboard:juju-info
     - - landscape-client:container
-      - [ lds, neutron-gateway, mysql, cinder, keystone, rabbitmq-server, glance, nova-cloud-computer, openstack-dashboard, nova-cloud-controller, nova-compute ]
+      - [ lds, neutron-gateway, mysql, cinder, keystone, rabbitmq-server, glance, nova-cloud-computer, openstack-dashboard, nova-cloud-controller, nova-compute, swift-proxy, swift-storage-z1, swift-storage-z2 ]
     - - landscape-client:registration
       - lds

@@ -1,4 +1,4 @@
-openstack:
+havana-swift-ceph:
   series: precise
   overrides:
     openstack-origin: cloud:precise-havana
@@ -81,20 +81,12 @@ openstack:
       charm: cs:precise/swift-storage
       options:
         zone: 1
-        block-device: /srv
-        overwrite: "true"
+        block-device: "/srv/swift.img|10G" 
     swift-storage-z2:
       charm: cs:precise/swift-storage
       options:
         zone: 2
-        block-device: /srv
-        overwrite: "true"
-    swift-storage-z3:
-      charm: cs:precise/swift-storage
-      options:
-        zone: 3
-        block-device: /srv
-        overwrite: "true"
+        block-device: "/srv/swift.img|10G"
     ceilometer:
       charm: cs:precise/ceilometer
       to: lxc:3
@@ -159,8 +151,6 @@ openstack:
       - swift-storage-z1
     - - swift-proxy
       - swift-storage-z2
-    - - swift-proxy
-      - swift-storage-z3
     - - ceilometer
       - keystone
     - - ceilometer
@@ -192,8 +182,6 @@ openstack:
     - - ntp:juju-info
       - swift-storage-z2:juju-info
     - - ntp:juju-info
-      - swift-storage-z3:juju-info
-    - - ntp:juju-info
       - ceilometer:juju-info
     - - ntp:juju-info
       - mongodb:juju-info
@@ -204,6 +192,6 @@ openstack:
     - - ntp:juju-info
       - openstack-dashboard:juju-info
     - - landscape-client:container
-      - [ lds, neutron-gateway, mysql, cinder, keystone, rabbitmq-server, glance, nova-cloud-computer, openstack-dashboard, nova-cloud-controller, nova-compute, ceph ]
+      - [ lds, neutron-gateway, mysql, cinder, keystone, rabbitmq-server, glance, nova-cloud-computer, openstack-dashboard, nova-cloud-controller, nova-compute, ceph, swift-proxy, swift-storage-z1, swift-storage-z2 ]
     - - landscape-client:registration
       - lds
