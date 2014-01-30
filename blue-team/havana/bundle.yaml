@@ -42,6 +42,7 @@ openstack:
       charm: cs:precise/openstack-dashboard-11
       options:
         offline-compression: "no"
+        webroot: "/"
       to: lxc:3
     nova-compute:
       charm: cs:precise/nova-compute

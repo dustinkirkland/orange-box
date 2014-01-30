@@ -17,6 +17,7 @@ keystone:
 openstack-dashboard: 
   openstack-origin: "cloud:precise-havana"
   offline-compression: "no"
+  webroot: "/"
 glance: 
   openstack-origin: "cloud:precise-havana"
 ceph:
