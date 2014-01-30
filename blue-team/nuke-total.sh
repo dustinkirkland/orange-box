@@ -20,7 +20,10 @@ echo -e "Clear juju environment with juju destroy-environment"
 echo -e "This will set nodes 1-9 back to Ready state in MAAS"
 echo -e "and delete the ~/.juju/environments dir."
 sudo juju destroy-environment maas || true
-sudo rm -rf ~/.juju/environments
+rm -rf ~/.juju/environments
+
+echo -e "Removing the ssh known_hosts file"
+rm ~/.ssh/known_hosts
 
 echo -e " Delete virtual nodes from MAAS state"
 nodes=$(maas-cli admin tag nodes virtual | grep system_id | sed -e 's/", $//' -e 's/^.*"//')
