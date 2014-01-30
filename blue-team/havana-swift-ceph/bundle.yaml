@@ -1,11 +1,11 @@
-havana-swift:
+openstack:
   series: precise
   overrides:
     openstack-origin: cloud:precise-havana
     source: cloud:precise-updates/havana
   services:
     lds:
-      branch: local:precise/lds-quickstart
+      charm_url: local:precise/lds-quickstart
       options:
         server_fqdn: lds.orangebox.org
         admin_email: admin@lds.orangebox.org
@@ -22,6 +22,15 @@ havana-swift:
       charm: cs:precise/rabbitmq-server-16
       constraints: mem=1G
       to: lxc:3
+    ceph:
+      charm: cs:precise/ceph
+      num_units: 3
+      options:
+        monitor-count: 3
+        fsid: 9e7aac42-4bf4-11e3-b4b7-5254006a039c
+        monitor-secret: AQAAvoJSOAv/NRAAgvXP8d7iXN7lWYbvDZzm2Q==
+        osd-devices: /srv
+        osd-reformat: "yes"
     keystone:
       charm: cs:precise/keystone-23
       options:
@@ -32,10 +41,11 @@ havana-swift:
       charm: cs:precise/openstack-dashboard-11
       options:
         offline-compression: "no"
+        webroot: "/"
       to: lxc:3
     nova-compute:
       charm: cs:precise/nova-compute
-      num_units: 7
+      num_units: 2 
       options:
         config-flags: "auto_assign_floating_ip=False"
         enable-live-migration: False
@@ -49,7 +59,7 @@ havana-swift:
     neutron-gateway:
       charm: cs:precise/quantum-gateway-12
       options:
-        ext-port: eth1
+        ext-port: eth0
       to: 2
     cinder:
       charm: cs:precise/cinder-14
@@ -60,6 +70,31 @@ havana-swift:
     glance:
       charm: cs:precise/glance-26
       to: lxc:3
+    swift-proxy:
+      charm: cs:precise/swift-proxy
+      options:
+        zone-assignment: manual
+        replicas: 3
+        use-https: 'no'
+        swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+    swift-storage-z1:
+      charm: cs:precise/swift-storage
+      options:
+        zone: 1
+        block-device: /srv
+        overwrite: "true"
+    swift-storage-z2:
+      charm: cs:precise/swift-storage
+      options:
+        zone: 2
+        block-device: /srv
+        overwrite: "true"
+    swift-storage-z3:
+      charm: cs:precise/swift-storage
+      options:
+        zone: 3
+        block-device: /srv
+        overwrite: "true"
     ceilometer:
       charm: cs:precise/ceilometer
       to: lxc:3
@@ -90,10 +125,14 @@ havana-swift:
       - rabbitmq-server:amqp
     - - nova-compute
       - glance
+    - - nova-compute
+      - ceph
     - - glance
       - mysql
     - - glance
       - keystone
+    - - glance
+      - ceph
     - - glance
       - cinder
     - - cinder
@@ -104,6 +143,8 @@ havana-swift:
       - nova-cloud-controller
     - - cinder
       - keystone
+    - - cinder
+      - ceph
     - - neutron-gateway
       - mysql
     - - neutron-gateway
@@ -112,6 +153,14 @@ havana-swift:
       - nova-cloud-controller
     - - openstack-dashboard
       - keystone
+    - - swift-proxy
+      - keystone
+    - - swift-proxy
+      - swift-storage-z1
+    - - swift-proxy
+      - swift-storage-z2
+    - - swift-proxy
+      - swift-storage-z3
     - - ceilometer
       - keystone
     - - ceilometer
@@ -129,11 +178,21 @@ havana-swift:
     - - ntp:juju-info
       - neutron-gateway:juju-info
     - - ntp:juju-info
+      - ceph:juju-info
+    - - ntp:juju-info
       - cinder:juju-info
     - - ntp:juju-info
       - keystone:juju-info
     - - ntp:juju-info
       - glance:juju-info
+    - - ntp:juju-info
+      - swift-proxy:juju-info
+    - - ntp:juju-info
+      - swift-storage-z1:juju-info
+    - - ntp:juju-info
+      - swift-storage-z2:juju-info
+    - - ntp:juju-info
+      - swift-storage-z3:juju-info
     - - ntp:juju-info
       - ceilometer:juju-info
     - - ntp:juju-info
@@ -145,6 +204,6 @@ havana-swift:
     - - ntp:juju-info
       - openstack-dashboard:juju-info
     - - landscape-client:container
-      - [ lds, neutron-gateway, mysql, cinder, keystone, rabbitmq-server, glance, nova-cloud-computer, openstack-dashboard, nova-cloud-controller, nova-compute ]
+      - [ lds, neutron-gateway, mysql, cinder, keystone, rabbitmq-server, glance, nova-cloud-computer, openstack-dashboard, nova-cloud-controller, nova-compute, ceph ]
     - - landscape-client:registration
       - lds
