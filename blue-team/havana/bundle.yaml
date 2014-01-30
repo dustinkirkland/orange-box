@@ -74,27 +74,20 @@ openstack:
       charm: cs:precise/swift-proxy
       options:
         zone-assignment: manual
-        replicas: 3
+        replicas: 2
         use-https: 'no'
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
+      to: lxc:3
     swift-storage-z1:
       charm: cs:precise/swift-storage
       options:
         zone: 1
-        block-device: vdb
-        overwrite: "true"
+        block-device: "/srv/swift.img|10G"
     swift-storage-z2:
       charm: cs:precise/swift-storage
       options:
         zone: 2
-        block-device: vdb
-        overwrite: "true"
-    swift-storage-z3:
-      charm: cs:precise/swift-storage
-      options:
-        zone: 3
-        block-device: vdb
-        overwrite: "true"
+        block-device: "/srv/swift.img|10G"
     ceilometer:
       charm: cs:precise/ceilometer
       to: lxc:3
