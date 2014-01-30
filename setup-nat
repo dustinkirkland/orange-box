@@ -17,7 +17,7 @@ set -e
 
 # Enable IP forwarding and save for next boot
 echo 1 > /proc/sys/net/ipv4/ip_forward
-echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/10-maas-ip-forward
+echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/10-maas-ip-forward.conf
 sysctl --system
 
 # Some things use the MAAS proxy - some things don't. So turn on NAT.
