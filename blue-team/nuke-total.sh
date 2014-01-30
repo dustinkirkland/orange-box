@@ -15,10 +15,11 @@
 #
 
 set -e
+export PATH=~/test-bin:$PATH
 echo -e "Clear juju environment with juju destroy-environment"
 echo -e "This will set nodes 1-9 back to Ready state in MAAS"
 echo -e "and delete the ~/.juju/environments dir."
-sudo juju destroy-environment maas
+sudo juju destroy-environment maas || true
 sudo rm -rf ~/.juju/environments
 
 echo -e " Delete virtual nodes from MAAS state"
@@ -31,10 +32,10 @@ done
 echo -e "Deleting KVMs from node 0"
 
 set +e # We want to try all of these
-sudo virsh destroy juju-bootstrap
+sudo virsh destroy juju
 sudo virsh destroy lds
 sudo virsh destroy neutron
-sudo virsh undefine juju-bootstrap
+sudo virsh undefine juju
 sudo virsh undefine lds
 sudo virsh undefine neutron
 set -e

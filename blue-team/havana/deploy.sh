@@ -3,10 +3,11 @@
 #node 1, 2 are KVM virtual hosts on the master MAAS node.
 #node 3 is for Openstack management services using LXC
 #nodes 4-11 are the rest of the physical nodes.
-set -e
+set -ex
+export PATH=~/test-bin:$PATH
 [ -d ~/landscape ] || bzr branch lp:landscape
 cd ~/landscape/dev/charms
-[ -f license.txt ] || echo "Need to create license.txt" && false
+[ -f license.txt ] || (echo "Need to create license.txt" && false)
 [ -f landscape.yaml ] || echo > landscape.yaml <<EOF
 lds-quickstart:
   server_fqdn: lds.orangebox.org
