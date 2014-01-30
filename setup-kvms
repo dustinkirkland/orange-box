@@ -52,7 +52,9 @@ sudo chsh maas -s /bin/bash
 grep 'maas@' ~/.ssh/authorized_keys || sudo cat /home/maas/.ssh/id_rsa.pub | tee -a /home/ubuntu/.ssh/authorized_keys
 # 10.0.0.1 known hosts
 
-for i in {0..3}; do 
+maas-cli admin zones create name="$NODE-vms"
+
+for i in {0..3}; do
   sudo virsh list --all --name | grep vm0$i || sudo virt-install --name vm0$i.$NODE.master --ram 4096 --disk path=/dev/vmdisk/vm0$i --vcpus=1 --os-type=linux --pxe --network-bridge=br0 --boot network || true
 
   mac=$(sudo virsh dumpxml vm0$i | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
