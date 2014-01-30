@@ -66,8 +66,9 @@ juju add-relation nova-cloud-controller neutron-gateway
 
 
 echo "Adding Ceph relationships"
-juju add-relation ceph mysql
-juju add-relation ceph rabbitmq-server
+# James says we don't need these. HA only
+# juju add-relation ceph mysql
+# juju add-relation ceph rabbitmq-server
 juju add-relation ceph glance
 juju add-relation ceph cinder
 juju add-relation ceph nova-compute
