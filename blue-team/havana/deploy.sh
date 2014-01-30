@@ -73,6 +73,6 @@ juju add-relation ceph cinder
 juju add-relation ceph nova-compute
 
 echo "Adding Landscape client relationships"
-for service in landscape neutron-gateway mysql cinder keystone rabbitmq-server glance nova-cloud-computer openstack-dashboard nova-cloud-controller nova-compute ceph; do
+for service in landscape neutron-gateway mysql cinder keystone rabbitmq-server glance openstack-dashboard nova-cloud-controller nova-compute ceph; do
     juju add-relation $service landscape-client:container
 done
