@@ -39,15 +39,15 @@ for ip in $ips; do
 
 	# Enable remote VNC to each node
 	# set the vnc password
-	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k RFBPassword=${VNC_PASSWORD}
+	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k RFBPassword=${VNC_PASSWORD} > /dev/null 2>&1
 	# enable KVM redirection to port 5900
-	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k Is5900PortEnabled=true
+	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k Is5900PortEnabled=true > /dev/null 2>&1
 	# disable opt-in policy
-	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k OptInPolicy=false
+	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k OptInPolicy=false > /dev/null 2>&1
 	# disable session timeout
-	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k SessionTimeout=0
+	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k SessionTimeout=0 > /dev/null 2>&1
 	# enable KVM
-	wsman invoke -a RequestStateChange http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_KVMRedirectionSAP -h ${ip} -P 16992 -u admin -p ${AMT_PASSWORD} -k RequestedState=2
+	wsman invoke -a RequestStateChange http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_KVMRedirectionSAP -h ${ip} -P 16992 -u admin -p ${AMT_PASSWORD} -k RequestedState=2 > /dev/null 2>&1
 	# Add the node to MAAS
 	# dap: added hostname parameter which pulls from a file named
 	# `hostname`-nodelist in the nodelists subdirectory
@@ -60,4 +60,4 @@ done
 # Cool, everything is added, lets make them fastpath
 # Get JSON, then push it to a little python script
 nodes=`maas-cli admin nodes list`
-scripts/maas-fast-path.py "$nodes"
+scripts/maas-fastpath.py "$nodes"

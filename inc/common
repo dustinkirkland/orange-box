@@ -111,11 +111,11 @@ oauth_login() {
     return 1
   fi
 
-  maas-cli login http://10.0.0.1/MAAS "$user" "$auth"
+  maas-cli login "$user" http://10.0.0.1/MAAS "$auth"
 }
 
 wake_me_up_before_you_go_go() {
   for i in {0..3}; do
-    amttool $1 info > /dev/null 2>&1
+    amttool $1 info > /dev/null 2>&1 || true
   done
 }
