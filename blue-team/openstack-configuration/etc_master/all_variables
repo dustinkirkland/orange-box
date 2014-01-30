@@ -1,0 +1,31 @@
+# List of all place holders used in any of the test configs.
+# 'run_tests.py --configure' will reference this, and update
+# configs according to what is available in environment.
+# Putting this here and into run_tests.py keeps the Jenkins
+# jobs slim and clean.
+
+# openstack.conf
+NOVA_HOST
+GLANCE_HOST
+KEYSTONE_HOST
+CINDER_HOST
+QUANTUM_HOST
+NOVA_COMPUTE_HOST
+NOVA_VOLUME_HOST
+ADMIN_TOKEN
+IMAGE_UUID
+IMAGE_NAME
+EC2_ACCESS_KEY
+EC2_SECRET_KEY
+EC2_URL
+S3_URL
+EC2_AMI_ID
+OS_USERNAME
+OS_PASSWORD
+OS_AUTH_URL
+OS_TENANT_NAME
+HORIZON_HOST
+ENABLED_SERVICES
+
+# devstack.conf
+ENABLED_SERVICES

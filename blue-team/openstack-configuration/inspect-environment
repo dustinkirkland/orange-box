@@ -53,6 +53,7 @@ MISSING_HOSTS=""
 [[ ! -z "$HORIZON_HOST" ]] && ENABLED_SERVICES="$ENABLED_SERVICES,horizon"
 [[ ! -z "$QUANTUM_HOST" ]] && ENABLED_SERVICES="$ENABLED_SERVICES,quantum" ||
   ENABLED_SERVICES="$ENABLED_SERVICES,n-net"
+[[ ! -z "$SWIFT_HOST" ]] && ENABLED_SERVICES="$ENABLED_SERVICES,swift"
 
 # Bail if we're missing any critical services.
 [[ -n "$MISSING_HOSTS" ]] &&

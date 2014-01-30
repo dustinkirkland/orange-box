@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+#
+# source exerciserc
+#
+# Configure the DevStack exercise scripts
+# For best results, source this _after_ stackrc/localrc as it will set
+# values only if they are not already set.
+
+# Max time to wait while vm goes from build to active state
+export ACTIVE_TIMEOUT={{ active_timeout }}
+# Max time to wait for proper IP association and dis-association.
+export ASSOCIATE_TIMEOUT={{ associate_timeout }}
+
+# Max time till the vm is bootable
+export BOOT_TIMEOUT={{ boot_timeout }}
+
+# Max time from run instance command until it is running
+export RUNNING_TIMEOUT={{ running_timeout }}
+
+# Max time to wait for a vm to terminate
+export TERMINATE_TIMEOUT={{ terminate_timeout }}
+
+# Max time to wait for a euca-volume command to propogate
+export VOLUME_TIMEOUT=${VOLUME_TIMEOUT:-30}
+
+# Max time to wait for a euca-delete command to propogate
+export VOLUME_DELETE_TIMEOUT=${SNAPSHOT_DELETE_TIMEOUT:-60}
+
+# The size of the volume we want to boot from; some storage back-ends
+# do not allow a disk resize, so it's important that this can be tuned
+export DEFAULT_VOLUME_SIZE=${DEFAULT_VOLUME_SIZE:-1}
+

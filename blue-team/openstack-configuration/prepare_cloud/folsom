@@ -55,6 +55,7 @@ function setup_quantum_network() {
                   quantum-ext-net -g $QUANTUM_EXT_NET_GW \
                   -c $QUANTUM_EXT_NET_CIDR \
                   -f $QUANTUM_FLOAT_RANGE \
+                  -t services \
                   $QUANTUM_EXT_NET_NAME"
   ssh ubuntu@"$NOVA_HOST" "\
                 OS_USERNAME=$OS_USERNAME OS_PASSWORD=$OS_PASSWORD \

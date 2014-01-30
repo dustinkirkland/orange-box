@@ -1,0 +1,110 @@
+
+###########################
+# Ubuntu CI Lab Settings
+###########################
+
+# List of all enabled services, compiled by inspect_environment.sh
+# and set in etc/tests/devstack.conf
+ENABLED_SERVICES={{ enabled_services }}
+
+# volumes + floating_ips test checks this when determining whether
+# or not it should try to ping internal IPs
+MULTI_HOST=1
+
+# The second pool of floating ips, created during jenkins
+# via /var/lib/jenkins/tools/jenkins-scripts/prepare_cloud.sh
+TEST_FLOATING_POOL={{ secondary_ip_pool }}
+
+# Should point to keystone
+HOST_IP={{ keystone_host }}
+SERVICE_HOST=${SERVICE_HOST:-$HOST_IP}
+
+# Needed because tests use glance client directly
+GLANCE_HOST={{ glance_host }}
+
+PRIVATE_NETWORK_NAME="private network"
+
+# These get created by the Keystone charm during deployment.
+# They are set as config options to the charm
+export NOVA_PROJECT_ID={{ os_tenant_name }}
+export NOVA_USERNAME={{ os_username }}
+export NOVA_PASSWORD={{ os_password }}
+
+# Commit 10670d1bad6b4afd3dce9af61d22c8cd5eeded59 changed keystone token
+# auth so that they use OS_ env. variables, but doesn't translate
+# properly from existing NOVA_ ones
+export OS_TENANT_NAME=$NOVA_PROJECT_ID
+export OS_USERNAME=$NOVA_USERNAME
+export OS_PASSWORD=$NOVA_PASSWORD
+export OS_AUTH_URL="http://$HOST_IP:5000/v2.0/"
+
+# Set the ec2 url so euca2ools works
+export EC2_URL="http://{{ nova_host }}:8773/services/Cloud"
+
+# Also set s3 url for bundle testing
+export S3_URL="http://{{ nova_host }}:3333"
+
+# Specify what image to parse out of 'glance index' so we don't accidentally
+# try spawning the test, null AMI that the bundle test publishses.
+# DISABLED: setting this actually throws off devstack's regexp 
+# and the test sometimes boots an AKI instead of AMI. 
+#export DEFAULT_IMAGE_NAME="cirros-0.3.0-x86_64-uec-ami"
+
+# Bumped these timeouts to 60, bump higher if we decide to use
+# cloud images instead of ttylinux
+# Max time till the vm is bootable
+export BOOT_TIMEOUT=60
+# Max time to wait while vm goes from build to active state
+export ACTIVE_TIMEOUT=60
+
+# Timeout for instance termination
+export TERMINATE_TIMEOUT=30
+
+# Disable use of python-keyring during tests.
+export OS_NO_CACHE=1
+
+###########################
+# Devstack defaults
+###########################
+
+# With the addition of Keystone, to use an openstack cloud you should
+# authenticate against keystone, which returns a **Token** and **Service
+# Catalog**.  The catalog contains the endpoint for all services the user/tenant
+# has access to - including nova, glance, keystone, swift, ...  We currently
+# recommend using the 2.0 *auth api*.
+#
+# *NOTE*: Using the 2.0 *auth api* does not mean that compute api is 2.0.  We
+# will use the 1.1 *compute api*
+export NOVA_URL=${NOVA_URL:-http://$SERVICE_HOST:5000/v2.0/}
+
+# Currently novaclient needs you to specify the *compute api* version.  This
+# needs to match the config of your catalog returned by Keystone.
+export NOVA_VERSION=${NOVA_VERSION:-1.1}
+
+# FIXME - why does this need to be specified?
+export NOVA_REGION_NAME=${NOVA_REGION_NAME:-RegionOne}
+
+# Euca2ools Certificate stuff for uploading bundles
+# You can get your certs using ./tools/get_certs.sh
+NOVARC=$(readlink -f "${BASH_SOURCE:-${0}}" 2>/dev/null) ||
+        NOVARC=$(python -c 'import os,sys; print os.path.abspath(os.path.realpath(sys.argv[1]))' "${BASH_SOURCE:-${0}}")
+NOVA_KEY_DIR=${NOVARC%/*}
+# Override this above, since devstack seems to use SERVICE_HOST to describe
+# both the nova host + keystone
+#export S3_URL=http://$SERVICE_HOST:3333
+export EC2_USER_ID=42 # nova does not use user id, but bundling requires it
+export EC2_PRIVATE_KEY=${NOVA_KEY_DIR}/pk.pem
+export EC2_CERT=${NOVA_KEY_DIR}/cert.pem
+export NOVA_CERT=${NOVA_KEY_DIR}/cacert.pem
+export EUCALYPTUS_CERT=${NOVA_CERT} # euca-bundle-image seems to require this set
+alias ec2-bundle-image="ec2-bundle-image --cert ${EC2_CERT} --privatekey ${EC2_PRIVATE_KEY} --user 42 --ec2cert ${NOVA_CERT}"
+alias ec2-upload-bundle="ec2-upload-bundle -a ${EC2_ACCESS_KEY} -s ${EC2_SECRET_KEY} --url ${S3_URL} --ec2cert ${NOVA_CERT}"
+
+# set log level to DEBUG (helps debug issues)
+# export NOVACLIENT_DEBUG=1
+
+# Max time from run instance command until it is running
+export RUNNING_TIMEOUT=${RUNNING_TIMEOUT:-$(($BOOT_TIMEOUT + $ACTIVE_TIMEOUT))}
+
+# Max time to wait for proper IP association and dis-association.
+export ASSOCIATE_TIMEOUT=${ASSOCIATE_TIMEOUT:-15}
