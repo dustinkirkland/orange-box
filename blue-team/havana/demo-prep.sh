@@ -1,12 +1,12 @@
 #!/bin/bash
 #Darryl weaver, 26th January 2014
-
+export PATH=~/test-bin:$PATH
 date
 echo "checking for existing Juju environment..."
 juju status && echo "Existing deployment found, exiting." && exit
 
-echo "Deploying Juju Bootstrap node to Virtual machine: juju.local using tags=juju-bootstrap"
-juju bootstrap --upload-tools=true --constraints "tags=juju-bootstrap"
+echo "Deploying Juju Bootstrap node to Virtual machine: juju.local using tags=juju"
+juju bootstrap --upload-tools=true --constraints "tags=juju"
 
 echo "unset constraints"
 juju set-constraints tags=""
@@ -18,7 +18,7 @@ echo "Now deploying landscape-client charm to register Bootstrap node to LDS"
 #Create a landscape.yaml file
 
 #Deploy it
-[ -f landscape-client.yaml ] || echo > landscape-client.yaml <<EOF
+[ -f landscape-client.yaml ] || cat > landscape-client.yaml <<EOF
 landscape-client:
      origin: ppa:landscape/trunk
      exchange-interval: 60
@@ -27,18 +27,13 @@ landscape-client:
      script-users: ALL
      include-manager-plugins: ScriptExecution
 EOF
-juju deploy --config=landscape-client.yaml landscape-client
+juju deploy --config=landscape-client.yaml cs:landscape-client
 
 #Let's add the bootstrap node, which runs the juju-gui service
 juju add-relation landscape-client:container juju-gui
-juju add-relation landscape-client:registration juju-gui
 
 
 echo "Landscape client charm deployed"
 
 date
 echo "Running pre-deployment"
-
-
-
-

@@ -1,0 +1,65 @@
+#!/bin/bash
+
+if [ "$(id -u)" != "0" ]; then
+  echo "Must be run with sudo or by root"
+  exit 77
+fi
+
+set -e
+
+NODE=$1
+IP=$2
+ADMIN_CLI=$3
+
+. inc/common
+
+sudo apt-get install --yes libvirt-bin virtinst qemu-kvm
+[ -d ~/isos ] || mkdir ~/isos
+[ -f ~/isos/ubuntu-12.04.3-server-amd64.iso ] || wget http://releases.ubuntu.com/precise/ubuntu-12.04.3-server-amd64.iso -O ~/isos/ubuntu-12.04.3-server-amd64.iso
+
+# Make Logical Volumes for the guests
+sudo vgscan | grep vmdisk || sudo vgcreate vmdisk /dev/sda1
+sudo lvdisplay | grep vm00 || sudo lvcreate -L15G -n vm00 vmdisk
+sudo lvdisplay | grep vm01 || sudo lvcreate -L15G -n vm01 vmdisk
+sudo lvdisplay | grep vm02 || sudo lvcreate -L15G -n vm02 vmdisk
+sudo lvdisplay | grep vm03 || sudo lvcreate -L15G -n vm03 vmdisk
+
+# Setup networking
+# Add to /etc/network/interfaces
+grep br0 /etc/network/interfaces || sudo tee -a /etc/network/interfaces <<EOF
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+auto br0
+iface br0 inet dhcp
+    bridge_ports em1
+    bridge_stp off
+    bridge_fd 0
+    bridge_maxwait 0
+EOF
+
+virsh net-info default && virsh net-destroy default && virsh net-undefine default
+
+sudo ifup br0
+
+[ -d /home/maas ] || sudo install -d /home/maas --owner maas --group maas
+sudo chsh maas -s /bin/bash
+[ -d /home/maas/.ssh ] || echo -e "\n\n\n" | sudo -u maas ssh-keygen -N "" -t rsa -f /home/maas/.ssh/id_rsa
+grep 'maas@' ~/.ssh/authorized_keys || sudo cat /home/maas/.ssh/id_rsa.pub | tee -a /home/ubuntu/.ssh/authorized_keys
+# 10.0.0.1 known hosts
+
+for i in {0..3}; do 
+  sudo virsh list --all --name | grep vm0$i || sudo virt-install --name vm0$i.$NODE.master --ram 4096 --disk path=/dev/vmdisk/vm0$i --vcpus=1 --os-type=linux --pxe --network-bridge=br0 --boot network || true
+
+  mac=$(sudo virsh dumpxml vm0$i | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
+  system_id=$(maas-cli admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
+  maas-cli admin node update $system_id hostname=vm0$i.$NODE.master power_type=virsh power_parameters_power_address=qemu+ssh://ubuntu@$IP/system power_parameters_power_id=vm0$i.$NODE.master
+  maas-cli admin tags new name=virtual || true
+  maas-cli admin tag update-nodes virtual add=$system_id
+  maas-cli admin tag update-nodes use-fastpath-installer add=$system_id
+  maas-cli admin node commission $system_id || true
+done

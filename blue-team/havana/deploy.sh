@@ -3,10 +3,11 @@
 #node 1, 2 are KVM virtual hosts on the master MAAS node.
 #node 3 is for Openstack management services using LXC
 #nodes 4-11 are the rest of the physical nodes.
-set -e
+set -ex
+export PATH=~/test-bin:$PATH
 [ -d ~/landscape ] || bzr branch lp:landscape
 cd ~/landscape/dev/charms
-[ -f license.txt ] || echo "Need to create license.txt" && false
+[ -f license.txt ] || (echo "Need to create license.txt" && false)
 [ -f landscape.yaml ] || echo > landscape.yaml <<EOF
 lds-quickstart:
   server_fqdn: lds.orangebox.org
@@ -18,8 +19,9 @@ lds-quickstart:
 EOF
 
 echo "Deploy LDS"
-juju deploy local:lds-quickstart --config=landscape.yaml --to 1
+juju deploy local:lds-quickstart --config=landscape.yaml --to 1 landscape
 cd -
+juju add-relation landscape-client:registration landscape
 
 echo "Deploying Neutron"
 juju deploy cs:quantum-gateway-12 --config=havana.yaml neutron-gateway --to 2
@@ -71,7 +73,6 @@ juju add-relation ceph cinder
 juju add-relation ceph nova-compute
 
 echo "Adding Landscape client relationships"
-for service in lds neutron-gateway mysql cinder keystone rabbitmq-server glance nova-cloud-computer openstack-dashboard nova-cloud-controller nova-compute ceph; do
+for service in landscape neutron-gateway mysql cinder keystone rabbitmq-server glance openstack-dashboard nova-cloud-controller nova-compute ceph; do
     juju add-relation $service landscape-client:container
-    juju add-relation $service landscape-client:registration
 done

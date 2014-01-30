@@ -1,5 +1,6 @@
 #!/bin/bash
 #Darryl Weaver, 26th January 2014
+export PATH=~/test-bin:$PATH
 
 date
 echo "Pre-deployment script to add machines to environment in advance of a demo"
@@ -7,10 +8,7 @@ echo "Pre-deployment script to add machines to environment in advance of a demo"
 juju add-machine --constraints tags=lds
 juju add-machine --constraints tags=neutron
 juju add-machine
-juju ssh 3 "sudo ifup br0"
 
-echo "Waiting for Juju to add-machine"
-sleep 30 # wait for br0 to come up or not
 for v in `seq 1 7`;
        	do
                	juju add-machine lxc:3

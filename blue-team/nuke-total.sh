@@ -14,11 +14,16 @@
 #	  but not juju environment/bootstrap info)
 #
 
+set -e
+export PATH=~/test-bin:$PATH
 echo -e "Clear juju environment with juju destroy-environment"
 echo -e "This will set nodes 1-9 back to Ready state in MAAS"
 echo -e "and delete the ~/.juju/environments dir."
-sudo juju destroy-environment
-sudo rm -rf ~/.juju/environment
+sudo juju destroy-environment maas || true
+rm -rf ~/.juju/environments
+
+echo -e "Removing the ssh known_hosts file"
+rm ~/.ssh/known_hosts
 
 echo -e " Delete virtual nodes from MAAS state"
 nodes=$(maas-cli admin tag nodes virtual | grep system_id | sed -e 's/", $//' -e 's/^.*"//')
@@ -28,11 +33,14 @@ for node in $nodes;do
 done
 
 echo -e "Deleting KVMs from node 0"
-sudo virsh destroy juju-bootstrap
+
+set +e # We want to try all of these
+sudo virsh destroy juju
 sudo virsh destroy lds
 sudo virsh destroy neutron
-sudo virsh undefine juju-bootstrap
+sudo virsh undefine juju
 sudo virsh undefine lds
 sudo virsh undefine neutron
+set -e
 
 echo -e "Done."
