@@ -1,11 +1,28 @@
 #!/bin/bash
 
+# Set up structure
 if [ $(mount | grep /dev/sdb1 | wc -l) -ne 1 ]
 then
 	echo Mounting /dev/sdb1 under /mnt...
 	mount /dev/sdb1 /mnt || (echo Error mounting /dev/sdb1 && exit 1)
 fi
 
-mkdir -p /mnt/mirror || (echo Error creating /mnt/mirror && exit 1)
+mkdir -p /mnt/mirror/precise || (echo Error creating /mnt/mirror/precise && exit 1)
 
+# install charm-tools if not already there
+if [ $(dpkg -l | grep charm-tools | grep ^ii) -ne 0 ]
+then
+	echo Installing charm-tools
+	apt-get -y install charm-tools || (echo Error installing charm-tools && exit 1)
+fi
+
+# rsync the mirror into /mnt/mirror
 rsync -avP archive.ubuntu.com::ubuntu /mnt/mirror/
+
+# grab the charms into /mnt/mirror/precise
+cd /mnt/mirror/precise
+charm getall
+
+# done
+cd -
+echo Done.
