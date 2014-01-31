@@ -1,7 +1,9 @@
 #!/bin/bash
 set -ex
 export PATH=~/test-bin:$PATH
-sudo apt-get install --yes libvirt-bin virtinst qemu-kvm juju iptables-persistent
+sudo apt-get install --yes libvirt-bin virtinst qemu-kvm juju iptables-persistent juju-deployer \
+  python-keystoneclient python-novaclient python-cinderclient python-glanceclient python-neutronclient \
+  python-nose git
 [ -d ~/isos ] || mkdir ~/isos
 [ -f ~/isos/ubuntu-12.04.3-server-amd64.iso ] || wget http://releases.ubuntu.com/precise/ubuntu-12.04.3-server-amd64.iso -O ~/isos/ubuntu-12.04.3-server-amd64.iso
 
@@ -67,7 +69,7 @@ virsh net-info default && virsh net-destroy default && virsh net-undefine defaul
 
 # create bridge on 172.16.1.0/24 for neutron
 virsh net-info bridge2 || virsh net-create bridge2.xml
-virsh net-autostart bridge2
+#virsh net-autostart bridge2
 
 # cat >/tmp/maas-private.xml <<EOF
 # <network>

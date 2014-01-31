@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 base=$(dirname $0)
 rm -rf etc

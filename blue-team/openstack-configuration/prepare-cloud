@@ -43,7 +43,7 @@ missing=""
 [[ -n "$missing" ]] && error_out "Missing from environment: $missing"
 
 export IMG_DIR=${IMG_DIR:-$HOME/images}
-export DEFAULT_IMAGE=${DEFAULT_IMAGE:-$IMG_DIR/quantal-server-cloudimg-amd64-disk1.img}
+export DEFAULT_IMAGE=${DEFAULT_IMAGE:-$IMG_DIR/precise-server-cloudimg-amd64-disk1.img}
 export VMWARE_IMAGE=${VMWARE_IMAGE:-$IMG_DIR/vmware/precise.vmdk}
 export LXC_IMAGE=${LXC_IMAGE:-$IMG_DIR/lxc/precise-server-cloudimg-amd64.img
 }

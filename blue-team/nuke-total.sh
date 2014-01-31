@@ -34,7 +34,7 @@ echo -e " Delete virtual nodes from MAAS state"
 for nodename in juju lds neutron; do
 	system_id=$(maas-cli admin nodes list hostname=$nodename.local | grep system_id | cut -d'"' -f4)
 	echo -e  "Deleting virtual node: $nodename == $system_id from MAAS."
-	maas-cli admin node delete $system_id
+	maas-cli admin node delete $system_id || :
 done
 
 echo -e "Deleting KVMs from node 0"
