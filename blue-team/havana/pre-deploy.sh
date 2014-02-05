@@ -5,7 +5,7 @@ export PATH=~/test-bin:$PATH
 date
 echo "Pre-deployment script to add machines to environment in advance of a demo"
 
-juju add-machine --constraints tags=lds
+# juju add-machine --constraints tags=lds
 juju add-machine --constraints tags=neutron
 juju add-machine
 

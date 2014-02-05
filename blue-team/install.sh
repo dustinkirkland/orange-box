@@ -7,15 +7,21 @@ sudo apt-get install --yes libvirt-bin virtinst qemu-kvm juju iptables-persisten
 [ -d ~/isos ] || mkdir ~/isos
 [ -f ~/isos/ubuntu-12.04.3-server-amd64.iso ] || wget http://releases.ubuntu.com/precise/ubuntu-12.04.3-server-amd64.iso -O ~/isos/ubuntu-12.04.3-server-amd64.iso
 
-# Make Logical Volumes for the guests
-sudo vgscan | grep BigDisk || sudo vgcreate BigDisk /dev/sdb1
+grep 'libvirtd.*ubuntu' /etc/group || (echo "Adding ubuntu user to libvirtd group" && sudo adduser ubuntu libvirtd && echo "Please re-login and run again" && exit 0)
 
-for service in juju lds neutron; do
-    sudo lvdisplay | grep ${service}_disk && sudo lvremove -f BigDisk/${service}_disk
-done
-sudo lvcreate -L20G -n juju_disk BigDisk
-sudo lvcreate -L800G -n lds_disk BigDisk
-sudo lvcreate -L20G -n neutron_disk BigDisk
+[ -f /home/ubuntu/.ssh/id_rsa ] || echo -e "\n\n\n" | ssh-keygen -N "" -t rsa -f /home/ubuntu/.ssh/id_rsa
+maas-cli admin sshkeys list | grep id || maas-cli admin sshkeys new key="$(cat ~/.ssh/id_rsa.pub)"
+
+# Make Logical Volumes for the guests
+echo "Skipping setup of LVMs"
+# sudo vgscan | grep BigDisk || sudo vgcreate BigDisk /dev/sdb1
+
+# for service in juju lds neutron; do
+#     sudo lvdisplay | grep ${service}_disk && sudo lvremove -f BigDisk/${service}_disk
+# done
+# sudo lvcreate -L20G -n juju_disk BigDisk
+# sudo lvcreate -L800G -n lds_disk BigDisk
+# sudo lvcreate -L20G -n neutron_disk BigDisk
 
 sudo tee /etc/init/maas-pserv.override << EOF
 # Don't start maas-pserv until bridge has started
@@ -64,12 +70,19 @@ iface br1 inet static
 
 EOF
 
+sudo sed -i -e's/eth0/br0/g' /etc/iptables/rules.v4
+sudo sed -i -e's/em1/br1/g' /etc/iptables/rules.v4
+sudo service iptables-persistent restart
+
+cluster_controller_uuid=$(maas-cli admin node-groups list | grep uuid | cut -d'"' -f4)
+# Replace MAAS management of em1 with br1
+maas-cli admin node-group-interface delete ${cluster_controller_uuid} em1 && maas-cli admin node-group-interfaces new ${cluster_controller_uuid} interface=br1 ip=10.0.0.1 subnet_mask=255.255.255.0 broadcast_ip=10.0.0.255 router_ip=10.0.0.1 ip_range_low=10.0.0.10 ip_range_high=10.0.0.254 management=2 && sudo service maas-dhcp-server restart && sudo service maas-pserv restart && sudo service maas-cluster-celery restart && sudo service maas-region-celery restart
+
 sudo sed -ie 's/#prepend domain-name-servers 127.0.0.1;/prepend domain-name-servers 10.0.0.1;/' /etc/dhcp/dhclient.conf
 virsh net-info default && virsh net-destroy default && virsh net-undefine default
 
 # create bridge on 172.16.1.0/24 for neutron
-virsh net-info bridge2 || virsh net-create bridge2.xml
-#virsh net-autostart bridge2
+virsh net-info bridge2 || virsh net-create ~/micro-cluster/blue-team/bridge2.xml
 
 # cat >/tmp/maas-private.xml <<EOF
 # <network>
@@ -89,29 +102,34 @@ virsh net-info bridge2 || virsh net-create bridge2.xml
 # </network>
 # EOF
 # for net in maas-private maas-external; do
-#     sudo virsh net-create /tmp/$net.xml
-#     sudo virsh net-define /tmp/$net.xml
-#     sudo virsh net-autostart $net
+#     virsh net-create /tmp/$net.xml
+#     virsh net-define /tmp/$net.xml
+#     virsh net-autostart $net
 # done
 sudo ifup br0
 sudo ifup br1
 [ -d /home/maas ] || sudo install -d /home/maas --owner maas --group maas
 sudo chsh maas -s /bin/bash
 [ -d /home/maas/.ssh ] || echo -e "\n\n\n" | sudo -u maas ssh-keygen -N "" -t rsa -f /home/maas/.ssh/id_rsa
+[ -f /home/maas/.ssh/config ] || sudo -u maas tee /home/maas/.ssh/config <<EOF
+Host *
+   UserKnownHostsFile /dev/null
+   StrictHostKeyChecking no
+EOF
 grep 'maas@' ~/.ssh/authorized_keys || sudo cat /home/maas/.ssh/id_rsa.pub | tee -a /home/ubuntu/.ssh/authorized_keys
 # 10.0.0.1 known hosts
 
 # create the kvms, not in loop due to neutron being different
 echo -e "virt-install juju instance"
-sudo virsh list --all --name | grep juju || sudo virt-install --name juju --ram 4096 --disk path=/dev/BigDisk/juju_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br1 --boot network || true
-echo -e "virt-install lds instance"
-sudo virsh list --all --name | grep lds || sudo virt-install --name lds --ram 4096 --disk path=/dev/BigDisk/lds_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br1 --boot network || true
+virsh list --all --name | grep juju || sudo virt-install --name juju --ram 4096 --disk path=/mnt/juju_disk,size=20 --vcpus=2 --os-type=linux --pxe --network=bridge=br1 --boot network || true
+# echo -e "virt-install lds instance"
+# virsh list --all --name | grep lds || sudo virt-install --name lds --ram 4096 --disk path=/dev/BigDisk/lds_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br1 --boot network || true
 echo -e "virt-install neutron instance"
-sudo virsh list --all --name | grep neutron || sudo virt-install --name neutron --ram 4096 --disk path=/dev/BigDisk/neutron_disk --vcpus=2 --os-type=linux --pxe --network=bridge=virbr1 --network=bridge=br1 --boot network || true
+virsh list --all --name | grep neutron || sudo virt-install --name neutron --ram 4096 --disk path=/mnt/neutron_disk,size=20 --vcpus=2 --os-type=linux --pxe --network=bridge=virbr1 --network=bridge=br1 --boot network || true
 
 # loop to fixup the kvms
-for system in juju lds neutron; do
-    mac=$(sudo virsh dumpxml $system | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
+for system in juju neutron; do
+    mac=$(virsh dumpxml $system | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
     system_id=$(maas-cli admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
     # until [ $system_id ]; do
     #     system_id=$(maas-cli admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
@@ -125,8 +143,8 @@ for system in juju lds neutron; do
 done
 
 
-for system in juju lds neutron; do
-    mac=$(sudo virsh dumpxml $system | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
+for system in juju neutron; do
+    mac=$(virsh dumpxml $system | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
     system_id=$(maas-cli admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
     echo "Waiting for $system to be Ready"
     until maas-cli admin node read $system_id | grep status | awk {'print $2'} | grep '4,'; do echo -n '.'; sleep 5; done

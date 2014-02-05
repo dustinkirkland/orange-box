@@ -69,7 +69,7 @@ config_key_exists() {
 
 config_set() {
   # $1 configuration key
-  # $2 value
+  # $2 valuep
   if [ ! -f "$_SETTINGS_FILE" ]; then
     mkdir -p $(dirname $_SETTINGS_FILE)
   fi
@@ -109,6 +109,7 @@ oauth_login() {
   fi
 
   maas-cli login "$user" http://10.0.0.1/MAAS "$auth"
+  chown ubuntu: ~/.maascli.db
 }
 
 wake_me_up_before_you_go_go() {
