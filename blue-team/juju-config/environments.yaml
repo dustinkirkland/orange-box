@@ -1,0 +1,12 @@
+default: openstack
+environments:
+  openstack:
+    type: openstack
+    control-bucket: __UUID__
+    admin-secret: __UUID__
+    auth-url: __AUTH_URL__
+    region: RegionOne
+    username: admin
+    password: Password1+
+    tenant-name: admin
+    use-floating-ip: true

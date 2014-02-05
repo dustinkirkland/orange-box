@@ -1,0 +1,45 @@
+#!/bin/bash
+#set -x
+#This script controls power on Intel AMT-managed systems.  
+#Systems can be powered up, powered down, or power cycled. 
+
+WSENDPOINT=$1
+WSUSER=$2
+WSPASS=$AMT_PASSWORD
+ACTION=$3
+
+export WSOPTS="-h $WSENDPOINT -u $WSUSER -p $WSPASS -P 16992 -V -v"
+
+usage()
+{
+cat << EOF
+
+ws-powerctl - AMT power control using wsman.
+
+USAGE: $0 <ipaddress> <amt username> <action>
+
+  The options to ws-powerctl must be passed as follows:
+  <ipaddress> = IP address of the system's AMT device
+  <username>  = The username assigned to the AMT device
+  <action>    
+          up    - power up the device
+          down  - power down the device
+          cycle - power cycle the device
+  
+  Password is passed via AMT_PASSWORD environment variable.
+
+  Example:  ws-powerctl 192.168.0.1 admin up
+
+EOF
+}
+
+[ $# -lt 3 ] && usage
+
+case $ACTION in
+   up) wsman invoke -a RequestPowerStateChange -J request-powerup.xml http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_PowerManagementService?SystemCreationClassName="\"CIM_ComputerSystem\"",SystemName="\"Intel(r) AMT\"",CreationClassName="\"CIM_PowerManagementService\"",Name="\"Intel(r) AMT Power Management Service\"" ${WSOPTS}
+       ;;
+ down) wsman invoke -a RequestPowerStateChange -J request-poweroff.xml http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_PowerManagementService?SystemCreationClassName="\"CIM_ComputerSystem\"",SystemName="\"Intel(r) AMT\"",CreationClassName="\"CIM_PowerManagementService\"",Name="\"Intel(r) AMT Power Management Service\"" ${WSOPTS}
+       ;;
+cycle) wsman invoke -a RequestPowerStateChange -J request-powercycle.xml http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_PowerManagementService?SystemCreationClassName="\"CIM_ComputerSystem",SystemName="Intel(r) AMT\"",CreationClassName="\"CIM_PowerManagementService\"",Name="\"Intel(r) AMT Power Management Service\"" ${WSOPTS}
+       ;;
+esac

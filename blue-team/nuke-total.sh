@@ -15,7 +15,6 @@
 #
 
 set -e
-export PATH=~/test-bin:$PATH
 echo -e "Clear juju environment with juju destroy-environment"
 echo -e "This will set nodes 1-9 back to Ready state in MAAS"
 echo -e "and delete the ~/.juju/environments dir."
@@ -50,7 +49,5 @@ set -e
 
 echo -e "Removing virtual bridge2"
 sudo virsh net-destroy bridge2
-sudo virsh net-undefine bridge2
-
 
 echo -e "Done."

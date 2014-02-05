@@ -1,0 +1,13 @@
+#!/bin/bash 
+# Filename: ws-powercycle
+# Version: 1.0
+# Author: Kent Baxley
+
+export AMT_PASSWORD="Password1+"
+
+export WSENDPOINT=$1
+
+echo "Sending powercycle request for: ${WSENDPOINT}"
+
+wsman invoke -a RequestPowerStateChange -J request-powercycle.xml http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_PowerManagementService?SystemCreationClassName="\"CIM_ComputerSystem",SystemName="Intel(r) AMT\"",CreationClassName="\"CIM_PowerManagementService\"",Name="\"Intel(r) AMT Power Management Service\"" --port 16992 -h $WSENDPOINT --username admin -p ${AMT_PASSWORD} -V -v
+

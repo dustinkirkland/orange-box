@@ -7,41 +7,110 @@ then
 	exit 1
 fi
 
-# Set up structure
-if [ $(mount | grep /dev/sdb1 | wc -l) -ne 1 ]
+home=$PWD
+IP=10.0.0.1
+
+function run_mirror { 
+    echo "apt-mirror /etc/apt/mirror.list" 
+}
+
+echo THIS IS MEANT TO BE RUN FROM WITHIN THE TOP LEVEL micro-cluster BRANCH
+echo If you are not there, you need to exit now and start over in the right
+echo location.  Hit Return to continue or ctrl-c to exit.
+read RETURN_TO_CONTINUE
+
+if [ -e /srv/Mirror_Only ]
 then
-	echo Mounting /dev/sdb1 under /srv...
-	mount /dev/sdb1 /srv || echo Error mounting /dev/sdb1 && exit 1
-    echo YOU MUST ADD /dev/sdb1 TO FSTAB TO ENSURE IT MOUNTS EVERY TIME WE BOOT!!!
+    echo It appears this script has been run already and you just need to restart apt-mirror... Doing that now.
+    run_mirror
+    exit $?
 fi
 
-mkdir -p /mnt/mirror/precise || echo Error creating /mnt/mirror/precise && exit 1
+# Install software we need
+echo Installing necessary packages ...
+echo Setting up the Juju Stable PPA ...
+add-apt-repository -y ppa:juju/stable || echo ERROR Installing PPA
+apt-get update
 
-# install charm-tools if not already there
-PKGS=charm-tools apt-mirror
-for pkg in $PKGS; do
-    if [ $(dpkg -l | grep $pkg | grep ^ii) -ne 0 ]
-    then
-	    echo Installing $pkg
-	    apt-get -y install $pkg || echo Error installing $pkg && exit 1
-    fi
+PACKAGES="apache2 apt-mirror bzr charm-tools run-one"
+for package in $PACKAGES; do
+    dpkg-query -W -f='${Status}\n' $package > /dev/null 2>&1 || apt-get install -y $package
 done
+echo Done. && echo
 
-# run apt-mirror to mirror the archives
-if [ -f /etc/apt/mirrors.list ]; then
-    apr-mirror /etc/apt/mirrors.list || echo ERROR SYNCING MIRRORS && exit 1
-else
-    echo ERROR mirrors.list not found
+# Set up structure
+# unmount the disk if it's mounted already
+echo Setting up the disk for our mirror ...
+if [ $(mount | grep /dev/sdb1 | wc -l) -gt 0 ]
+then
+    echo Unmounting /dev/sdb1 ...
+    umount /dev/sdb1
 fi
 
-# grab the charms into /mnt/mirror/precise
-cd /srv/charmstore/precise
-charm getall
+# Add our disk to fstab
+echo Adding /dev/sdb1 to fstab ...
+grep -q /dev/sdb1 /etc/fstab && sed -i "/\/dev\/sdb1/c\\/dev\/sdb1  \/srv ext4    rw,errors=remount-ro    0   2" /etc/fstab || echo "/dev/sdb1  /srv  ext4 rw,errors=remount-ro  0  2" | tee -a /etc/fstab
 
-# make charms trustified
-cd /srv/charmstore
-cp -a precise/ trusty/
+# mount /srv
+echo Mounting /srv ...
+mount /srv
+echo Done. && echo
 
-# done
-cd -
-echo Done.
+# Create our charm mirror
+echo Creating Charm Store Mirror ...
+echo Creating Charm Store directories ...
+[ -e /srv/charmstore/precise ] || mkdir -p /srv/charmstore/precise
+
+echo Mirroring the Charmstore ...
+# This may not work :/ Ran into issues on my test precise VM
+cd /srv/charmstore/
+charm getall precise
+
+echo Making Trusty Charms *THIS IS A HACK TO BE FIXED WHEN TRUSTY CHARMS EXIST
+cp -a /srv/charmstore/precise /srv/charmstore/trusty
+echo Done. && echo
+
+# Set up apt-mirror to mirror the archives
+echo Setting up Apt Mirror ...
+cd $home
+if [ -f /etc/apt/mirror.list ]; then
+    mv /etc/apt/mirror.list /etc/apt/mirror.list.orig
+fi
+cp etc/apt/mirror.list /etc/apt
+
+echo Making mirror directories ...
+mkdir -p /srv/mirrors /srv/skel /srv/var
+
+echo Creating postmirror.sh script ...
+# This created a blank file, for some reason :/
+echo << 'EOF' > /srv/var/postmirror.sh
+#!/bin/sh
+/srv/var/clean.sh
+EOF
+
+echo Making postmirror.sh executable ...
+chmod +x /srv/var/postmirror.sh
+echo Done. && echo
+
+echo Setting up the web dirs for mirroring ...
+ln -s /srv/mirrors/archive.ubuntu.com/ubuntu /var/www/html/archive.ubuntu.com
+ln -s /srv/mirrors/ubuntu-cloud.archive.canonical.com/ubuntu /var/www/html/ubuntu-cloud.archive.canonical.com
+
+echo Copying config file to apache ...
+cd $home
+cp etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled
+
+echo Restarting Apache ...
+service apache2 restart
+
+echo Now we\'re ready to start apt-mirror ...
+echo This could take quite a while ...
+touch /srv/Mirror_Only
+run_mirror
+echo Done ...
+
+echo Testing Apache ...
+curl -f $IP/archive.ubuntu.com || echo ERROR accessing local mirror, you need to fix the links or permissions in apache...
+
+exit 0
+

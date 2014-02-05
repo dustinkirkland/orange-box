@@ -1,9 +1,8 @@
 #!/bin/bash
 set -ex
-export PATH=~/test-bin:$PATH
 sudo apt-get install --yes libvirt-bin virtinst qemu-kvm juju iptables-persistent juju-deployer \
   python-keystoneclient python-novaclient python-cinderclient python-glanceclient python-neutronclient \
-  python-nose git
+  python-nose git python-swiftclient
 [ -d ~/isos ] || mkdir ~/isos
 [ -f ~/isos/ubuntu-12.04.3-server-amd64.iso ] || wget http://releases.ubuntu.com/precise/ubuntu-12.04.3-server-amd64.iso -O ~/isos/ubuntu-12.04.3-server-amd64.iso
 
@@ -179,7 +178,4 @@ environments:
         maas-oauth: '$maas_oauth'
 EOF
 
-cd ~/micro-cluster/blue-team/havana
-./demo-prep.sh
-./pre-deploy.sh
-cd -
+echo "Install script finished"

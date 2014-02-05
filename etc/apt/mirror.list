@@ -6,8 +6,8 @@ set base_path    /srv/
 set mirror_path  $base_path/mirrors
 set skel_path    $base_path/skel
 set var_path     $base_path/var
-set cleanscript $var_path/bin/clean.sh
-# set defaultarch  <running host architecture>
+set cleanscript  /bin/true
+set defaultarch  amd64
 # set postmirror_script $var_path/postmirror.sh
 # set run_postmirror 0
 set nthreads     20
@@ -19,25 +19,37 @@ set _tilde 0
 deb http://archive.ubuntu.com/ubuntu trusty main restricted universe multiverse
 deb http://archive.ubuntu.com/ubuntu trusty-security main restricted universe multiverse
 deb http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe multiverse
+deb-i386 http://archive.ubuntu.com/ubuntu trusty main restricted universe multiverse
+deb-i386 http://archive.ubuntu.com/ubuntu trusty-security main restricted universe multiverse
+deb-i386 http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe multiverse
 
 ## precise
 deb http://archive.ubuntu.com/ubuntu precise main restricted universe multiverse
 deb http://archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
 deb http://archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse
+deb-i386 http://archive.ubuntu.com/ubuntu precise main restricted universe multiverse
+deb-i386 http://archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
+deb-i386 http://archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse
 
 ## Saucy
 deb http://archive.ubuntu.com/ubuntu saucy main restricted universe multiverse
 deb http://archive.ubuntu.com/ubuntu saucy-security main restricted universe multiverse
 deb http://archive.ubuntu.com/ubuntu saucy-updates main restricted universe multiverse
+deb-i386 http://archive.ubuntu.com/ubuntu saucy main restricted universe multiverse
+deb-i386 http://archive.ubuntu.com/ubuntu saucy-security main restricted universe multiverse
+deb-i386 http://archive.ubuntu.com/ubuntu saucy-updates main restricted universe multiverse
 
 ## Cloud-archive
+deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/cloud-tools main
 deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/folsom main
 deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/grizzly main
 deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/havana main
 deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/icehouse main
-
-#deb-src http://archive.ubuntu.com/ubuntu saucy main restricted universe multiverse
-#deb-src http://archive.ubuntu.com/ubuntu saucy-security main restricted universe multiverse
-#deb-src http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe multiverse
+deb-i386 http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/cloud-tools main
+deb-i386 http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/folsom main
+deb-i386 http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/grizzly main
+deb-i386 http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/havana main
+deb-i386 http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/icehouse main
 
 clean http://archive.ubuntu.com/ubuntu
+clean http://ubuntu-cloud.archive.canonical.com/ubuntu

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+
+sed -e "s/__UUID__/$(uuid)/g" -e "s!__AUTH_URL__!http://$(juju-deployer -f keystone):5000/v2.0!g" environments.yaml
