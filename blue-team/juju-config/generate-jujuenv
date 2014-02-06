@@ -2,4 +2,11 @@
 
 set -e
 
-sed -e "s/__UUID__/$(uuid)/g" -e "s!__AUTH_URL__!http://$(juju-deployer -f keystone):5000/v2.0!g" environments.yaml
+sed -e "s/__UUID__/$(uuid)/g" -e "s!__AUTH_URL__!http://$(juju-deployer -f keystone):5000/v2.0!g" environments.yaml >> ~/.juju/environments.yaml
+
+echo "Default Juju environment is now: openstack"
+
+echo "Syncing tools to Openstack Container"
+juju sync-tools
+
+#What else do we need to do to prepare Juju?

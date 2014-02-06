@@ -2,7 +2,7 @@
 set -ex
 sudo apt-get install --yes libvirt-bin virtinst qemu-kvm juju iptables-persistent juju-deployer \
   python-keystoneclient python-novaclient python-cinderclient python-glanceclient python-neutronclient \
-  python-nose git python-swiftclient
+  python-nose git python-swiftclient uuid
 [ -d ~/isos ] || mkdir ~/isos
 [ -f ~/isos/ubuntu-12.04.3-server-amd64.iso ] || wget http://releases.ubuntu.com/precise/ubuntu-12.04.3-server-amd64.iso -O ~/isos/ubuntu-12.04.3-server-amd64.iso
 
@@ -81,7 +81,7 @@ sudo sed -ie 's/#prepend domain-name-servers 127.0.0.1;/prepend domain-name-serv
 virsh net-info default && virsh net-destroy default && virsh net-undefine default
 
 # create bridge on 172.16.1.0/24 for neutron
-virsh net-info bridge2 || virsh net-create ~/micro-cluster/blue-team/bridge2.xml
+virsh net-info bridge2 || ( virsh net-define ~/micro-cluster/blue-team/bridge2.xml && virsh net-autostart bridge2 && virsh net-start bridge2 )
 
 # cat >/tmp/maas-private.xml <<EOF
 # <network>
@@ -101,9 +101,9 @@ virsh net-info bridge2 || virsh net-create ~/micro-cluster/blue-team/bridge2.xml
 # </network>
 # EOF
 # for net in maas-private maas-external; do
-#     virsh net-create /tmp/$net.xml
 #     virsh net-define /tmp/$net.xml
 #     virsh net-autostart $net
+#     virsh net-start $net
 # done
 sudo ifup br0
 sudo ifup br1
@@ -121,20 +121,20 @@ grep 'maas@' ~/.ssh/authorized_keys || sudo cat /home/maas/.ssh/id_rsa.pub | tee
 # create the kvms, not in loop due to neutron being different
 echo -e "virt-install juju instance"
 virsh list --all --name | grep juju || sudo virt-install --name juju --ram 4096 --disk path=/mnt/juju_disk,size=20 --vcpus=2 --os-type=linux --pxe --network=bridge=br1 --boot network || true
-# echo -e "virt-install lds instance"
-# virsh list --all --name | grep lds || sudo virt-install --name lds --ram 4096 --disk path=/dev/BigDisk/lds_disk --vcpus=2 --os-type=linux --pxe --network=bridge=br1 --boot network || true
+echo -e "virt-install lds instance"
+virsh list --all --name | grep lds || sudo virt-install --name lds --ram 4096 --disk path=/mnt/lds_disk,size=20 --vcpus=2 --os-type=linux --pxe --network=bridge=br1 --boot network || true
 echo -e "virt-install neutron instance"
 virsh list --all --name | grep neutron || sudo virt-install --name neutron --ram 4096 --disk path=/mnt/neutron_disk,size=20 --vcpus=2 --os-type=linux --pxe --network=bridge=virbr1 --network=bridge=br1 --boot network || true
 
 # loop to fixup the kvms
-for system in juju neutron; do
+for system in juju lds neutron; do
     mac=$(virsh dumpxml $system | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
     system_id=$(maas-cli admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
     # until [ $system_id ]; do
     #     system_id=$(maas-cli admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
     #     sleep 10
     # done
-    maas-cli admin node update $system_id hostname=$system.local power_type=virsh power_parameters_power_address=qemu+ssh://ubuntu@10.0.0.1/system power_parameters_power_id=$system
+    maas-cli admin node update $system_id hostname=$system.master power_type=virsh power_parameters_power_address=qemu+ssh://ubuntu@10.0.0.1/system power_parameters_power_id=$system
     maas-cli admin tags new name=$system || true
     maas-cli admin tag update-nodes $system add=$system_id
     maas-cli admin tag update-nodes use-fastpath-installer add=$system_id
@@ -142,7 +142,7 @@ for system in juju neutron; do
 done
 
 
-for system in juju neutron; do
+for system in juju lds neutron; do
     mac=$(virsh dumpxml $system | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
     system_id=$(maas-cli admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
     echo "Waiting for $system to be Ready"
@@ -153,10 +153,12 @@ done
 # set all physical nodes to use fast installer
 
 for system in node1 node2 node3 node4 node5 node6 node7 node8 node9; do
-   system_id=$(maas-cli admin nodes list hostname=$system.local | grep system_id | cut -d'"' -f4)
+   system_id=$(maas-cli admin nodes list hostname=$system.master | grep system_id | cut -d'"' -f4)
    maas-cli admin tag update-nodes use-fastpath-installer add=$system_id
 done
 
+#Add Tag NUC to identify physical nodes
+maas-cli admin tag new name='nuc' comment='physical nuc nodes' definition='//node[@id="core"]/product = "D53427RKE"'
 
 # DNS forwarding, /etc/bind/named.conf.options
 

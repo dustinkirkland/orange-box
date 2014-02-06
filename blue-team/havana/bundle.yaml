@@ -20,8 +20,8 @@ openstack:
     lds:
       branch: lp:charms/lds-quickstart
       options:
-        server_fqdn: lds.orangebox.org
-        admin_email: admin@lds.orangebox.org
+        server_fqdn: lds.master
+        admin_email: admin@lds.master
         admin_name: admin
         admin_password: Password1+
         license: include-file://license.txt
@@ -60,7 +60,7 @@ openstack:
       to: lxc:ubuntu=0
     nova-compute:
       charm: cs:precise/nova-compute
-      num_units: 4
+      num_units: 3
       options:
         config-flags: "auto_assign_floating_ip=False"
         enable-live-migration: False
@@ -98,13 +98,13 @@ openstack:
       options:
         zone: 1
         block-device: "/srv/swift.img|10G"
-      to: nova-compute=0
+      constraints: tags=nuc
     swift-storage-z2:
       charm: cs:precise/swift-storage
       options:
         zone: 2
         block-device: "/srv/swift.img|10G"
-      to: nova-compute=1
+      constraints: tags=nuc
     ceilometer:
       charm: cs:precise/ceilometer
       to: lxc:ubuntu=0

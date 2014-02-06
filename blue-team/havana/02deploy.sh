@@ -1,8 +1,7 @@
 #!/bin/bash
-#Services need to be deployed in correct order as machines are pre-deployed.
-#node 1, 2 are KVM virtual hosts on the master MAAS node.
-#node 3 is for Openstack management services using LXC
-#nodes 4-11 are the rest of the physical nodes.
+#Pre-requisite: Must have set your Launchpad login for bzr.
+bzr launchpad-login || ( echo "Please set your Launchpad login: bzr launchpad-login LAUNCHPAD_ID and re-run." && exit )
+
 set -ex
 [ -d ~/landscape ] || bzr branch lp:landscape ~/landscape
 
@@ -23,3 +22,5 @@ juju-deployer -c bundle.yaml -d
 
 # NOTE: add relation not encompassed in bundle
 juju add-relation landscape-client:container juju-gui
+
+echo "Deployment finished"

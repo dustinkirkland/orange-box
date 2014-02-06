@@ -1,6 +1,5 @@
 #!/bin/bash
-#Canonical
-date
+#Canonical Micro-Cluster Demo Preparation
 echo "checking for existing Juju environment..."
 juju status && echo "Existing deployment found, exiting." && exit
 
@@ -12,5 +11,3 @@ juju set-constraints tags=""
 echo "Deploying Juju-gui to bootstrap node"
 juju deploy --to 0 juju-gui
 
-date
-echo "Running pre-deployment"
