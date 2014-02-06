@@ -81,7 +81,7 @@ sudo sed -ie 's/#prepend domain-name-servers 127.0.0.1;/prepend domain-name-serv
 virsh net-info default && virsh net-destroy default && virsh net-undefine default
 
 # create bridge on 172.16.1.0/24 for neutron
-virsh net-info bridge2 || ( virsh net-define ~/micro-cluster/blue-team/bridge2.xml && virsh net-autostart bridge2 && virsh net-start bridge2 )
+virsh net-info bridge2 || ( virsh net-define bridge2.xml && virsh net-autostart bridge2 && virsh net-start bridge2 )
 
 # cat >/tmp/maas-private.xml <<EOF
 # <network>

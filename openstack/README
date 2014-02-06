@@ -1,0 +1,24 @@
+This is the Openstack deployment demo folder.
+
+Step 1: Run the script:
+./openstack-prereqs-install.sh
+
+Step 2: Change into a subdirectory of the deployment you want to use, use havana as default.
+cd havana
+
+Step 3: Run the pre-deployment to set up Juju and the GUI
+./01demo-prep.sh
+
+Step 4: Ready to run the demo!
+./02deploy.sh
+
+Step 5: Configure Openstack and Juju to Use Openstack
+./03configure-cloud.sh
+
+Step 6: Deploy other workloads ontop of Openstack.
+See other demo workload folders
+
+Step 7: Cleanup after a demo:
+./04cleanup.sh
+
+Ready to run the demo again.
