@@ -1,4 +1,5 @@
-havana-swift:
+# vim :set ts=2 et:
+openstack:
   series: precise
   overrides:
     openstack-origin: cloud:precise-havana
@@ -19,8 +20,8 @@ havana-swift:
     lds:
       branch: lp:charms/lds-quickstart
       options:
-        server_fqdn: lds.orangebox.org
-        admin_email: admin@lds.orangebox.org
+        server_fqdn: lds.master
+        admin_email: admin@lds.master
         admin_name: admin
         admin_password: Password1+
         license: include-file://license.txt
@@ -45,10 +46,11 @@ havana-swift:
       charm: cs:precise/openstack-dashboard-11
       options:
         offline-compression: "no"
+        webroot: "/"
       to: lxc:ubuntu=0
     nova-compute:
       charm: cs:precise/nova-compute
-      num_units: 7
+      num_units: 8
       options:
         config-flags: "auto_assign_floating_ip=False"
         enable-live-migration: False
@@ -63,13 +65,12 @@ havana-swift:
     neutron-gateway:
       charm: cs:precise/quantum-gateway-12
       options:
-        ext-port: eth1
+        ext-port: eth0
       constraints: tags=neutron
     cinder:
       charm: cs:precise/cinder-14
       options:
         block-device: "None"
-        overwrite: "true"
       to: lxc:ubuntu=0
     glance:
       charm: cs:precise/glance-26

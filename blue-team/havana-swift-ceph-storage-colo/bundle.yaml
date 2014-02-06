@@ -1,10 +1,11 @@
-havana-swift-ceph-storage-colo:
+# vim :set ts=2 et:
+openstack:
   series: precise
   overrides:
     openstack-origin: cloud:precise-havana
     source: cloud:precise-updates/havana
   services:
-    ubuntu:
+    ubuntu: 
       charm: cs:precise/ubuntu
       constraints: tags=nuc
     landscape-client:
@@ -19,8 +20,8 @@ havana-swift-ceph-storage-colo:
     lds:
       branch: lp:charms/lds-quickstart
       options:
-        server_fqdn: lds.orangebox.org
-        admin_email: admin@lds.orangebox.org
+        server_fqdn: lds.master
+        admin_email: admin@lds.master
         admin_name: admin
         admin_password: Password1+
         license: include-file://license.txt
@@ -37,7 +38,7 @@ havana-swift-ceph-storage-colo:
       to: lxc:ubuntu=0
     ceph:
       charm: cs:precise/ceph
-      num_units: 5
+      num_units: 6
       options:
         monitor-count: 3
         fsid: 9e7aac42-4bf4-11e3-b4b7-5254006a039c
@@ -59,7 +60,7 @@ havana-swift-ceph-storage-colo:
       to: lxc:ubuntu=0
     nova-compute:
       charm: cs:precise/nova-compute
-      num_units: 5 
+      num_units: 8
       options:
         config-flags: "auto_assign_floating_ip=False"
         enable-live-migration: False
@@ -80,7 +81,6 @@ havana-swift-ceph-storage-colo:
       charm: cs:precise/cinder-14
       options:
         block-device: "None"
-        overwrite: "true"
       to: lxc:ubuntu=0
     glance:
       charm: cs:precise/glance-26
@@ -98,13 +98,13 @@ havana-swift-ceph-storage-colo:
       options:
         zone: 1
         block-device: "/srv/swift.img|10G"
-      to: nova-compute=0
+      to: nova-compute=6
     swift-storage-z2:
       charm: cs:precise/swift-storage
       options:
         zone: 2
         block-device: "/srv/swift.img|10G"
-      to: nova-compute=1
+      to: nova-compute=7
     ceilometer:
       charm: cs:precise/ceilometer
       to: lxc:ubuntu=0
@@ -209,6 +209,6 @@ havana-swift-ceph-storage-colo:
     - - ntp:juju-info
       - openstack-dashboard:juju-info
     - - landscape-client:container
-      - [ lds, neutron-gateway, mysql, cinder, keystone, rabbitmq-server, glance, openstack-dashboard, nova-cloud-controller, nova-compute, ceph, swift-proxy, swift-storage-z1, swift-storage-z2 ]
+      - [ lds, neutron-gateway, mysql, cinder, keystone, rabbitmq-server, glance, openstack-dashboard, nova-cloud-controller, nova-compute, swift-proxy ]
     - - landscape-client:registration
       - lds

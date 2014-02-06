@@ -1,10 +1,11 @@
-havana-swift:
+# vim :set ts=2 et:
+openstack:
   series: precise
   overrides:
     openstack-origin: cloud:precise-havana
     source: cloud:precise-updates/havana
   services:
-    ubuntu:
+    ubuntu: 
       charm: cs:precise/ubuntu
       constraints: tags=nuc
     landscape-client:
@@ -17,15 +18,15 @@ havana-swift:
         script-users: ALL
         include-manager-plugins: ScriptExecution
     lds:
-      branch: lp:charms/lds-quickstart 
+      branch: lp:charms/lds-quickstart
       options:
-        server_fqdn: lds.orangebox.org
-        admin_email: admin@lds.orangebox.org
+        server_fqdn: lds.master
+        admin_email: admin@lds.master
         admin_name: admin
         admin_password: Password1+
         license: include-file://license.txt
         sample_data: False
-      constraints: tags=lds 
+      constraints: tags=lds
     mysql:
       charm: cs:precise/mysql-29
       options:
@@ -45,10 +46,11 @@ havana-swift:
       charm: cs:precise/openstack-dashboard-11
       options:
         offline-compression: "no"
+        webroot: "/"
       to: lxc:ubuntu=0
     nova-compute:
       charm: cs:precise/nova-compute
-      num_units: 5 
+      num_units: 6
       options:
         config-flags: "auto_assign_floating_ip=False"
         enable-live-migration: False
@@ -63,13 +65,12 @@ havana-swift:
     neutron-gateway:
       charm: cs:precise/quantum-gateway-12
       options:
-        ext-port: eth1
+        ext-port: eth0
       constraints: tags=neutron
     cinder:
       charm: cs:precise/cinder-14
       options:
         block-device: "None"
-        overwrite: "true"
       to: lxc:ubuntu=0
     glance:
       charm: cs:precise/glance-26
@@ -78,22 +79,22 @@ havana-swift:
       charm: cs:precise/swift-proxy
       options:
         zone-assignment: manual
-        replicas: 2 
+        replicas: 2
         use-https: 'no'
         swift-hash: fdfef9d4-8b06-11e2-8ac0-531c923c8fae
-      contraints: tags=nuc
+      to: lxc:ubuntu=0
     swift-storage-z1:
       charm: cs:precise/swift-storage
       options:
         zone: 1
         block-device: "/srv/swift.img|10G"
-      contraints: tags=nuc
+      constraints: tags=nuc
     swift-storage-z2:
       charm: cs:precise/swift-storage
       options:
         zone: 2
         block-device: "/srv/swift.img|10G"
-      contraints: tags=nuc
+      constraints: tags=nuc
     ceilometer:
       charm: cs:precise/ceilometer
       to: lxc:ubuntu=0
