@@ -3,7 +3,7 @@
 echo "Configuring Openstack environment"
 cd ../openstack-configuration/
 
-./get-cloud-images
+[ -f ~/images/precise-server-cloudimg-amd64-disk1.img ] || ./get-cloud-images
 
 ./inspect-environment
 source envrc

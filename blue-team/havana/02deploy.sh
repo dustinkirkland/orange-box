@@ -1,9 +1,10 @@
 #!/bin/bash
-#Pre-requisite: Must have set your Launchpad login for bzr.
-bzr launchpad-login || ( echo "Please set your Launchpad login: bzr launchpad-login LAUNCHPAD_ID and re-run." && exit )
 
 set -ex
-[ -d ~/landscape ] || bzr branch lp:landscape ~/landscape
+if [ ! -d ~/landscape ]; then
+	bzr launchpad-login || ( echo "Please set your Launchpad login: bzr launchpad-login LAUNCHPAD_ID and re-run." && exit )
+	bzr branch lp:landscape ~/landscape
+fi
 
 [ -f license.txt ] || (echo "Need to create license.txt" && false)
 
