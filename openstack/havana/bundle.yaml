@@ -45,7 +45,7 @@ openstack:
         monitor-secret: AQAAvoJSOAv/NRAAgvXP8d7iXN7lWYbvDZzm2Q==
         osd-devices: /srv
         osd-reformat: "yes"
-      contraints: tags=nuc
+      constraints: tags=nuc
     keystone:
       charm: cs:precise/keystone-23
       options:
@@ -65,7 +65,7 @@ openstack:
         config-flags: "auto_assign_floating_ip=False"
         enable-live-migration: False
         virt-type: kvm
-      contraints: tags=nuc
+      constraints: tags=nuc
     nova-cloud-controller:
       charm: cs:precise/nova-cloud-controller-19
       options:

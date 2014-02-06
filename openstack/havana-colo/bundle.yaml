@@ -65,7 +65,7 @@ openstack:
         config-flags: "auto_assign_floating_ip=False"
         enable-live-migration: False
         virt-type: kvm
-      contraints: tags=nuc
+      constraints: tags=nuc
     nova-cloud-controller:
       charm: cs:precise/nova-cloud-controller-19
       options:
