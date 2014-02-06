@@ -2,11 +2,15 @@
 
 set -ex
 if [ ! -d ~/landscape ]; then
-	bzr launchpad-login || ( echo "Please set your Launchpad login: bzr launchpad-login LAUNCHPAD_ID and re-run." && exit )
+	bzr launchpad-login || ( echo "Please set your Launchpad login: bzr launchpad-login LAUNCHPAD_ID and re-run." && false )
 	bzr branch lp:landscape ~/landscape
 fi
 
-[ -f license.txt ] || (echo "Need to create license.txt" && false)
+if [ ! -f ~/license.txt ]; then
+	(echo "Need to create license.txt" && false)
+else
+	cp ~/license.txt ./license.txt
+fi
 
 if [ ! -d precise/lds ]; then
   mkdir -p precise
