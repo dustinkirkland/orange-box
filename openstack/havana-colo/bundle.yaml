@@ -209,6 +209,6 @@ openstack:
     - - ntp:juju-info
       - openstack-dashboard:juju-info
     - - landscape-client:container
-      - [ lds, neutron-gateway, mysql, cinder, keystone, rabbitmq-server, glance, openstack-dashboard, nova-cloud-controller, nova-compute, swift-proxy ]
+      - [ lds, neutron-gateway, ubuntu, mysql, cinder, keystone, rabbitmq-server, glance, openstack-dashboard, nova-cloud-controller, ceilometer, mongodb, nova-compute, swift-proxy ]
     - - landscape-client:registration
       - lds
