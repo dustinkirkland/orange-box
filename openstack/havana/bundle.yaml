@@ -97,13 +97,13 @@ openstack:
       charm: cs:precise/swift-storage
       options:
         zone: 1
-        block-device: "/srv/swift.img|10G"
+        block-device: "/srv/swift.img|40G"
       constraints: tags=nuc
     swift-storage-z2:
       charm: cs:precise/swift-storage
       options:
         zone: 2
-        block-device: "/srv/swift.img|10G"
+        block-device: "/srv/swift.img|40G"
       constraints: tags=nuc
     ceilometer:
       charm: cs:precise/ceilometer

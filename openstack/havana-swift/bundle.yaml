@@ -50,7 +50,7 @@ openstack:
       to: lxc:ubuntu=0
     nova-compute:
       charm: cs:precise/nova-compute
-      num_units: 6
+      num_units: 5
       options:
         config-flags: "auto_assign_floating_ip=False"
         enable-live-migration: False
@@ -70,8 +70,8 @@ openstack:
     cinder:
       charm: cs:precise/cinder-14
       options:
-        block-device: "None"
-      to: lxc:ubuntu=0
+        block-device: "/srv/cinder.img|40G"
+      constraints: tags=nuc
     glance:
       charm: cs:precise/glance-26
       to: lxc:ubuntu=0
@@ -87,13 +87,13 @@ openstack:
       charm: cs:precise/swift-storage
       options:
         zone: 1
-        block-device: "/srv/swift.img|10G"
+        block-device: "/srv/swift.img|40G"
       constraints: tags=nuc
     swift-storage-z2:
       charm: cs:precise/swift-storage
       options:
         zone: 2
-        block-device: "/srv/swift.img|10G"
+        block-device: "/srv/swift.img|40G"
       constraints: tags=nuc
     ceilometer:
       charm: cs:precise/ceilometer
