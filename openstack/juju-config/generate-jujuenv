@@ -2,11 +2,38 @@
 
 set -e
 
-sed -e "s/__UUID__/$(uuid)/g" -e "s!__AUTH_URL__!http://$(juju-deployer -f keystone):5000/v2.0!g" environments.yaml >> ~/.juju/environments.yaml
+grep openstack ~/.juju/environments.yaml &&  echo "Openstack already configured in ~/.juju/environments.yaml" && exit 
+
+source ../openstack-configuration/envrc
+
+#Backup environments.yaml
+cp ~/.juju/environments.yaml ~/.juju/environments.yaml.bak
+
+sed -e "s/__UUID__/$(uuid)/g" -e "s!__AUTH_URL__!http://$KEYSTONE_HOST:5000/v2.0/!g"  environments.yaml >> ~/.juju/environments.yaml
 
 echo "Default Juju environment is now: openstack"
 
-echo "Syncing tools to Openstack Container"
-juju sync-tools
+echo "Generating Juju meta-data"
+juju-metadata generate-image -a amd64 -u ${OS_AUTH_URL?} -i $IMAGE_UUID -r $OS_REGION_NAME -s precise 
 
-#What else do we need to do to prepare Juju?
+echo "Copying data to web server"
+sudo cp -r images /var/www/html/
+sudo chmod -R go+r /var/www/html/images
+
+echo "Validating Juju Image Metadata"
+juju-metadata validate-images
+
+echo "Remove m1.tiny as it is too small for an Ubuntu Cloud Image and Juju defaults to the smallest flavor"
+nova flavor-delete m1.tiny
+
+echo "Fixup DNS nameservers to point to 172.16.1.1 for Neutron subnets"
+#Get subnet IDs
+for SUBNET in `neutron subnet-list -f csv -F id --quote none | grep -v ^id`
+do
+	neutron subnet-update $SUBNET --dns_nameservers list=true 172.16.1.1
+done
+
+echo "Ready to bootstrap Juju"
+echo "juju bootstrap --upload-tools=true"
+
+
