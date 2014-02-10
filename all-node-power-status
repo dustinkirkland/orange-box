@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export AMT_PASSWORD=Password1+
+
+for i in {1..9}
+do
+   amttool node$i.master
+done
