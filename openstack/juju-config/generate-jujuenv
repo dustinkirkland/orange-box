@@ -24,14 +24,12 @@ echo "Validating Juju Image Metadata"
 juju-metadata validate-images
 
 echo "Remove m1.tiny as it is too small for an Ubuntu Cloud Image and Juju defaults to the smallest flavor"
-nova flavor-delete m1.tiny
+nova flavor-list | grep m1.tiny && nova flavor-delete m1.tiny
 
 echo "Fixup DNS nameservers to point to 172.16.1.1 for Neutron subnets"
 #Get subnet IDs
-for SUBNET in `neutron subnet-list -f csv -F id --quote none | grep -v ^id`
-do
-	neutron subnet-update $SUBNET --dns_nameservers list=true 172.16.1.1
-done
+neutron subnet-update admin_net_subnet --dns_nameservers list=true 172.16.1.1
+neutron subnet-update ext_net_subnet --dns_nameservers list=true 172.16.1.1
 
 echo "Ready to bootstrap Juju"
 echo "juju bootstrap --upload-tools=true"
