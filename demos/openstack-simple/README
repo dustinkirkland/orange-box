@@ -1,3 +1,5 @@
 Simple OpenStack havana deployment
 
+Run commands in order:
+00-demp-prep.sh
 juju-deployer -c havanaOB.yaml
