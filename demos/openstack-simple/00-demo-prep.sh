@@ -7,6 +7,10 @@ echo "checking for existing Juju environment..."
 juju status && echo "Existing deployment found, exiting." && exit
 
 echo "No existing environment found, we are good to go."
+# Blow away the old known_hosts and juju environments to prevent
+# SSH key errors and any leftovers from previous deployments
+rm -rf ~/.ssh/known_hosts
+rm -rf ~/.juju/environments
 juju bootstrap
 echo "Waiting for bootstrap node to deploy (5 minutes)"
 sleep 300
