@@ -1,5 +1,12 @@
 havana:
   services: 
+    keystone: 
+      charm: "cs:precise/keystone-22"
+      num_units: 1
+      options: 
+        "admin-password": "p@33w0rd4Ost4ck"
+        "admin-token": ubuntutesting
+        "openstack-origin": "cloud:precise-havana"
     "nova-compute":
       charm: "cs:precise/nova-compute-16"
       num_units: 1
@@ -14,6 +21,7 @@ havana:
     "nova-cloud-controller": 
       charm: "cs:precise/nova-cloud-controller-18"
       num_units: 1
+      to: "keystone"
       options: 
         "network-manager": Neutron
         "openstack-origin": "cloud:precise-havana"
@@ -33,20 +41,12 @@ havana:
         "block-device": none
         "openstack-origin": "cloud:precise-havana"
         overwrite: "true"
-    keystone: 
-      charm: "cs:precise/keystone-22"
-      num_units: 1
-      options: 
-        "admin-password": "p@33w0rd4Ost4ck"
-        "admin-token": ubuntutesting
-        "openstack-origin": "cloud:precise-havana"
-      to: 1
     "openstack-dashboard": 
       charm: "cs:precise/openstack-dashboard-11"
       num_units: 1
+      to: "keystone"
       options: 
         "openstack-origin": "cloud:precise-havana"
-      to: 1
     mysql: 
       charm: "cs:precise/mysql-29"
       num_units: 1
