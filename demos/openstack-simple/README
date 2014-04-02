@@ -1,0 +1,3 @@
+Simple OpenStack havana deployment
+
+juju-deployer -c havanaOB.yaml

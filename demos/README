@@ -1,0 +1,5 @@
+Demos ready to run on a micro-cluster
+
+Each directory contains a demo for the micro cluster as well as a README 
+file on how to run the demo.  It is highly recommended to read the 
+README before running a demo!

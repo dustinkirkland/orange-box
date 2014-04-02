@@ -1,0 +1,89 @@
+havana:
+  services: 
+    "nova-compute":
+      charm: "cs:precise/nova-compute-16"
+      num_units: 1
+      options:
+        "flat-interface": eth0
+        "openstack-origin": "cloud:precise-havana"
+    "neutron-gateway":
+      charm: "cs:precise/quantum-gateway-10"
+      num_units: 1
+      options:
+        "openstack-origin": "cloud:precise-havana"
+    "nova-cloud-controller": 
+      charm: "cs:precise/nova-cloud-controller-18"
+      num_units: 1
+      options: 
+        "network-manager": Neutron
+        "openstack-origin": "cloud:precise-havana"
+    rabbitmq: 
+      charm: "cs:precise/rabbitmq-server-15"
+      num_units: 1
+    glance: 
+      charm: "cs:precise/glance-26"
+      num_units: 1
+      options: 
+        "openstack-origin": "cloud:precise-havana"
+    cinder: 
+      charm: "cs:precise/cinder-13"
+      num_units: 1
+      options: 
+        "block-device": none
+        "openstack-origin": "cloud:precise-havana"
+        overwrite: "true"
+    keystone: 
+      charm: "cs:precise/keystone-22"
+      num_units: 1
+      options: 
+        "admin-password": "p@33w0rd4Ost4ck"
+        "admin-token": ubuntutesting
+        "openstack-origin": "cloud:precise-havana"
+    "openstack-dashboard": 
+      charm: "cs:precise/openstack-dashboard-11"
+      num_units: 1
+      options: 
+        "openstack-origin": "cloud:precise-havana"
+    mysql: 
+      charm: "cs:precise/mysql-29"
+      num_units: 1
+  relations: 
+    - - "keystone:shared-db"
+      - "mysql:shared-db"
+    - - "nova-cloud-controller:shared-db"
+      - "mysql:shared-db"
+    - - "nova-cloud-controller:amqp"
+      - "rabbitmq:amqp"
+    - - "nova-cloud-controller:image-service"
+      - "glance:image-service"
+    - - "nova-cloud-controller:identity-service"
+      - "keystone:identity-service"
+    - - "glance:shared-db"
+      - "mysql:shared-db"
+    - - "glance:identity-service"
+      - "keystone:identity-service"
+    - - "cinder:shared-db"
+      - "mysql:shared-db"
+    - - "cinder:amqp"
+      - "rabbitmq:amqp"
+    - - "cinder:cinder-volume-service"
+      - "nova-cloud-controller:cinder-volume-service"
+    - - "cinder:identity-service"
+      - "keystone:identity-service"
+    - - "neutron-gateway:shared-db"
+      - "mysql:shared-db"
+    - - "neutron-gateway:amqp"
+      - "rabbitmq:amqp"
+    - - "neutron-gateway:quantum-network-service"
+      - "nova-cloud-controller:quantum-network-service"
+    - - "openstack-dashboard:identity-service"
+      - "keystone:identity-service"
+    - - "nova-compute:shared-db"
+      - "mysql:shared-db"
+    - - "nova-compute:amqp"
+      - "rabbitmq:amqp"
+    - - "nova-compute:image-service"
+      - "glance:image-service"
+    - - "nova-compute:cloud-compute"
+      - "nova-cloud-controller:cloud-compute"
+  series: precise
