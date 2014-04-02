@@ -11,5 +11,4 @@ juju bootstrap
 echo "Waiting for bootstrap node to deploy (5 minutes)"
 sleep 300
 juju deploy --to 0 juju-gui
-juju deploy ubuntu
 
