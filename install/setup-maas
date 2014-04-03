@@ -19,7 +19,7 @@ apt-get install -y maas maas-cluster-controller amtterm
 
 # Just run createadmin, since we can feed it a password
 #maas createsuperuser --username root --email maas-root@example.com || true
-maas createadmin --username admin --email maas-admin@example.com --password="Password1+" || true
+maas-region-admin createadmin --username admin --email maas-admin@example.com --password="Password1+"
 
 sed -i -e /^RELEASES=/d -e /^ARCHES=/d /etc/maas/import_pxe_files
 
