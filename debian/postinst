@@ -6,17 +6,27 @@ PKG="orange-box"
 webserver="apache2"
 
 case "$1" in
-        configure)
-                a2ensite archive
-                a2ensite ubuntu-cloud
-                invoke-rc.d $webserver reload
-        ;;
-        abort-upgrade|abort-remove|abort-deconfigure)
-        ;;
-        *)
-                echo "postinst called with unknown argument \`$1'" >&2
-                exit 1
-        ;;
+	configure)
+		# Set up the local mirror
+		a2ensite archive
+		a2ensite ubuntu-cloud
+		invoke-rc.d $webserver reload
+		# Configure the MAAS admin user
+		maas-region-admin createadmin --username admin --email maas-admin@example.com --password="admin" || true
+		# Import a minimal set of pxe images
+		sed -i -e /^RELEASES=/d -e /^ARCHES=/d /etc/maas/import_pxe_files
+		cat >> /etc/maas/import_pxe_files <<EOF
+RELEASES="trusty"
+ARCHES="amd64/generic"
+EOF
+		run-this-one maas-import-pxe-files
+	;;
+	abort-upgrade|abort-remove|abort-deconfigure)
+	;;
+	*)
+		echo "postinst called with unknown argument \`$1'" >&2
+	exit 1
+	;;
 esac
 
 #DEBHELPER#

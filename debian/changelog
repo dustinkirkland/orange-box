@@ -1,5 +1,7 @@
 orange-box (1.0) unreleased; urgency=low
 
   * Initial packaging
+  * debian/postinst:
+    - move some of the setup maas configuration into the postinst
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 07 Mar 2014 16:46:18 -0600
