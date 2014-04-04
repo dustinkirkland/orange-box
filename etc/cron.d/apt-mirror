@@ -1,0 +1,1 @@
+42 * * * *	run-one apt-mirror /etc/apt/mirrors.list

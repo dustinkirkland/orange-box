@@ -11,10 +11,12 @@ Architecture: all
 Depends: ${misc:Depends},
  amtterm,
  apache2,
+ apt-mirror,
  bzr,
  ccze,
  maas,
  maas-cluster-controller,
+ run-one,
  ubuntu-desktop,
  vim,
 Description: Orange Box master node easy installation
