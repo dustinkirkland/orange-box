@@ -3,5 +3,8 @@ orange-box (1.0) unreleased; urgency=low
   * Initial packaging
   * debian/postinst:
     - move some of the setup maas configuration into the postinst
+  * etc/apt/mirror.list => etc/apt/orange-box-mirror.list,
+    etc/cron.d/apt-mirror => etc/cron.d/orange-box-mirror:
+    - don't step on apt-mirror's default configuration file
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 07 Mar 2014 16:46:18 -0600
