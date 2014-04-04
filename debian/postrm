@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -e
+
+webserver="apache2"
+
+case "$1" in
+	remove)
+		for i in archive ubuntu-cloud; do
+			if [ -e "/etc/apache2/sites-enabled/${i}.conf" ]; then
+				a2dissite $i
+			fi
+		done
+		invoke-rc.d $webserver reload
+	;;
+esac
+
+#DEBHELPER#
+
+exit 0
