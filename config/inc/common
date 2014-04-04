@@ -101,14 +101,14 @@ oauth_login() {
   fi
 
   local user="${1:-admin}"
-  # 10.0.0.1/MAAS is hardcoded, dealwithit.gif
+  # 10.14.4.1/MAAS is hardcoded, dealwithit.gif
   local auth=`oauth_key "$user"`
   if [ "$auth" == "" ]; then
     echo "Unable to find user creds, does user exist?"
     return 1
   fi
 
-  maas-cli login "$user" http://10.0.0.1/MAAS "$auth"
+  maas-cli login "$user" http://10.14.4.1/MAAS "$auth"
   chown ubuntu: ~/.maascli.db
 }
 

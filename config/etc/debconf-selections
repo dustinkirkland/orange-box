@@ -1,5 +1,5 @@
-maas-cluster-controller maas-cluster-controller/maas-url        string  http://10.0.0.1/MAAS
-maas-region-controller-min      maas/default-maas-url   string  10.0.0.1
+maas-cluster-controller maas-cluster-controller/maas-url        string  http://10.14.4.1/MAAS
+maas-region-controller-min      maas/default-maas-url   string  10.14.4.1
 maas-region-controller-min      maas/installation-note   boolean true
 iptables-persistent     iptables-persistent/autosave_v6 boolean true
 iptables-persistent     iptables-persistent/autosave_v4 boolean true

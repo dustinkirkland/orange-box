@@ -1,9 +1,9 @@
 # The interface to the internal network.
 auto em1
 iface em1 inet static
-    address 10.0.0.1
+    address 10.14.4.1
     netmask 255.255.255.0
-    broadcast 10.0.0.255
+    broadcast 10.14.4.255
 
 # USB NIC; connect to LAN.
 auto eth0
