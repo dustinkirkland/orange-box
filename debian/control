@@ -1,12 +1,12 @@
-Source: orangebox
+Source: orange-box
 Section: admin
 Priority: optional
 Maintainer: Dustin Kirkland <kirkland@ubuntu.com>
 Build-Depends: debhelper (>= 7.0.50~),
 Standards-Version: 3.9.4
-Homepage: http://launchpad.net/orangebox
+Homepage: http://launchpad.net/orange-box
 
-Package: orangebox
+Package: orange-box
 Architecture: all
 Depends: ${misc:Depends},
  amtterm,
