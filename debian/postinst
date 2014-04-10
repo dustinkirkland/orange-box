@@ -5,21 +5,89 @@ set -e
 PKG="orange-box"
 webserver="apache2"
 
+setup_networking() {
+	# Set up the two network interfaces
+	local Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT
+	while read Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT; do
+		[ "$Mask" = "00000000" ] && break
+	done < /proc/net/route
+	default_interface="$Iface"
+	for interface in $(ifconfig -a -s | grep -v ^Iface | awk '{print $1}'); do
+		case "$interface" in
+			lo)
+				continue
+			;;
+			$default_interface)
+				continue
+			;;
+			*)
+				internal_interface="$interface"
+				break
+			;;
+		esac
+	done
+	cat >/etc/network/interfaces <<EOF
+auto lo
+iface lo inet loopback
+
+auto $default_interface
+iface $default_interface inet dhcp
+
+auto $internal_interface
+iface $internal_interface inet static
+	address 10.14.4.1
+	netmask 255.255.255.0
+	broadcast 10.14.4.255
+
+EOF
+	for interface in $default_interface $internal_interface; do
+		ifdown $interface || true
+		ifup $interface
+	done
+}
+
+setup_external_drive() {
+	# External drive must be:
+	#	a) on /dev/sdb
+	#	b) partitioned into 1 big partition
+	#	c) ext4 formatted
+	if [ -b /dev/sdb1 ] && ! grep -qs '^/dev/sdb1' /etc/fstab; then
+		echo "/dev/sdb1	/srv	ext4	defaults	1 1" >> /etc/fstab
+		mount -a
+	fi
+}
+
+setup_local_mirror() {
+	# Set up the local mirror
+	a2ensite archive
+	a2ensite ubuntu-cloud
+	invoke-rc.d $webserver reload
+}
+
+setup_maas_admin() {
+	# Configure the MAAS admin user
+	# Sadly, there's no way to test if the user has been created already,
+	# so ignore errors for idempotence
+	maas-region-admin createadmin --username admin --email maas-admin@example.com --password="admin" 2>/dev/null || true
+}
+
+setup_boot_resources() {
+	# Use our boot resources as found on the external storage
+	if [ -d /var/lib/maas/boot-resources ] && [ /srv/boot-resources ]; then
+		mv -f /var/lib/maas/boot-resources /var/lib/maas/boot-resources.orig
+		ln -sf /srv/boot-resources /var/lib/maas/
+	fi
+	# Start importing boot resources in the background
+	run-this-one maas-import-pxe-files &
+}
+
 case "$1" in
 	configure)
-		# Set up the local mirror
-		a2ensite archive
-		a2ensite ubuntu-cloud
-		invoke-rc.d $webserver reload
-		# Configure the MAAS admin user
-		maas-region-admin createadmin --username admin --email maas-admin@example.com --password="admin" || true
-		# Import a minimal set of pxe images
-		sed -i -e /^RELEASES=/d -e /^ARCHES=/d /etc/maas/import_pxe_files
-		cat >> /etc/maas/import_pxe_files <<EOF
-RELEASES="trusty"
-ARCHES="amd64/generic"
-EOF
-		run-this-one maas-import-pxe-files
+		setup_networking
+		setup_external_drive
+		setup_local_mirror
+		setup_maas_admin
+		setup_boot_resources
 	;;
 	abort-upgrade|abort-remove|abort-deconfigure)
 	;;

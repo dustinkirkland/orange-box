@@ -6,5 +6,13 @@ orange-box (1.0) unreleased; urgency=low
   * etc/apt/mirror.list => etc/apt/orange-box-mirror.list,
     etc/cron.d/apt-mirror => etc/cron.d/orange-box-mirror:
     - don't step on apt-mirror's default configuration file
+  * === added directory etc/maas, debian/control, debian/postinst,
+    etc/cron.d/orange-box-mirror, etc/maas/import_pxe_files:
+    - add openssh-server as a dependency (which is not necessarily
+      installed if we start from an Ubuntu desktop
+    - refactor and expand the logic in postinst, ensure idempotency,
+      add networking support
+    - fix error in mirror cronjob
+    - add import pxe conf file
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 07 Mar 2014 16:46:18 -0600
