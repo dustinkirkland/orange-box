@@ -14,5 +14,11 @@ orange-box (1.0) unreleased; urgency=low
       add networking support
     - fix error in mirror cronjob
     - add import pxe conf file
+  * debian/postinst, etc/network/interfaces.example, === removed
+    directory etc/network:
+    - add logic for getting the api key
+    - setup maas admin first
+    - fix syntax error in boot resources setup
+    - remove the deprecated network interfaces sample
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 07 Mar 2014 16:46:18 -0600

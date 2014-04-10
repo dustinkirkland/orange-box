@@ -5,6 +5,13 @@ set -e
 PKG="orange-box"
 webserver="apache2"
 
+setup_maas_admin() {
+	# Configure the MAAS admin user
+	# Sadly, there's no way to test if the user has been created already,
+	# so ignore errors for idempotence
+	maas-region-admin createadmin --username admin --email maas-admin@example.com --password="admin" 2>/dev/null || true
+}
+
 setup_networking() {
 	# Set up the two network interfaces
 	local Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT
@@ -44,6 +51,10 @@ EOF
 		ifdown $interface || true
 		ifup $interface
 	done
+	. /etc/maas/maas_cluster.conf
+	APIKEY=$(maas-region-admin apikey --username admin)
+	maas login admin $MAAS_URL $APIKEY
+	maas maas node-group-interface update $CLUSTER_UUID $internal_interface ip=10.14.4.1 interface=$internal_interface management=2 subnet_mask=255.255.255.0 broadcast_ip=10.14.4.255 router_ip=10.14.4.1 ip_range_low=10.14.4.10 ip_range_high=10.14.4.250
 }
 
 setup_external_drive() {
@@ -64,16 +75,9 @@ setup_local_mirror() {
 	invoke-rc.d $webserver reload
 }
 
-setup_maas_admin() {
-	# Configure the MAAS admin user
-	# Sadly, there's no way to test if the user has been created already,
-	# so ignore errors for idempotence
-	maas-region-admin createadmin --username admin --email maas-admin@example.com --password="admin" 2>/dev/null || true
-}
-
 setup_boot_resources() {
 	# Use our boot resources as found on the external storage
-	if [ -d /var/lib/maas/boot-resources ] && [ /srv/boot-resources ]; then
+	if [ -d /var/lib/maas/boot-resources ] && [ -d /srv/boot-resources ]; then
 		mv -f /var/lib/maas/boot-resources /var/lib/maas/boot-resources.orig
 		ln -sf /srv/boot-resources /var/lib/maas/
 	fi
@@ -83,10 +87,10 @@ setup_boot_resources() {
 
 case "$1" in
 	configure)
+		setup_maas_admin
 		setup_networking
 		setup_external_drive
 		setup_local_mirror
-		setup_maas_admin
 		setup_boot_resources
 	;;
 	abort-upgrade|abort-remove|abort-deconfigure)
