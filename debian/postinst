@@ -103,11 +103,11 @@ ensure_running() {
 }
 
 ensure_running_maas() {
+	ensure_running maas-region-celery
+	ensure_running maas-cluster-celery
+	ensure_running maas-txlongpoll
 	ensure_running maas-pserv
 	ensure_running maas-dhcp-server
-	ensure_running maas-cluster-celery
-	ensure_running maas-region-celery
-	ensure_running maas-txlongpoll
 }
 
 setup_all_nodes() {

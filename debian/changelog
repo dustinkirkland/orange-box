@@ -1,6 +1,7 @@
 orange-box (1.2) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - reorder the checking of maas services; region must be up first
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Apr 2014 08:30:24 -0500
 
