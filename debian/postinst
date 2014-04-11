@@ -13,47 +13,7 @@ setup_maas_admin() {
 	maas-region-admin createadmin --username admin --email maas-admin@example.com --password="admin" 2>/dev/null || true
 }
 
-setup_networking() {
-	# Set up the two network interfaces
-	local Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT
-	while read Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT; do
-		[ "$Mask" = "00000000" ] && break
-	done < /proc/net/route
-	external_interface="$Iface"
-	for interface in $(ifconfig -a -s | grep -v ^Iface | awk '{print $1}'); do
-		case "$interface" in
-			lo)
-				continue
-			;;
-			$external_interface)
-				continue
-			;;
-			*)
-				internal_interface="$interface"
-				break
-			;;
-		esac
-	done
-	cat >/etc/network/interfaces <<EOF
-auto lo
-iface lo inet loopback
-
-auto $external_interface
-iface $external_interface inet dhcp
-
-auto $internal_interface
-iface $internal_interface inet static
-	address 10.14.4.1
-	netmask 255.255.255.0
-	broadcast 10.14.4.255
-
-EOF
-	for interface in $external_interface $internal_interface; do
-		ifdown $interface || true
-		ifup $interface
-	done
-	# Wait a moment for the network to normalize
-	sleep 5
+setup_maas_networking() {
 	. /etc/maas/maas_cluster.conf
 	APIKEY=$(maas-region-admin apikey --username admin)
 	maas login admin $MAAS_URL $APIKEY
@@ -63,6 +23,7 @@ EOF
 		[ $count -gt 100 ] && break
 		sleep 1
 	done
+	internal_interface=$(route -n | grep "^10\.14\.4\." | sed -e "s/.* //")
 	maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_high=10.14.4.10 ip_range_low=10.14.4.250 management=2 broadcast_ip=10.14.4.255 router_ip=10.14.4.1
 	#orange-box-setup-nat $internal_interface $external_interface
 }
@@ -118,16 +79,19 @@ EOF
 }
 
 setup_all_nodes() {
+	# Ensure that pxe and dhcp are running
+	invoke-rc.d maas-pserv restart
+	invoke-rc.d maas-dhcp-server restart
 	orange-box-add-all-nodes
 }
 
 case "$1" in
 	configure)
+		setup_boot_resources
 		setup_maas_admin
-		setup_networking
+		setup_maas_networking
 		setup_external_drive
 		setup_local_mirror
-		setup_boot_resources
 		setup_ssh_keys
 		setup_juju
 		setup_all_nodes

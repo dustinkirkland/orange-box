@@ -1,8 +1,62 @@
 #!/bin/sh
 set -e
 
-echo "debconf maas/default-maas-url string 10.14.4.1" | debconf-set-selections -
-echo "debconf maas-cluster-controller/maas-url string http://10.14.4.1/MAAS" | debconf-set-selections -
-echo "debconf maas/installation-note boolean true" | debconf-set-selections -
-echo "debconf iptables-persistent/autosave_v4 boolean true" | debconf-set-selections -
-echo "debconf iptables-persistent/autosave_v6 boolean true" | debconf-set-selections -
+setup_debconf() {
+	echo "debconf maas/default-maas-url string 10.14.4.1" | debconf-set-selections -
+	echo "debconf maas-cluster-controller/maas-url string http://10.14.4.1/MAAS" | debconf-set-selections -
+	echo "debconf maas/installation-note boolean true" | debconf-set-selections -
+	echo "debconf iptables-persistent/autosave_v4 boolean true" | debconf-set-selections -
+	echo "debconf iptables-persistent/autosave_v6 boolean true" | debconf-set-selections -
+}
+
+setup_networking() {
+        # Set up the two network interfaces
+        local Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT
+        while read Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT; do
+                [ "$Mask" = "00000000" ] && break
+        done < /proc/net/route
+        external_interface="$Iface"
+        for interface in $(ifconfig -a -s | grep -v ^Iface | awk '{print $1}'); do
+                case "$interface" in
+                        lo)
+                                continue
+                        ;;
+                        $external_interface)
+                                continue
+                        ;;
+                        *)
+                                internal_interface="$interface"
+                                break
+                        ;;
+                esac
+        done
+	# Set a sane default
+	[ -z "$internal_interface" ] && internal_interface=eth0
+        cat >/etc/network/interfaces <<EOF
+auto lo
+iface lo inet loopback
+
+auto $external_interface
+iface $external_interface inet dhcp
+
+auto $internal_interface
+iface $internal_interface inet static
+        address 10.14.4.1
+        netmask 255.255.255.0
+        broadcast 10.14.4.255
+
+EOF
+        for interface in $external_interface $internal_interface; do
+                ifdown $interface || true
+                ifup $interface
+        done
+        # Wait a moment for the network to normalize
+        sleep 5
+}
+
+setup_debconf
+setup_networking
+
+#DEBHELPER#
+
+exit 0

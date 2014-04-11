@@ -57,5 +57,7 @@ orange-box (1.0) unreleased; urgency=low
     - update apache site configuration for apache 2.4, ffs
     - make add-all-nodes more robust
     - fix some maas-cli calls
+  * debian/postinst, debian/preinst:
+    - move the networking setup to preinst
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 07 Mar 2014 16:46:18 -0600
