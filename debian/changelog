@@ -1,4 +1,4 @@
-orange-box (1.0) unreleased; urgency=low
+orange-box (1.0-0ubuntu1) trusty; urgency=low
 
   * Initial packaging
   * debian/postinst:
@@ -60,4 +60,4 @@ orange-box (1.0) unreleased; urgency=low
   * debian/postinst, debian/preinst:
     - move the networking setup to preinst
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 07 Mar 2014 16:46:18 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Apr 2014 07:20:25 -0500
