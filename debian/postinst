@@ -80,8 +80,10 @@ EOF
 
 setup_all_nodes() {
 	# Ensure that pxe and dhcp are running
-	invoke-rc.d maas-pserv restart
-	invoke-rc.d maas-dhcp-server restart
+	invoke-rc.d maas-pserv stop || true
+	invoke-rc.d maas-pserv start
+	invoke-rc.d maas-dhcp-server stop || true
+	invoke-rc.d maas-dhcp-server start
 	orange-box-add-all-nodes
 }
 
