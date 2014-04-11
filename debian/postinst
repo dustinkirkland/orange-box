@@ -4,7 +4,12 @@ set -e
 set -x
 
 PKG="orange-box"
-webserver="apache2"
+RETRY=120
+
+error() {
+	echo "ERROR: $@" 1>&2
+	exit 1
+}
 
 setup_maas_admin() {
 	# Configure the MAAS admin user
@@ -20,8 +25,10 @@ setup_maas_networking() {
 	count=0
 	while ! maas admin node-group-interfaces list $CLUSTER_UUID >/dev/null 2>&1; do
 		count=$((count+1))
-		[ $count -gt 100 ] && break
 		sleep 1
+		if [ $count -gt $RETRY ]; then
+			error "[maas admin node-group-interfaces list] failed [$RETRY] times"
+		fi
 	done
 	internal_interface=$(route -n | grep "^10\.14\.4\." | sed -e "s/.* //")
 	maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_high=10.14.4.10 ip_range_low=10.14.4.250 management=2 broadcast_ip=10.14.4.255 router_ip=10.14.4.1
@@ -35,8 +42,9 @@ setup_external_drive() {
 	#	c) ext4 formatted
 	if [ -b /dev/sdb1 ] && ! grep -qs '^/dev/sdb1' /etc/fstab; then
 		echo "/dev/sdb1	/srv	ext4	defaults	1 1" >> /etc/fstab
-		mount -a
 	fi
+	umount /dev/sdb1 || true
+	mount -a
 }
 
 setup_local_mirror() {
@@ -44,7 +52,7 @@ setup_local_mirror() {
 	a2ensite archive
 	a2ensite ubuntu-cloud
 	a2dissite 000-default
-	invoke-rc.d $webserver restart
+	invoke-rc.d apache2 restart
 }
 
 setup_boot_resources() {
@@ -78,12 +86,33 @@ environments:
 EOF
 }
 
+ensure_running() {
+	job="$1"
+	count=1
+	while true; do
+		if (status $job | grep -qs "start/running,"); then
+			break
+		fi
+		invoke-rc.d $job start
+		sleep 1
+		count=$((count+1))
+		if [ $count -gt $RETRY ]; then
+			error "[$job] refused to start [$RETRY] times"
+		fi
+	done
+}
+
+ensure_running_maas() {
+	ensure_running maas-pserv
+	ensure_running maas-dhcp-server
+	ensure_running maas-cluster-celery
+	ensure_running maas-region-celery
+	ensure_running maas-txlongpoll
+}
+
 setup_all_nodes() {
 	# Ensure that pxe and dhcp are running
-	invoke-rc.d maas-pserv stop || true
-	invoke-rc.d maas-pserv start
-	invoke-rc.d maas-dhcp-server stop || true
-	invoke-rc.d maas-dhcp-server start
+	ensure_running_maas
 	orange-box-add-all-nodes
 }
 
