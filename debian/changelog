@@ -35,5 +35,8 @@ orange-box (1.0) unreleased; urgency=low
     - generate an ssh key for the ubuntu user, and add it to maas
     - setup a juju environment for maas
     - rename all of the nodelists, to OrangeBox[00-05]
+  * debian/postinst, usr/bin/orange-box-setup-nat:
+    - rework our setup-nat script a bit; tested and working as
+      designed, at this point
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 07 Mar 2014 16:46:18 -0600

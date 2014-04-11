@@ -18,13 +18,13 @@ setup_networking() {
 	while read Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT; do
 		[ "$Mask" = "00000000" ] && break
 	done < /proc/net/route
-	default_interface="$Iface"
+	external_interface="$Iface"
 	for interface in $(ifconfig -a -s | grep -v ^Iface | awk '{print $1}'); do
 		case "$interface" in
 			lo)
 				continue
 			;;
-			$default_interface)
+			$external_interface)
 				continue
 			;;
 			*)
@@ -37,8 +37,8 @@ setup_networking() {
 auto lo
 iface lo inet loopback
 
-auto $default_interface
-iface $default_interface inet dhcp
+auto $external_interface
+iface $external_interface inet dhcp
 
 auto $internal_interface
 iface $internal_interface inet static
@@ -47,10 +47,11 @@ iface $internal_interface inet static
 	broadcast 10.14.4.255
 
 EOF
-	for interface in $default_interface $internal_interface; do
+	for interface in $external_interface $internal_interface; do
 		ifdown $interface || true
 		ifup $interface
 	done
+	orange-box-setup-nat $internal_interface $external_interface
 	. /etc/maas/maas_cluster.conf
 	APIKEY=$(maas-region-admin apikey --username admin)
 	maas login admin $MAAS_URL $APIKEY
