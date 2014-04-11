@@ -11,6 +11,20 @@ orange-box (1.3) unreleased; urgency=medium
   * debian/control:
     - add juju-deployer to the master node, makes deploying bundles
       much easier
+  * === added directory home, === added directory home/ubuntu, === added
+    directory home/ubuntu/.remmina, debian/postinst,
+    home/ubuntu/.remmina/1397230159112.remmina,
+    home/ubuntu/.remmina/1397232305030.remmina,
+    home/ubuntu/.remmina/1397232322839.remmina,
+    home/ubuntu/.remmina/1397232362406.remmina,
+    home/ubuntu/.remmina/1397232390677.remmina,
+    home/ubuntu/.remmina/1397232407533.remmina,
+    home/ubuntu/.remmina/1397232435909.remmina,
+    home/ubuntu/.remmina/1397232455068.remmina,
+    home/ubuntu/.remmina/1397232472197.remmina,
+    home/ubuntu/.remmina/remmina.pref, usr/share/doc/orange-
+    box/examples/openstack-simple/havanaOB.yaml:
+    - install a working set of VNC configs
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Apr 2014 10:34:53 -0500
 
