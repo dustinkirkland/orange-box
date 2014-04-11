@@ -20,6 +20,11 @@
 
 _SETTINGS_FILE="${MICRO_CLUSTER_CFG:-~/.config/micro-cluster/settings.cfg}"
 
+error() {
+	echo "ERROR: $@" 1>&2
+	exit 1
+}
+
 detect_inet() {
   # $1 inet preface (eg: eth)
   # $2 max range (eg: 5)

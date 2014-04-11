@@ -34,6 +34,12 @@ export AMT_PASSWORD="Password1+"
 export VNC_PASSWORD="Ubuntu1+"
 nodelist=/usr/share/orange-box/nodelists/$(hostname)
 
+# Search for nodes listening on AMT's 16992
+ips=$(nmap -p 16992 -oG - 10.14.4.1/24 | grep 16992/open | awk '{print $2}')
+if [ -z "$ips" ]; then
+	error "nmap did not find any nodes listening on 16992\nThis probably means that none of your nodes have drawn an IP address from MAAS's DHCP server.\nYour best bet, at this point, is to:\n a) push the pin hole for 5 seconds, to power all nodes off\n b) press the pin hole for 1 second to power all of the nodes on\n c) wait 1 second\n d) push the pin hole again for 1 second to power all nodes off again" 
+fi
+
 # First, delete any and all nodes
 for system_id in $(list_all_nodes); do
 	maas admin node delete $system_id

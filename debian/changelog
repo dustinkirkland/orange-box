@@ -2,6 +2,11 @@ orange-box (1.2) unreleased; urgency=medium
 
   * debian/postinst:
     - reorder the checking of maas services; region must be up first
+  * debian/postinst, usr/bin/orange-box-add-all-nodes, usr/lib/orange-
+    box/inc/common:
+    - move the error function to our common include
+    - print a suggestion error message, if nmap finds no nodes listening
+      on AMT
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Apr 2014 08:30:24 -0500
 

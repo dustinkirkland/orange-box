@@ -6,10 +6,7 @@ set -x
 PKG="orange-box"
 RETRY=120
 
-error() {
-	echo "ERROR: $@" 1>&2
-	exit 1
-}
+. /usr/lib/orange-box/inc/common
 
 setup_maas_admin() {
 	# Configure the MAAS admin user
