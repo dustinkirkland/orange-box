@@ -28,7 +28,7 @@ setup_maas_networking() {
 		fi
 	done
 	internal_interface=$(route -n | grep "^10\.14\.4\." | sed -e "s/.* //")
-	maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_high=10.14.4.10 ip_range_low=10.14.4.250 management=2 broadcast_ip=10.14.4.255 router_ip=10.14.4.1
+	maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_high=10.14.4.20 ip_range_low=10.14.4.250 management=2 broadcast_ip=10.14.4.255 router_ip=10.14.4.1
 	#orange-box-setup-nat $internal_interface $external_interface
 }
 

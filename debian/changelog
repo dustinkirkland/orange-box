@@ -7,6 +7,9 @@ orange-box (1.2) unreleased; urgency=medium
     - move the error function to our common include
     - print a suggestion error message, if nmap finds no nodes listening
       on AMT
+  * debian/postinst, usr/bin/orange-box-add-all-nodes:
+    - change the IP range to 20-250, to allow for 11-19 for static AMT IPs
+    - use a bulk method to mark all nodes as fastpath
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Apr 2014 08:30:24 -0500
 

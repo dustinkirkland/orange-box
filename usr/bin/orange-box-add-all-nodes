@@ -45,6 +45,9 @@ for system_id in $(list_all_nodes); do
 	maas admin node delete $system_id
 done
 
+# Mark all future nodes as fast path
+maas admin tags new name='use-fastpath-installer' comment='fp' "definition=true()"
+
 # Loop over our database of known mac addresses
 for mac in $(grep -v "^#" $nodelist | awk '{print $1}'); do
 	hostname=$(grep "^$mac" $nodelist | awk '{print $2}')
@@ -74,9 +77,4 @@ for mac in $(grep -v "^#" $nodelist | awk '{print $1}'); do
 	sleep 1
 	wake_me_up_before_you_go_go $ip
 	yes | run-one-until-success amttool $ip powerup pxe
-done
-
-# Cool, everything is added, lets make them fastpath
-for system_id in $(list_all_nodes); do
-	maas admin tag update-nodes use-fastpath-installer add=$system_id
 done
