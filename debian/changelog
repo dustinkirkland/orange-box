@@ -1,4 +1,4 @@
-orange-box (1.2) unreleased; urgency=medium
+orange-box (1.2-0ubuntu1) trusty; urgency=medium
 
   * debian/postinst:
     - reorder the checking of maas services; region must be up first
@@ -11,7 +11,7 @@ orange-box (1.2) unreleased; urgency=medium
     - change the IP range to 20-250, to allow for 11-19 for static AMT IPs
     - use a bulk method to mark all nodes as fastpath
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Apr 2014 08:30:24 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Apr 2014 10:13:33 -0500
 
 orange-box (1.1-0ubuntu1) trusty; urgency=medium
 
