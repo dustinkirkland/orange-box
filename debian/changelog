@@ -1,4 +1,4 @@
-orange-box (1.1) unreleased; urgency=medium
+orange-box (1.1-0ubuntu1) trusty; urgency=medium
 
   * debian/postinst:
     - handle the stop/start of the pserv and dhcp more robustly
@@ -6,7 +6,7 @@ orange-box (1.1) unreleased; urgency=medium
     - create a function that tries to ensure certain services are running
     - ensure that ALL OF MAAS is running, before trying to add all nodes
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Apr 2014 07:20:31 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Apr 2014 08:30:22 -0500
 
 orange-box (1.0-0ubuntu1) trusty; urgency=low
 
