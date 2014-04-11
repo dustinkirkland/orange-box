@@ -1,3 +1,9 @@
+orange-box (1.1) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Apr 2014 07:20:31 -0500
+
 orange-box (1.0-0ubuntu1) trusty; urgency=low
 
   * Initial packaging
