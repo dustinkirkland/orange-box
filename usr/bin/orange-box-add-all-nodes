@@ -21,6 +21,11 @@
 . /etc/maas/maas_cluster.conf
 
 set -e
+set -x
+
+list_all_nodes() {
+	maas admin nodes list | grep system_id | sed -e 's/\",//' -e 's/.*\"//' | sort -u
+}
 
 oauth_login
 
@@ -29,9 +34,18 @@ export AMT_PASSWORD="Password1+"
 export VNC_PASSWORD="Ubuntu1+"
 nodelist=/usr/share/orange-box/nodelists/$(hostname)
 
-ips=$(grep "^lease " /var/lib/maas/dhcp/dhcpd.leases | awk '{print $2}' | sort -u)
-for ip in $ips; do
-	mac=$(grep -A20 "^lease $ip {" /var/lib/maas/dhcp/dhcpd.leases | grep -B20 "}" | grep -m1 "hardware ethernet " | sed -e "s/.* //" -e "s/;//")
+# First, delete any and all nodes
+for system_id in $(list_all_nodes); do
+	maas admin node delete $system_id
+done
+
+# Loop over our database of known mac addresses
+for mac in $(grep -v "^#" $nodelist | awk '{print $1}'); do
+	hostname=$(grep "^$mac" $nodelist | awk '{print $2}')
+	ip=$(arp -na | grep $mac | sed -e 's/.*(//' -e 's/).*//')
+	if [ -z "$ip" ] || [ "$ip" = "10.14.4.1" ]; then
+		continue
+	fi
 	echo "$ip $mac"
 	# Sorry for the name
 	wake_me_up_before_you_go_go $ip
@@ -48,15 +62,15 @@ for ip in $ips; do
 	# enable KVM
 	wsman invoke -a RequestStateChange http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_KVMRedirectionSAP -h ${ip} -P 16992 -u admin -p ${AMT_PASSWORD} -k RequestedState=2 > /dev/null 2>&1
 	# Add the node to MAAS
-	# dap: added hostname parameter which pulls from a file named
-	# $(hostname) in the nodelists subdirectory
-	maas admin nodes new nodegroup=$CLUSTER_UUID architecture=amd64 power_type=amt mac_addresses=$mac power_parameters_mac_address=$mac power_parameters_power_pass=$AMT_PASSWORD hostname="$(grep $mac $nodelist | awk '{print $2}')"
-	(yes | amttool $ip powerdown) || true
+	run-one-until-success maas admin nodes new nodegroup=$CLUSTER_UUID architecture=amd64 power_type=amt mac_addresses=$mac power_parameters_mac_address=$mac power_parameters_power_pass=$AMT_PASSWORD hostname=$hostname
+	wake_me_up_before_you_go_go $ip
+	(yes | amttool $ip powerdown >/dev/null 2>&1) || true
 	sleep 1
+	wake_me_up_before_you_go_go $ip
 	yes | run-one-until-success amttool $ip powerup pxe
 done
 
 # Cool, everything is added, lets make them fastpath
-for $system_id in $(maas admin nodes list | grep system_id | sed -e 's/\",//' -e 's/.*\"//' | sort -u); do
+for system_id in $(list_all_nodes); do
 	maas admin tag update-nodes use-fastpath-installer add=$system_id
 done

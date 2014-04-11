@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -e
+set -x
 
 PKG="orange-box"
 webserver="apache2"
@@ -51,7 +52,8 @@ EOF
 		ifdown $interface || true
 		ifup $interface
 	done
-	orange-box-setup-nat $internal_interface $external_interface
+	# Wait a moment for the network to normalize
+	sleep 5
 	. /etc/maas/maas_cluster.conf
 	APIKEY=$(maas-region-admin apikey --username admin)
 	maas login admin $MAAS_URL $APIKEY
@@ -62,6 +64,7 @@ EOF
 		sleep 1
 	done
 	maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_high=10.14.4.10 ip_range_low=10.14.4.250 management=2 broadcast_ip=10.14.4.255 router_ip=10.14.4.1
+	#orange-box-setup-nat $internal_interface $external_interface
 }
 
 setup_external_drive() {
@@ -79,7 +82,8 @@ setup_local_mirror() {
 	# Set up the local mirror
 	a2ensite archive
 	a2ensite ubuntu-cloud
-	invoke-rc.d $webserver reload
+	a2dissite 000-default
+	invoke-rc.d $webserver restart
 }
 
 setup_boot_resources() {
@@ -93,7 +97,7 @@ setup_boot_resources() {
 }
 
 setup_ssh_keys() {
-	if [ ! -e /home/ubuntu/.ssh/id_rsa ]
+	if [ ! -e /home/ubuntu/.ssh/id_rsa ]; then
 		su -l ubuntu -c "ssh-keygen -N '' -f /home/ubuntu/.ssh/id_rsa"
 	fi
 	maas admin sshkeys new key="$(cat /home/ubuntu/.ssh/id_rsa.pub)" || true
@@ -108,9 +112,13 @@ environments:
         type: maas
         maas-server: 'http://10.14.4.1/MAAS/'
         maas-oauth: '$APIKEY'
-	default-series: precise
-	authorized-keys-path: /home/ubuntu/.ssh/id_rsa.pub
+        default-series: precise
+        authorized-keys-path: /home/ubuntu/.ssh/id_rsa.pub
 EOF
+}
+
+setup_all_nodes() {
+	orange-box-add-all-nodes
 }
 
 case "$1" in
@@ -122,6 +130,7 @@ case "$1" in
 		setup_boot_resources
 		setup_ssh_keys
 		setup_juju
+		setup_all_nodes
 	;;
 	abort-upgrade|abort-remove|abort-deconfigure)
 	;;

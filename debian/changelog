@@ -42,5 +42,20 @@ orange-box (1.0) unreleased; urgency=low
     - update add-all-nodes logic, use a small shell replacement for
       the fastpath python script; also tested and working as designed,
       at this point
+  * debian/control, debian/postinst, debian/preinst, etc/apache2/sites-
+    available/archive.conf, etc/apache2/sites-available/ubuntu-
+    cloud.conf, usr/bin/orange-box-add-all-nodes, usr/lib/orange-
+    box/inc/common:
+    - add nmap, useful for telling which nodes have AMT listening
+    - use set -x on a couple of our scripts for now
+    - wait a few seconds to ensure networking is ready
+    - disable nat setup for now
+    - disable the default apache site, restart instead of reload
+    - fix conditional syntax error
+    - add all nodes in the postinst
+    - add a preinst file that sets some debconf questions
+    - update apache site configuration for apache 2.4, ffs
+    - make add-all-nodes more robust
+    - fix some maas-cli calls
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 07 Mar 2014 16:46:18 -0600

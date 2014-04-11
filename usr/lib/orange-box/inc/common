@@ -86,7 +86,7 @@ maas_logged_in() {
     return 72
   fi
 
-  if [ "$(maas-cli list)" == "" ]; then
+  if [ "$(maas list)" == "" ]; then
     return 1
   fi
 }
@@ -108,7 +108,7 @@ oauth_login() {
     return 1
   fi
 
-  maas-cli login "$user" http://10.14.4.1/MAAS "$auth"
+  maas $user login http://10.14.4.1/MAAS "$auth"
   chown ubuntu: ~/.maascli.db
 }
 

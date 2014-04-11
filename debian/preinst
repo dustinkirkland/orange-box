@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+echo "debconf maas/default-maas-url string 10.14.4.1" | debconf-set-selections -
+echo "debconf maas-cluster-controller/maas-url string http://10.14.4.1/MAAS" | debconf-set-selections -
+echo "debconf maas/installation-note boolean true" | debconf-set-selections -
+echo "debconf iptables-persistent/autosave_v4 boolean true" | debconf-set-selections -
+echo "debconf iptables-persistent/autosave_v6 boolean true" | debconf-set-selections -
