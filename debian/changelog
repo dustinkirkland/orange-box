@@ -6,6 +6,8 @@ orange-box (1.3) unreleased; urgency=medium
     - show the debug log and upload tools when bootstrapping, otherwise
       FUCKING juju has to go out to the internet to download itself,
       FOR FUCKS SAKE
+  * debian/postinst:
+    - set an admin secret so that we can log into the juju gui
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Apr 2014 10:34:53 -0500
 
