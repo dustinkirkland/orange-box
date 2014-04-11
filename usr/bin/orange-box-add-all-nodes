@@ -17,7 +17,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-. inc/common
+. /usr/lib/orange-box/inc/common
+. /etc/maas/maas_cluster.conf
 
 set -e
 
@@ -26,9 +27,7 @@ oauth_login
 export AMT_PASSWORD="Password1+"
 # VNC Password MUST BE *exactly 8 characters long and contain 1 capital letter, a number, and a special character!!!
 export VNC_PASSWORD="Ubuntu1+"
-
-apt-get install -y wsmancli amtterm
-nodelist=nodelists/`hostname`-nodelist
+nodelist=/usr/share/orange-box/nodelists/$(hostname)
 
 ips=$(grep "^lease " /var/lib/maas/dhcp/dhcpd.leases | awk '{print $2}' | sort -u)
 for ip in $ips; do
@@ -50,16 +49,14 @@ for ip in $ips; do
 	wsman invoke -a RequestStateChange http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_KVMRedirectionSAP -h ${ip} -P 16992 -u admin -p ${AMT_PASSWORD} -k RequestedState=2 > /dev/null 2>&1
 	# Add the node to MAAS
 	# dap: added hostname parameter which pulls from a file named
-	# `hostname`-nodelist in the nodelists subdirectory
-	maas-cli admin nodes new architecture=amd64 power_type=amt mac_addresses=$mac power_parameters_power_address=$ip power_parameters_power_pass=$AMT_PASSWORD hostname="`grep $mac $nodelist | awk '{print $2}'`"
+	# $(hostname) in the nodelists subdirectory
+	maas admin nodes new nodegroup=$CLUSTER_UUID architecture=amd64 power_type=amt mac_addresses=$mac power_parameters_mac_address=$mac power_parameters_power_pass=$AMT_PASSWORD hostname="$(grep $mac $nodelist | awk '{print $2}')"
 	(yes | amttool $ip powerdown) || true
 	sleep 1
 	yes | run-one-until-success amttool $ip powerup pxe
 done
 
-maas-cli admin tags new name=use-fastpath-installer || true
-
 # Cool, everything is added, lets make them fastpath
-# Get JSON, then push it to a little python script
-nodes=`maas-cli admin nodes list`
-scripts/maas-fastpath.py "$nodes"
+for $system_id in $(maas admin nodes list | grep system_id | sed -e 's/\",//' -e 's/.*\"//' | sort -u); do
+	maas admin tag update-nodes use-fastpath-installer add=$system_id
+done

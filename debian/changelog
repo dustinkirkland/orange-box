@@ -38,5 +38,9 @@ orange-box (1.0) unreleased; urgency=low
   * debian/postinst, usr/bin/orange-box-setup-nat:
     - rework our setup-nat script a bit; tested and working as
       designed, at this point
+  * usr/bin/orange-box-add-all-nodes, usr/bin/orange-box-fastpath:
+    - update add-all-nodes logic, use a small shell replacement for
+      the fastpath python script; also tested and working as designed,
+      at this point
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 07 Mar 2014 16:46:18 -0600
