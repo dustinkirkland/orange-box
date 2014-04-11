@@ -54,7 +54,13 @@ EOF
 	. /etc/maas/maas_cluster.conf
 	APIKEY=$(maas-region-admin apikey --username admin)
 	maas login admin $MAAS_URL $APIKEY
-	maas maas node-group-interface update $CLUSTER_UUID $internal_interface ip=10.14.4.1 interface=$internal_interface management=2 subnet_mask=255.255.255.0 broadcast_ip=10.14.4.255 router_ip=10.14.4.1 ip_range_low=10.14.4.10 ip_range_high=10.14.4.250
+	count=0
+	while ! maas admin node-group-interfaces list $CLUSTER_UUID >/dev/null 2>&1; do
+		count=$((count+1))
+		[ $count -gt 100 ] && break
+		sleep 1
+	done
+	maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_high=10.14.4.10 ip_range_low=10.14.4.250 management=2 broadcast_ip=10.14.4.255 router_ip=10.14.4.1
 }
 
 setup_external_drive() {
@@ -77,12 +83,33 @@ setup_local_mirror() {
 
 setup_boot_resources() {
 	# Use our boot resources as found on the external storage
-	if [ -d /var/lib/maas/boot-resources ] && [ -d /srv/boot-resources ]; then
+	if [ -e /var/lib/maas/boot-resources ] && [ ! -h /var/lib/maas/boot-resources ] && [ -d /srv/boot-resources ]; then
 		mv -f /var/lib/maas/boot-resources /var/lib/maas/boot-resources.orig
 		ln -sf /srv/boot-resources /var/lib/maas/
 	fi
 	# Start importing boot resources in the background
 	run-this-one maas-import-pxe-files &
+}
+
+setup_ssh_keys() {
+	if [ ! -e /home/ubuntu/.ssh/id_rsa ]
+		su -l ubuntu -c "ssh-keygen -N '' -f /home/ubuntu/.ssh/id_rsa"
+	fi
+	maas admin sshkeys new key="$(cat /home/ubuntu/.ssh/id_rsa.pub)" || true
+}
+
+setup_juju() {
+	mkdir -p /home/ubuntu/.juju
+	cat >/home/ubuntu/.juju/environments.yaml <<EOF
+default: maas
+environments:
+    maas:
+        type: maas
+        maas-server: 'http://10.14.4.1/MAAS/'
+        maas-oauth: '$APIKEY'
+	default-series: precise
+	authorized-keys-path: /home/ubuntu/.ssh/id_rsa.pub
+EOF
 }
 
 case "$1" in
@@ -92,6 +119,8 @@ case "$1" in
 		setup_external_drive
 		setup_local_mirror
 		setup_boot_resources
+		setup_ssh_keys
+		setup_juju
 	;;
 	abort-upgrade|abort-remove|abort-deconfigure)
 	;;

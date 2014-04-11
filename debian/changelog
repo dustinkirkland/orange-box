@@ -20,5 +20,20 @@ orange-box (1.0) unreleased; urgency=low
     - setup maas admin first
     - fix syntax error in boot resources setup
     - remove the deprecated network interfaces sample
+  * debian/control, debian/postinst, usr/share/orange-
+    box/nodelists/CloudFive-nodelist => usr/share/orange-
+    box/nodelists/OrangeBox05, usr/share/orange-box/nodelists/CloudFour-
+    nodelist => usr/share/orange-box/nodelists/OrangeBox04,
+    usr/share/orange-box/nodelists/CloudTwo-nodelist =>
+    usr/share/orange-box/nodelists/OrangeBox02, usr/share/orange-
+    box/nodelists/OrangeBox01:
+    - add some dependencies for other tools we'll need
+      + byobu, iptables-persistent, juju-core, wsmancli
+    - try to list the maas network interfaces first, and keep trying
+      until we can, and then update the network interfaces
+    - make sure boot-resources symlink does not yet exist
+    - generate an ssh key for the ubuntu user, and add it to maas
+    - setup a juju environment for maas
+    - rename all of the nodelists, to OrangeBox[00-05]
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 07 Mar 2014 16:46:18 -0600

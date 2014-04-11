@@ -12,14 +12,18 @@ Depends: ${misc:Depends},
  amtterm,
  apache2,
  apt-mirror,
+ byobu,
  bzr,
  ccze,
+ iptables-persistent,
+ juju-core,
  openssh-server,
  maas,
  maas-cluster-controller,
  run-one,
  ubuntu-desktop,
  vim,
+ wsmancli,
 Description: Orange Box master node easy installation
  This package can be installed on an Ubuntu Orange Box's master node
  to automatically configure MAAS and Juju.
