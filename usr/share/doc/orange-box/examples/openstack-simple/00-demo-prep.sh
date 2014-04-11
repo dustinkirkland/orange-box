@@ -11,7 +11,7 @@ echo "No existing environment found, we are good to go."
 # SSH key errors and any leftovers from previous deployments
 rm -rf ~/.ssh/known_hosts
 rm -rf ~/.juju/environments
-juju bootstrap
+juju bootstrap --show-log --upload-tools
 echo "Waiting for bootstrap node to deploy (5 minutes)"
 sleep 300
 juju deploy --to 0 juju-gui

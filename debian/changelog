@@ -2,6 +2,10 @@ orange-box (1.3) unreleased; urgency=medium
 
   * debian/postinst:
     - make sure we chown the .juju directory to the ubuntu user
+  * usr/share/doc/orange-box/examples/openstack-simple/00-demo-prep.sh:
+    - show the debug log and upload tools when bootstrapping, otherwise
+      FUCKING juju has to go out to the internet to download itself,
+      FOR FUCKS SAKE
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Apr 2014 10:34:53 -0500
 
