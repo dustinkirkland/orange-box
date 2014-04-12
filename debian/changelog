@@ -1,4 +1,4 @@
-orange-box (1.3) unreleased; urgency=medium
+orange-box (1.3-0ubuntu1) trusty; urgency=medium
 
   * debian/postinst:
     - make sure we chown the .juju directory to the ubuntu user
@@ -26,7 +26,7 @@ orange-box (1.3) unreleased; urgency=medium
     box/examples/openstack-simple/havanaOB.yaml:
     - install a working set of VNC configs
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Apr 2014 10:34:53 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 12 Apr 2014 00:17:44 -0500
 
 orange-box (1.2-0ubuntu1) trusty; urgency=medium
 
