@@ -21,7 +21,7 @@ environments:
 
         # maas-server specifies the location of the MAAS server. It must
         # specify the base path.
-        maas-server: 'http://10.0.0.1/MAAS/'
+        maas-server: 'http://10.14.4.1/MAAS/'
         
         # maas-oauth holds the OAuth credentials from MAAS.
         maas-oauth: '$maas_oauth'

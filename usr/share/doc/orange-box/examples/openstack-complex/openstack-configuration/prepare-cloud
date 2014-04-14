@@ -10,7 +10,7 @@
 #
 # - Configure networks in Nova's database.  Also hard-coded here
 #   to configure:
-#     - private instance network 10.0.0.24,
+#     - private instance network 10.14.4.24,
 #        multi_host, bridge=br100, bridge_interface=eth1
 #     - default floating ip pool 192.168.20.224/27
 #     - secondary floating ip pool 192.168.20.223/27

@@ -6,7 +6,7 @@ environments:
     admin-secret: Password1+
     auth-url: __AUTH_URL__
     region: RegionOne
-    image-metadata-url: http://10.0.0.1/images/
+    image-metadata-url: http://10.14.4.1/images/
     username: admin
     password: Password1+
     tenant-name: admin

@@ -4,6 +4,15 @@ orange-box (1.4) unreleased; urgency=medium
     - add some pre-flight checks, to ensure that the OrangeBox is installed
       per spec
     - add the NAT basics in the network setup
+  * usr/bin/orange-box-create-package-mirror, usr/bin/orange-box-setup-
+    kvms, usr/bin/orange-box-setup-maas, usr/share/doc/orange-
+    box/examples/openstack-complex/havana/04cleanup.sh,
+    usr/share/doc/orange-box/examples/openstack-complex/juju-
+    config/environments.yaml, usr/share/doc/orange-
+    box/examples/openstack-complex/openstack-configuration/prepare-
+    cloud, usr/share/doc/orange-box/examples/openstack-
+    complex/openstack-prereqs-install.sh:
+    - comprehensive replacement of 10.0.0.* with 10.14.4.*
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 12 Apr 2014 00:17:47 -0500
 

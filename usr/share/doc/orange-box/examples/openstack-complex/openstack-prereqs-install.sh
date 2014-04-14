@@ -56,15 +56,15 @@ iface br0 inet dhcp
 # The interface to the internal network.
 auto br1
 iface br1 inet static
-    address 10.0.0.1
+    address 10.14.4.1
     netmask 255.255.255.0
-    broadcast 10.0.0.255
-    network 10.0.0.0
+    broadcast 10.14.4.255
+    network 10.14.4.0
     bridge_ports em1
     bridge_stp off
     bridge_fd 0
     bridge_maxwait 0
-    dns-nameservers 10.0.0.1
+    dns-nameservers 10.14.4.1
     dns-search orangebox.org
 
 EOF
@@ -75,9 +75,9 @@ sudo service iptables-persistent restart
 
 cluster_controller_uuid=$(maas-cli admin node-groups list | grep uuid | cut -d'"' -f4)
 # Replace MAAS management of em1 with br1
-maas-cli admin node-group-interface delete ${cluster_controller_uuid} em1 && maas-cli admin node-group-interfaces new ${cluster_controller_uuid} interface=br1 ip=10.0.0.1 subnet_mask=255.255.255.0 broadcast_ip=10.0.0.255 router_ip=10.0.0.1 ip_range_low=10.0.0.10 ip_range_high=10.0.0.254 management=2 && sudo service maas-dhcp-server restart && sudo service maas-pserv restart && sudo service maas-cluster-celery restart && sudo service maas-region-celery restart
+maas-cli admin node-group-interface delete ${cluster_controller_uuid} em1 && maas-cli admin node-group-interfaces new ${cluster_controller_uuid} interface=br1 ip=10.14.4.1 subnet_mask=255.255.255.0 broadcast_ip=10.14.4.255 router_ip=10.14.4.1 ip_range_low=10.14.4.20 ip_range_high=10.14.4.254 management=2 && sudo service maas-dhcp-server restart && sudo service maas-pserv restart && sudo service maas-cluster-celery restart && sudo service maas-region-celery restart
 
-sudo sed -ie 's/#prepend domain-name-servers 127.0.0.1;/prepend domain-name-servers 10.0.0.1;/' /etc/dhcp/dhclient.conf
+sudo sed -ie 's/#prepend domain-name-servers 127.0.0.1;/prepend domain-name-servers 10.14.4.1;/' /etc/dhcp/dhclient.conf
 virsh net-info default && virsh net-destroy default && virsh net-undefine default
 
 # create bridge on 172.16.1.0/24 for neutron
@@ -116,7 +116,7 @@ Host *
    StrictHostKeyChecking no
 EOF
 grep 'maas@' ~/.ssh/authorized_keys || sudo cat /home/maas/.ssh/id_rsa.pub | tee -a /home/ubuntu/.ssh/authorized_keys
-# 10.0.0.1 known hosts
+# 10.14.4.1 known hosts
 
 # create the kvms, not in loop due to neutron being different
 echo -e "virt-install juju instance"
@@ -134,7 +134,7 @@ for system in juju lds neutron; do
     #     system_id=$(maas-cli admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
     #     sleep 10
     # done
-    maas-cli admin node update $system_id hostname=$system.master power_type=virsh power_parameters_power_address=qemu+ssh://ubuntu@10.0.0.1/system power_parameters_power_id=$system
+    maas-cli admin node update $system_id hostname=$system.master power_type=virsh power_parameters_power_address=qemu+ssh://ubuntu@10.14.4.1/system power_parameters_power_id=$system
     maas-cli admin tags new name=$system || true
     maas-cli admin tag update-nodes $system add=$system_id
     maas-cli admin tag update-nodes use-fastpath-installer add=$system_id
@@ -174,7 +174,7 @@ environments:
 
         # maas-server specifies the location of the MAAS server. It must
         # specify the base path.
-        maas-server: 'http://10.0.0.1/MAAS/'
+        maas-server: 'http://10.14.4.1/MAAS/'
         
         # maas-oauth holds the OAuth credentials from MAAS.
         maas-oauth: '$maas_oauth'
