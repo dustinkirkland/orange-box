@@ -68,6 +68,23 @@ EOF
         done
         # Wait a moment for the network to normalize
         sleep 5
+	# Setup NAT, so that nodes can get internet access through the master node
+	# NOTE: we should probably deprecate this one day, once we have an OrangeBox
+	# that can work entirely in disconnected mode
+	setup_nat $internal_interface $external_interface
+}
+
+setup_nat() {
+	internal="$1"
+	external="$2"
+	# Enable IP forwarding and save for next boot
+	echo 1 > /proc/sys/net/ipv4/ip_forward
+	echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/10-maas-ip-forward.conf
+	sysctl --system
+	iptables -t nat -A POSTROUTING -o $external -j MASQUERADE
+	iptables -A FORWARD -i $external -o $internal -m state --state RELATED,ESTABLISHED -j ACCEPT
+	iptables -A FORWARD -i $internal -o $external -j ACCEPT
+	iptables-save > /etc/iptables/rules.v4
 }
 
 preflight_checks

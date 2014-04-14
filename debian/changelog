@@ -3,6 +3,7 @@ orange-box (1.4) unreleased; urgency=medium
   * debian/preinst:
     - add some pre-flight checks, to ensure that the OrangeBox is installed
       per spec
+    - add the NAT basics in the network setup
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 12 Apr 2014 00:17:47 -0500
 
