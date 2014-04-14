@@ -13,6 +13,12 @@ orange-box (1.4) unreleased; urgency=medium
     cloud, usr/share/doc/orange-box/examples/openstack-
     complex/openstack-prereqs-install.sh:
     - comprehensive replacement of 10.0.0.* with 10.14.4.*
+  * usr/bin/orange-box-add-all-nodes:
+    - doesn't look like we actually need the nodelists
+    - use nmap to scan the network for ip's listening on 16992
+    - use arp to translate these ip's to mac addresses
+    - use a consistent naming scheme to create nodeN hostnames
+    - profit
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 12 Apr 2014 00:17:47 -0500
 
