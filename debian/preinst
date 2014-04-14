@@ -1,6 +1,22 @@
 #!/bin/sh
 set -e
 
+preflight_checks() {
+	if [ "$(id -u ubuntu)" != "1000" ]; then
+		echo "ERROR: Read the docs; a proper OrangeBox setup requires the default user to be [ubuntu]" 1>&2
+		exit 1
+	fi
+	case $(hostname) in
+		OrangeBox*)
+			true
+		;;
+		*)
+			echo "ERROR: Read the docs; a OrangeBox setup requires the hostname to be in the form [OrangeBox*]" 1>&2
+			exit 1
+		;;
+	esac
+}
+
 setup_debconf() {
 	echo "debconf maas/default-maas-url string 10.14.4.1" | debconf-set-selections -
 	echo "debconf maas-cluster-controller/maas-url string http://10.14.4.1/MAAS" | debconf-set-selections -
@@ -54,6 +70,7 @@ EOF
         sleep 5
 }
 
+preflight_checks
 setup_debconf
 setup_networking
 
