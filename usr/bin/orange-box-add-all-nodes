@@ -41,6 +41,7 @@ node_name() {
 oauth_login
 
 export AMT_PASSWORD="Password1+"
+grep -qs "^export AMT_PASSWORD" /home/ubuntu/.bashrc 2>/dev/null || echo 'export AMT_PASSWORD="Password1+"' >> /home/ubuntu/.bashrc
 # VNC Password MUST BE *exactly 8 characters long and contain 1 capital letter, a number, and a special character!!!
 export VNC_PASSWORD="Ubuntu1+"
 
