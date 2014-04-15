@@ -21,6 +21,8 @@ orange-box (1.4) unreleased; urgency=medium
     - profit
   * usr/bin/orange-box-add-all-nodes:
     - we use AMT_PASSWORD so much, put it in .bashrc
+  * usr/bin/orange-box-setup-maas:
+    - deprecated;  all functionality subsumed into postinst/preinst
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 12 Apr 2014 00:17:47 -0500
 
