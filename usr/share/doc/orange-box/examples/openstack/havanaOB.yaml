@@ -5,7 +5,7 @@ havana:
       num_units: 1
       options: 
         "admin-password": "admin"
-        "admin-token": ubuntutesting
+        "admin-token": "admin"
         "openstack-origin": "cloud:precise-havana"
     "nova-compute":
       charm: "cs:precise/nova-compute-16"
@@ -21,7 +21,6 @@ havana:
     "nova-cloud-controller": 
       charm: "cs:precise/nova-cloud-controller-18"
       num_units: 1
-      to: "keystone"
       options: 
         "network-manager": Neutron
         "openstack-origin": "cloud:precise-havana"

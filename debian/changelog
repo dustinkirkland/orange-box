@@ -25,6 +25,18 @@ orange-box (1.4) unreleased; urgency=medium
     - deprecated;  all functionality subsumed into postinst/preinst
   * debian/preinst, usr/lib/orange-box/inc/squid.conf:
     - setup squid
+  * === renamed directory usr/share/doc/orange-box/examples/openstack-
+    simple => usr/share/doc/orange-box/examples/openstack,
+    usr/share/doc/orange-box/examples/openstack/01-deploy.sh,
+    usr/share/doc/orange-box/examples/openstack/havanaOB.yaml,
+    usr/share/doc/orange-box/examples/openstack-simple/00-demo-prep.sh
+    => usr/share/doc/orange-box/examples/openstack/00-bootstrap.sh,
+    usr/share/doc/orange-box/examples/openstack-simple/0X-demo-
+    cleanup.sh => usr/share/doc/orange-box/examples/openstack/99-
+    cleanup.sh:
+    - updated Ameet's OpenStack example
+    - note that these scripts worked perfectly as of 4/11/2014 at
+      and 4/14/2014
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 12 Apr 2014 00:17:47 -0500
 
