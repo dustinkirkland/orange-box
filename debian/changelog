@@ -37,6 +37,9 @@ orange-box (1.4) unreleased; urgency=medium
     - updated Ameet's OpenStack example
     - note that these scripts worked perfectly as of 4/11/2014 at
       and 4/14/2014
+  * debian/postinst:
+    - let's not strict host check ssh keys on node1-node9, as these
+      will be constantly changing
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 12 Apr 2014 00:17:47 -0500
 

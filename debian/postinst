@@ -67,6 +67,18 @@ setup_ssh_keys() {
 		su -l ubuntu -c "ssh-keygen -N '' -f /home/ubuntu/.ssh/id_rsa"
 	fi
 	maas admin sshkeys new key="$(cat /home/ubuntu/.ssh/id_rsa.pub)" || true
+	if ! grep -qs "^Host.*maas$" /home/ubuntu/.ssh/config; then
+		cat <<EOF >>/home/ubuntu/.ssh/config
+
+Host *.maas
+UserKnownHostsFile /dev/null
+StrictHostKeyChecking no
+CheckHostIP no
+
+EOF
+	fi
+	chmod 600 /home/ubuntu/.ssh/config
+	chown -R ubuntu:ubuntu /home/ubuntu/.ssh/config
 }
 
 setup_juju() {
