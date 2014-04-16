@@ -60,7 +60,7 @@ done
 maas admin tags new name='use-fastpath-installer' comment='fp' "definition=true()"
 
 # Loop over the list of ip addresses listening on 16992
-for $ip in $ips; do
+for ip in $ips; do
 	mac=$(ip_to_mac $ip)
 	hostname=$(node_name $ip)
 	if [ -z "$ip" ] || [ "$ip" = "10.14.4.1" ]; then
