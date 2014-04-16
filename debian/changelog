@@ -81,6 +81,9 @@ orange-box (1.4) unreleased; urgency=medium
     - add an amt monitor script
   * debian/postinst:
     - add a symlink in ubuntu user's home directory to the examples
+  * debian/postinst, usr/bin/orange-box-amt-monitor:
+    - fix borked patch application
+    - make the amt monitor only watch open amt ports
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 12 Apr 2014 00:17:47 -0500
 
