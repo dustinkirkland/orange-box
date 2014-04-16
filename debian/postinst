@@ -145,7 +145,6 @@ apply_patches() {
 	invoke-rc.d maas-cluster-celery restart
 }
 
-
 case "$1" in
 	configure)
 		apply_patches
