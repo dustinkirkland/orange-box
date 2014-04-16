@@ -5,6 +5,11 @@ orange-box (1.5) unreleased; urgency=medium
   * === added directory etc/init, debian/postinst, etc/init/orange-box-
     amt-monitor.conf, usr/bin/orange-box-amt-monitor:
     - install an amt monitoring upstart job
+  * debian/postinst:
+    - make a copy of orange-box examples in the user's home directory
+    - it seems that juju-deployer wants to create a directory (precise)
+      in the current directory where deployed from, so this must be
+      writeable
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 16 Apr 2014 17:19:42 -0500
 
