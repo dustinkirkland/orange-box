@@ -51,8 +51,12 @@ setup_boot_resources() {
 		mv -f /var/lib/maas/boot-resources /var/lib/maas/boot-resources.orig
 		ln -sf /srv/boot-resources /var/lib/maas/
 	fi
-	# Start importing boot resources in the background
-	run-this-one maas-import-pxe-files &
+	# Importing boot resources
+	# If these were recently imported, they should be available in /srv
+	# and this should be fast;  if not, this might take a long time
+	# MAAS won't work very well until this is done, so we're going to block
+	# until this completes
+	run-this-one maas-import-pxe-files
 }
 
 setup_ssh_keys() {

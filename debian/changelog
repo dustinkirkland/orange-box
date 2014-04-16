@@ -50,6 +50,11 @@ orange-box (1.4) unreleased; urgency=medium
     - install pastebinit; seems we always need this for debugging
     - move external drive setup to preinst, to make sure drive is mounted
       before importing
+  * debian/postinst, debian/preinst:
+    - ensure that network manager does not manage our internal ethernet
+      adapter
+    - block on importing maas pxe files;  MAAS won't be usable until this
+      completes
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 12 Apr 2014 00:17:47 -0500
 

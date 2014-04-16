@@ -48,6 +48,14 @@ setup_networking() {
         done
 	# Set a sane default
 	[ -z "$internal_interface" ] && internal_interface=eth0
+	default_mac=$(ifconfig "$internal_interface" | grep "^$internal_interface" | sed -e "s/.*HWaddr //")
+	# Tell NetworkManager to piss off
+	sed -i -e "/^unmanaged-devices=mac:$default_mac$/d" /etc/NetworkManager/NetworkManager.conf
+	cat >>/etc/NetworkManager/NetworkManager.conf <<EOF
+[keyfile]
+unmanaged-devices=mac:$default_mac
+EOF
+	invoke-rc.d network-manager restart
         cat >/etc/network/interfaces <<EOF
 auto lo
 iface lo inet loopback
