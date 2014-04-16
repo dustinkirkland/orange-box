@@ -55,6 +55,18 @@ orange-box (1.4) unreleased; urgency=medium
       adapter
     - block on importing maas pxe files;  MAAS won't be usable until this
       completes
+  * === added directory usr/lib/orange-box/patches, debian/postinst,
+    debian/preinst, usr/bin/orange-box-add-all-nodes, usr/lib/orange-
+    box/patches/arp_ip_order.patch:
+    - restart maas-cluster-celery to ensure it picks up pxe iso images
+      imported
+    - tgt was running, but seemed to be failing;  restart tgt before adding
+      all nodes to maas
+    - forcibly apply a one-line patch to maas, to work around tych0's
+      arp-mac-to-ip bug
+    - no need to put our external interface in /etc/network/interfaces, just
+      let network-manager handle that one
+    - on re-runs of add all nodes, fastpath tag might already be defined
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 12 Apr 2014 00:17:47 -0500
 

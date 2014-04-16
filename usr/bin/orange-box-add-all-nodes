@@ -57,7 +57,7 @@ for system_id in $(list_all_nodes); do
 done
 
 # Mark all future nodes to be fast path installed
-maas admin tags new name='use-fastpath-installer' comment='fp' "definition=true()"
+maas admin tags new name='use-fastpath-installer' comment='fp' "definition=true()" || true
 
 # Loop over the list of ip addresses listening on 16992
 for ip in $ips; do

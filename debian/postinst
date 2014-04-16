@@ -57,6 +57,7 @@ setup_boot_resources() {
 	# MAAS won't work very well until this is done, so we're going to block
 	# until this completes
 	run-this-one maas-import-pxe-files
+	invoke-rc.d maas-cluster-celery restart
 }
 
 setup_ssh_keys() {
@@ -116,6 +117,8 @@ ensure_running_maas() {
 	ensure_running maas-txlongpoll
 	ensure_running maas-pserv
 	ensure_running maas-dhcp-server
+	invoke-rc.d tgt restart
+	ensure_running tgt
 }
 
 setup_all_nodes() {
@@ -124,10 +127,18 @@ setup_all_nodes() {
 	orange-box-add-all-nodes
 }
 
+apply_patches() {
+	# This is a DISGUSTING HACK that needs to go away
+	# as soon as MAAS ships these fixes
+	cat /usr/lib/orange-box/patches/arp_ip_order.patch | patch
+	rm -f /usr/lib/python2.7/dist-packages/provisioningserver/utils/__init__.pyc
+	invoke-rc.d maas-cluster-celery restart
+}
 
 
 case "$1" in
 	configure)
+		apply_patches
 		setup_boot_resources
 		setup_maas_admin
 		setup_maas_networking

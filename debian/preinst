@@ -60,9 +60,6 @@ EOF
 auto lo
 iface lo inet loopback
 
-auto $external_interface
-iface $external_interface inet dhcp
-
 auto $internal_interface
 iface $internal_interface inet static
         address 10.14.4.1
@@ -70,10 +67,8 @@ iface $internal_interface inet static
         broadcast 10.14.4.255
 
 EOF
-        for interface in $external_interface $internal_interface; do
-                ifdown $interface || true
-                ifup $interface
-        done
+	ifdown $internal_interface || true
+	ifup $internal_interface
         # Wait a moment for the network to normalize
         sleep 5
 	# Setup NAT, so that nodes can get internet access through the master node
