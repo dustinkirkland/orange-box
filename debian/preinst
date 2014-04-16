@@ -71,7 +71,7 @@ EOF
 	# Setup NAT, so that nodes can get internet access through the master node
 	# NOTE: we should probably deprecate this one day, once we have an OrangeBox
 	# that can work entirely in disconnected mode
-	#setup_nat $internal_interface $external_interface
+	setup_nat $internal_interface $external_interface
 	setup_squid
 }
 

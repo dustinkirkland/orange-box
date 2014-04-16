@@ -4,6 +4,7 @@ orange-box (1.4) unreleased; urgency=medium
     - add some pre-flight checks, to ensure that the OrangeBox is installed
       per spec
     - add the NAT basics in the network setup
+    - enable both NAT and squid
   * usr/bin/orange-box-create-package-mirror, usr/bin/orange-box-setup-
     kvms, usr/bin/orange-box-setup-maas, usr/share/doc/orange-
     box/examples/openstack-complex/havana/04cleanup.sh,
