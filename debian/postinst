@@ -32,6 +32,12 @@ setup_maas_networking() {
 	#orange-box-setup-nat $internal_interface $external_interface
 }
 
+setup_squid() {
+	cat /usr/lib/orange-box/inc/squid.conf > /etc/squid3/squid.conf
+	invoke-rc.d squid3 restart
+}
+
+
 setup_external_drive() {
 	# External drive must be:
 	#	a) on /dev/sdb
@@ -127,11 +133,14 @@ setup_all_nodes() {
 	orange-box-add-all-nodes
 }
 
+
+
 case "$1" in
 	configure)
 		setup_boot_resources
 		setup_maas_admin
 		setup_maas_networking
+		setup_squid
 		setup_external_drive
 		setup_local_mirror
 		setup_ssh_keys

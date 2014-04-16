@@ -41,6 +41,9 @@ orange-box (1.4) unreleased; urgency=medium
   * debian/postinst:
     - let's not strict host check ssh keys on node1-node9, as these
       will be constantly changing
+  * debian/control, debian/postinst, debian/preinst:
+    - move squid setup to postinst
+    - setup nat/networking in preinst, predepend on iptables
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 12 Apr 2014 00:17:47 -0500
 
