@@ -1,6 +1,7 @@
 orange-box (1.5) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/orange-box-amt-monitor:
+    - sort those ip address
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 16 Apr 2014 17:19:42 -0500
 
