@@ -1,6 +1,8 @@
 orange-box (1.6) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst, usr/lib/orange-box/patches/try_amt_harder.patch:
+    - MAAS needs to try a bit harder to issue AMT tools
+    - change patching
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 16 Apr 2014 17:34:21 -0500
 
