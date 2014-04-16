@@ -67,6 +67,18 @@ orange-box (1.4) unreleased; urgency=medium
     - no need to put our external interface in /etc/network/interfaces, just
       let network-manager handle that one
     - on re-runs of add all nodes, fastpath tag might already be defined
+  * debian/postinst, usr/bin/orange-box-amt-monitor,
+    usr/share/doc/orange-box/examples/hadoop/00-bootstrap.sh (properties
+    changed: -x to +x), usr/share/doc/orange-box/examples/hadoop/01-get-
+    juju-gui-info.sh (properties changed: -x to +x),
+    usr/share/doc/orange-box/examples/hadoop/03-run-terasort.sh
+    (properties changed: -x to +x), usr/share/doc/orange-
+    box/examples/hadoop/get-hadoop-info.sh (properties changed: -x to
+    +x):
+    - make hadoop example scripts executable
+    - add resolv.conf information so that we can easily resolve maas
+      node names
+    - add an amt monitor script
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 12 Apr 2014 00:17:47 -0500
 
