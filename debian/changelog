@@ -46,6 +46,10 @@ orange-box (1.4) unreleased; urgency=medium
     - setup nat/networking in preinst, predepend on iptables
   * usr/bin/orange-box-add-all-nodes:
     - fix critical typo
+  * debian/control, debian/postinst, debian/preinst:
+    - install pastebinit; seems we always need this for debugging
+    - move external drive setup to preinst, to make sure drive is mounted
+      before importing
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 12 Apr 2014 00:17:47 -0500
 

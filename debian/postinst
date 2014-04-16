@@ -37,19 +37,6 @@ setup_squid() {
 	invoke-rc.d squid3 restart
 }
 
-
-setup_external_drive() {
-	# External drive must be:
-	#	a) on /dev/sdb
-	#	b) partitioned into 1 big partition
-	#	c) ext4 formatted
-	if [ -b /dev/sdb1 ] && ! grep -qs '^/dev/sdb1' /etc/fstab; then
-		echo "/dev/sdb1	/srv	ext4	defaults	1 1" >> /etc/fstab
-	fi
-	umount /dev/sdb1 || true
-	mount -a
-}
-
 setup_local_mirror() {
 	# Set up the local mirror
 	a2ensite archive
@@ -141,7 +128,6 @@ case "$1" in
 		setup_maas_admin
 		setup_maas_networking
 		setup_squid
-		setup_external_drive
 		setup_local_mirror
 		setup_ssh_keys
 		setup_juju
