@@ -23,32 +23,31 @@ setup_debconf() {
 	echo "debconf maas/default-maas-url string 10.14.4.1" | debconf-set-selections -
 	echo "debconf maas-cluster-controller/maas-url string http://10.14.4.1/MAAS" | debconf-set-selections -
 	echo "debconf maas/installation-note boolean true" | debconf-set-selections -
-	# TODO: The following two can't actually affect iptables-persistent, since it's a pre-depends
 	echo "debconf iptables-persistent/autosave_v4 boolean true" | debconf-set-selections -
 	echo "debconf iptables-persistent/autosave_v6 boolean true" | debconf-set-selections -
 }
 
 setup_networking() {
-        # Set up the two network interfaces
-        local Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT
-        while read Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT; do
-                [ "$Mask" = "00000000" ] && break
-        done < /proc/net/route
-        external_interface="$Iface"
-        for interface in $(ifconfig -a -s | grep -v ^Iface | awk '{print $1}'); do
-                case "$interface" in
-                        lo)
-                                continue
-                        ;;
-                        $external_interface)
-                                continue
-                        ;;
-                        *)
-                                internal_interface="$interface"
-                                break
-                        ;;
-                esac
-        done
+	# Set up the two network interfaces
+	local Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT
+	while read Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT; do
+		[ "$Mask" = "00000000" ] && break
+	done < /proc/net/route
+	external_interface="$Iface"
+	for interface in $(ifconfig -a -s | grep -v ^Iface | awk '{print $1}'); do
+		case "$interface" in
+			lo)
+				continue
+			;;
+			$external_interface)
+				continue
+			;;
+			*)
+				internal_interface="$interface"
+				break
+			;;
+		esac
+	done
 	# Set a sane default
 	[ -z "$internal_interface" ] && internal_interface=eth0
 	default_mac=$(ifconfig "$internal_interface" | grep "^$internal_interface" | sed -e "s/.*HWaddr //")
@@ -74,23 +73,6 @@ EOF
 	ifup $internal_interface
         # Wait a moment for the network to normalize
         sleep 5
-	# Setup NAT, so that nodes can get internet access through the master node
-	# NOTE: we should probably deprecate this one day, once we have an OrangeBox
-	# that can work entirely in disconnected mode
-	setup_nat $internal_interface $external_interface
-}
-
-setup_nat() {
-	internal="$1"
-	external="$2"
-	# Enable IP forwarding and save for next boot
-	echo 1 > /proc/sys/net/ipv4/ip_forward
-	echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/10-maas-ip-forward.conf
-	sysctl --system
-	iptables -t nat -A POSTROUTING -o $external -j MASQUERADE
-	iptables -A FORWARD -i $external -o $internal -m state --state RELATED,ESTABLISHED -j ACCEPT
-	iptables -A FORWARD -i $internal -o $external -j ACCEPT
-	iptables-save > /etc/iptables/rules.v4
 }
 
 setup_external_drive() {

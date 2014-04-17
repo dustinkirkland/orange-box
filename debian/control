@@ -8,7 +8,6 @@ Homepage: http://launchpad.net/orange-box
 
 Package: orange-box
 Architecture: all
-Pre-Depends: iptables-persistent,
 Depends: ${misc:Depends},
  amtterm,
  apache2,
@@ -16,6 +15,7 @@ Depends: ${misc:Depends},
  byobu,
  bzr,
  ccze,
+ iptables-persistent,
  juju-core,
  juju-deployer,
  openssh-server,
