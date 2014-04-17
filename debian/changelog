@@ -1,3 +1,9 @@
+orange-box (1.8) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 17 Apr 2014 17:17:22 -0500
+
 orange-box (1.7-0ubuntu1) unstable; urgency=medium
 
   * debian/postinst, debian/preinst:
