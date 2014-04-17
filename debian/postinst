@@ -53,16 +53,20 @@ setup_local_mirror() {
 
 setup_boot_resources() {
 	# Use our boot resources as found on the external storage
-	if [ -e /var/lib/maas/boot-resources ] && [ ! -h /var/lib/maas/boot-resources ] && [ -d /srv/boot-resources ]; then
+	if [ -e /var/lib/maas/boot-resources ]; then
 		mv -f /var/lib/maas/boot-resources /var/lib/maas/boot-resources.orig
-		ln -sf /srv/boot-resources /var/lib/maas/
 	fi
+	if [ ! -e /srv/boot-resources ]; then
+		mkdir -p /srv/boot-resources
+	fi
+	ln -sf /srv/boot-resources /var/lib/maas/
 	# Importing boot resources
 	# If these were recently imported, they should be available in /srv
 	# and this should be fast;  if not, this might take a long time
 	# MAAS won't work very well until this is done, so we're going to block
 	# until this completes
 	run-this-one maas-import-pxe-files
+	# TODO: This following line doesn't actually cause MAAS to notice the pxe boot images, unfortunately
 	invoke-rc.d maas-cluster-celery restart
 }
 
