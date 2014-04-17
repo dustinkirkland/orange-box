@@ -1,4 +1,4 @@
-orange-box (1.7) unreleased; urgency=medium
+orange-box (1.7-0ubuntu1) unstable; urgency=medium
 
   * debian/postinst, debian/preinst:
     - do a slightly better job of creating the boot-resources link
@@ -14,7 +14,7 @@ orange-box (1.7) unreleased; urgency=medium
     - also move the setup nat logic out to an executable, as this is something
       that might need to re-run from time to time
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 16 Apr 2014 18:41:23 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 17 Apr 2014 17:17:19 -0500
 
 orange-box (1.6-0ubuntu1) trusty; urgency=medium
 
