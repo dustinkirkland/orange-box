@@ -17,4 +17,5 @@ juju bootstrap --show-log --upload-tools
 #echo "Waiting for bootstrap node to deploy (5 minutes)"
 #sleep 300
 juju deploy --to 0 --repository=/srv/charmstore/ local:precise/juju-gui
+juju expose juju-gui
 
