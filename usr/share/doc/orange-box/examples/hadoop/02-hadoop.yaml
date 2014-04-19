@@ -5,29 +5,29 @@ envExport:
       num_units: 1
       expose: true
       annotations: 
-        "gui-x": "670.9191466830049"
-        "gui-y": "392.8400343585607"
+        "gui-x": "914.9191466830049"
+        "gui-y": "112.84003435856067"
     mysql: 
       charm: "cs:precise/mysql-32"
       num_units: 1
       options: 
         "binlog-format": ROW
       annotations: 
-        "gui-x": "1476.919207718161"
-        "gui-y": "683.5067213702795"
+        "gui-x": "1424.919207718161"
+        "gui-y": "343.5067213702795"
     hive: 
       charm: "cs:precise/hive-4"
       num_units: 1
       to: "mysql"
       annotations: 
-        "gui-x": "1052.5858336947235"
-        "gui-y": "686.3796452663048"
+        "gui-x": "1146.5858336947235"
+        "gui-y": "340.3796452663048"
     "hadoop-datanode": 
       charm: "cs:precise/hadoop-10"
       num_units: 2
       annotations: 
-        "gui-x": "628.3332046960281"
-        "gui-y": "106.61878278661516"
+        "gui-x": "648.3332046960281"
+        "gui-y": "340.61878278661516"
   relations: 
     - - "hive:jobtracker"
       - "hadoop-namenode:jobtracker"
