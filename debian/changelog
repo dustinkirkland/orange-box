@@ -3,6 +3,10 @@ orange-box (1.8) unreleased; urgency=medium
   * debian/postinst:
     - disable remote password authentication, since our username/password
       is well known
+    - up the DHCP range to .50-.250
+      + 200 addresses should be plenty enough
+      + leave just a little more room, in case we ever fit more NUCs inside
+        of an Orange Box
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 17 Apr 2014 17:17:22 -0500
 
