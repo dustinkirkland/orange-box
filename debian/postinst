@@ -77,6 +77,12 @@ setup_boot_resources() {
 }
 
 setup_ssh_keys() {
+	# Disable remote password authentication, since our username/password
+	# combo is very well known
+	if ! grep -qs "^PasswordAuthentication no" /etc/ssh/sshd_config 2>/dev/null; then
+		echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
+		invoke-rc.d ssh restart
+	fi
 	if [ ! -e /home/ubuntu/.ssh/id_rsa ]; then
 		su -l ubuntu -c "ssh-keygen -N '' -f /home/ubuntu/.ssh/id_rsa"
 	fi
