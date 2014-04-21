@@ -7,32 +7,50 @@ havana:
         "admin-password": "admin"
         "admin-token": "admin"
         "openstack-origin": "cloud:precise-havana"
+      annotations:
+        "gui-x": "1731.1756591796875"
+        "gui-y": "59.8729248046875"
     "nova-compute":
       charm: "cs:precise/nova-compute-16"
       num_units: 1
       options:
         "flat-interface": eth0
         "openstack-origin": "cloud:precise-havana"
+      annotations:
+        "gui-x": "1325.8563232421875"
+        "gui-y": "-27.374825477600098"
     "neutron-gateway":
       charm: "cs:precise/quantum-gateway-10"
       num_units: 1
       options:
         "openstack-origin": "cloud:precise-havana"
+      annotations:
+        "gui-x": "847.3951416015625"
+        "gui-y": "432.41436767578125"
     "nova-cloud-controller": 
       charm: "cs:precise/nova-cloud-controller-18"
       num_units: 1
       options: 
         "network-manager": Neutron
         "openstack-origin": "cloud:precise-havana"
+      annotations:
+        "gui-x": "1401.865234375"
+        "gui-y": "891.737548828125"
     rabbitmq: 
       charm: "cs:precise/rabbitmq-server-15"
       num_units: 1
       to: 0
+      annotations:
+        "gui-x": "2000.339111328125"
+        "gui-y": "420.60723876953125"
     glance: 
       charm: "cs:precise/glance-26"
       num_units: 1
       options: 
         "openstack-origin": "cloud:precise-havana"
+      annotations:
+        "gui-x": "1008.2059936523438"
+        "gui-y": "734.3492889404297"
     cinder: 
       charm: "cs:precise/cinder-13"
       num_units: 1
@@ -40,16 +58,25 @@ havana:
         "block-device": none
         "openstack-origin": "cloud:precise-havana"
         overwrite: "true"
+      annotations:
+        "gui-x": "980.4285888671875"
+        "gui-y": "154.0172348022461"
     "openstack-dashboard": 
       charm: "cs:precise/openstack-dashboard-11"
       num_units: 1
       to: "keystone"
       options: 
         "openstack-origin": "cloud:precise-havana"
+      annotations:
+        "gui-x": "2023.8385009765625"
+        "gui-y": "65.05170631408691"
     mysql: 
       charm: "cs:precise/mysql-29"
       num_units: 1
       to: 0
+      annotations:
+        "gui-x": "1912.73876953125"
+        "gui-y": "762.34814453125"
   relations: 
     - - "keystone:shared-db"
       - "mysql:shared-db"
