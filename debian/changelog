@@ -1,4 +1,4 @@
-orange-box (1.8) unreleased; urgency=medium
+orange-box (1.8-0ubuntu1) unstable; urgency=medium
 
   * debian/postinst:
     - disable remote password authentication, since our username/password
@@ -14,7 +14,7 @@ orange-box (1.8) unreleased; urgency=medium
     box/patches/try_amt_harder.patch:
     - add links to upstream bugs
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 17 Apr 2014 17:17:22 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 22 Apr 2014 08:32:39 -0500
 
 orange-box (1.7-0ubuntu1) unstable; urgency=medium
 
