@@ -1,3 +1,5 @@
+# Hot fix for LP: #1310844
+
 --- /usr/lib/python2.7/dist-packages/provisioningserver/utils/__init__.py	2014-04-16 13:12:54.741041502 -0500
 +++ /usr/lib/python2.7/dist-packages/provisioningserver/utils/__init__.py	2014-04-16 13:13:08.705040814 -0500
 @@ -819,7 +819,7 @@ def find_ip_via_arp(mac):

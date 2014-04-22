@@ -10,6 +10,9 @@ orange-box (1.8) unreleased; urgency=medium
   * usr/share/doc/orange-box/examples/hadoop/02-hadoop.yaml,
     usr/share/doc/orange-box/examples/openstack/havanaOB.yaml:
     - merge from Ameet, more cleanly placing these services on the canvas
+  * usr/lib/orange-box/patches/arp_ip_order.patch, usr/lib/orange-
+    box/patches/try_amt_harder.patch:
+    - add links to upstream bugs
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 17 Apr 2014 17:17:22 -0500
 
