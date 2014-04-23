@@ -1,0 +1,13 @@
+# List of nodes in CloudThree
+# Format: <macaddr> <hostname>
+ec:a8:6b:fe:18:8c node0
+ec:a8:6b:fe:18:94 node1
+ec:a8:6b:fe:18:1a node2
+ec:a8:6b:fe:18:5e node3
+ec:a8:6b:fe:17:e2 node4
+ec:a8:6b:fe:18:63 node5
+ec:a8:6b:fe:03:db node6
+ec:a8:6b:fe:18:8f node7
+ec:a8:6b:fd:29:3f node8
+ec:a8:6b:fe:18:61 node9
+
