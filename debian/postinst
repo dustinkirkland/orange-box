@@ -99,7 +99,7 @@ EOF
 	fi
 	chmod 600 /home/ubuntu/.ssh/config
 	chown -R ubuntu:ubuntu /home/ubuntu/.ssh/config
-	rm -f /home/ubuntu/examples
+	rm -rf /home/ubuntu/examples
 	cp -a /usr/share/doc/orange-box/examples /home/ubuntu/
 	chown -R ubuntu:ubuntu /home/ubuntu/examples
 }
