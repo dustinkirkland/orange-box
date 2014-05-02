@@ -1,6 +1,11 @@
 orange-box (1.10) unreleased; urgency=medium
 
-  * UNRELEASED
+  * Re-release, this time with:
+  * debian/control, debian/postinst, usr/share/orange-box/orange-box-
+    background.png:
+    - add explicity dependencies for remmina and gsettings
+    - set the desktop background to an orange box image
+    - clean up the default launcher favorites
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 May 2014 17:37:18 -0500
 
@@ -11,11 +16,6 @@ orange-box (1.9-0ubuntu1) utopic; urgency=medium
     - I expect to deprecate and remove all of these very soon, however
   * debian/postinst:
     - clean up user's examples directory; this was causing reinstalls to fail
-  * debian/control, debian/postinst, usr/share/orange-box/orange-box-
-    background.png:
-    - add explicity dependencies for remmina and gsettings
-    - set the desktop background to an orange box image
-    - clean up the default launcher favorites
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 May 2014 17:37:16 -0500
 
