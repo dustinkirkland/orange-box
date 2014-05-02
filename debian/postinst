@@ -76,6 +76,11 @@ setup_boot_resources() {
 	invoke-rc.d maas-cluster-celery restart
 }
 
+setup_desktop() {
+	su -l ubuntu -c "gsettings set org.gnome.desktop.background picture-uri file:///usr/share/orange-box/orange-box-background.png"
+	su -l ubuntu -c "gsettings set com.canonical.Unity.Launcher favorites \"['firefox.desktop', 'byobu.desktop', 'remmina.desktop']\""
+}
+
 setup_ssh_keys() {
 	# Disable remote password authentication, since our username/password
 	# combo is very well known
@@ -165,6 +170,7 @@ apply_patches() {
 
 case "$1" in
 	configure)
+		setup_desktop
 		apply_patches
 		setup_boot_resources
 		setup_maas_admin
