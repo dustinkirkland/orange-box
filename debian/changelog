@@ -1,4 +1,4 @@
-orange-box (1.10) unreleased; urgency=medium
+orange-box (1.10-0ubuntu1) utopic; urgency=medium
 
   * Re-release, this time with:
   * debian/control, debian/postinst, usr/share/orange-box/orange-box-
@@ -7,7 +7,7 @@ orange-box (1.10) unreleased; urgency=medium
     - set the desktop background to an orange box image
     - clean up the default launcher favorites
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 May 2014 17:37:18 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 May 2014 17:38:54 -0500
 
 orange-box (1.9-0ubuntu1) utopic; urgency=medium
 
