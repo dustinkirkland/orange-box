@@ -1,0 +1,55 @@
+#!/bin/bash
+#
+#    orange-box-setup-kvms - create some virtual machines
+#    Copyright (C) 2014 Canonical Ltd.
+#
+#    Authors: Ronald McCollam <ronald.mccollam@canonical.com>
+#             Dustin Kirkland <kirkland@canonical.com>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, version 3 of the License.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+if [ "$(id -u)" != "0" ]; then
+  echo "Must be run with sudo or by root"
+  exit 77
+fi
+
+set -e
+set -x
+
+virsh net-info default && virsh net-destroy default && virsh net-undefine default
+
+[ -d /home/maas ] || install -d /home/maas --owner maas --group maas
+chsh maas -s /bin/bash
+[ -d /home/maas/.ssh ] || echo -e "\n\n\n" | sudo -u maas ssh-keygen -N "" -t rsa -f /home/maas/.ssh/id_rsa
+grep 'maas@' ~/.ssh/authorized_keys || cat /home/maas/.ssh/id_rsa.pub | tee -a /home/ubuntu/.ssh/authorized_keys
+printf "%s,%s %s %s\n" "node0.maas" "10.14.4.1" $(awk '{print $1 " " $2}' /etc/ssh/ssh_host_ecdsa_key.pub) | sudo tee /home/maas/.ssh/known_hosts
+
+maas admin zones create name="node0-vms" || true
+maas admin tags new name=virtual || true
+virsh destroy node0vm0.maas || true
+virsh undefine node0vm0.maas || true
+echo "INFO: Installing virtual machine"
+virt-install --debug --name node0vm0.maas --ram 4096 --disk=path=/home/ubuntu/node0vm0.img,size=10 --vcpus=2 --os-type=linux --pxe --network=bridge=br0 --boot network || true
+virsh console node0vm0.maas
+mac=$(virsh dumpxml node0vm0.maas | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
+system_id=$(maas admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
+if [ -n "$system_id" ]; then
+	maas admin node update $system_id hostname=node0vm0.maas power_type=virsh power_parameters_power_address=qemu+ssh://ubuntu@10.14.4.1/system power_parameters_power_id=node0vm0.maas
+	maas admin tag update-nodes "virtual" add=$system_id
+	maas admin tag update-nodes use-fastpath-installer add=$system_id
+	maas admin node commission $system_id || true
+else
+	echo "ERROR: Could not find virtual machine in MAAS" 1>&2
+	exit 1
+fi

@@ -1,6 +1,18 @@
 orange-box (1.11) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/control, debian/postinst, debian/preinst, usr/bin/orange-box-
+    add-all-nodes, usr/bin/orange-box-setup-kvms => usr/bin/orange-box-
+    add-virtual-nodes, usr/share/doc/orange-box/examples/openstack/00-
+    bootstrap.sh:
+    - add a VM on the master node to MAAS
+      + useful for running the Juju GUI
+    - install libvirt-bin, qemu-kvm, virtinst
+    - configure the internal interface to be a bridge, so that we
+      can host a virtual machine here
+    - tag real nodes as 'physical' (note, this isn't yet working)
+    - update the setup-kvms script to create one single virtual machine
+      node and add to MAAS
+    - update openstack example documentation to bootstrap onto a vm
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 May 2014 17:38:56 -0500
 
