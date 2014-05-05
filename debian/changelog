@@ -1,4 +1,4 @@
-orange-box (1.11) unreleased; urgency=medium
+orange-box (1.11-0ubuntu1) utopic; urgency=medium
 
   * debian/control, debian/postinst, debian/preinst, usr/bin/orange-box-
     add-all-nodes, usr/bin/orange-box-setup-kvms => usr/bin/orange-box-
@@ -14,7 +14,7 @@ orange-box (1.11) unreleased; urgency=medium
       node and add to MAAS
     - update openstack example documentation to bootstrap onto a vm
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 02 May 2014 17:38:56 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Sun, 04 May 2014 23:51:32 -0500
 
 orange-box (1.10-0ubuntu1) utopic; urgency=medium
 
