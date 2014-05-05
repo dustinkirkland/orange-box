@@ -1,3 +1,9 @@
+orange-box (1.12) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Sun, 04 May 2014 23:51:34 -0500
+
 orange-box (1.11-0ubuntu1) utopic; urgency=medium
 
   * debian/control, debian/postinst, debian/preinst, usr/bin/orange-box-
