@@ -1,6 +1,7 @@
 orange-box (1.16) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/preinst:
+    - fix iptables debconf question
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 06 May 2014 10:39:22 -0500
 
