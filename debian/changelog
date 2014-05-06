@@ -1,6 +1,7 @@
 orange-box (1.12) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - fix typo in ip allocation
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sun, 04 May 2014 23:51:34 -0500
 
