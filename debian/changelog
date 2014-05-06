@@ -3,6 +3,10 @@ orange-box (1.14) unreleased; urgency=medium
   * debian/postinst, usr/bin/orange-box-add-virtual-nodes:
     - disable screensaver
     - virsh console again
+  * debian/postinst, debian/preinst, usr/share/doc/orange-
+    box/examples/openstack/00-bootstrap.sh:
+    - revert the virtual machine installation and the bridge creation
+      + bridge is causing serious problems with network manager
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 05 May 2014 22:57:55 -0500
 

@@ -161,7 +161,7 @@ setup_all_nodes() {
 	# Ensure that pxe and dhcp are running
 	ensure_running_maas
 	orange-box-add-all-nodes
-	orange-box-add-virtual-nodes
+	#orange-box-add-virtual-nodes
 }
 
 apply_patches() {
