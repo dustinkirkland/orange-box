@@ -1,6 +1,8 @@
 orange-box (1.14) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst, usr/bin/orange-box-add-virtual-nodes:
+    - disable screensaver
+    - virsh console again
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 05 May 2014 22:57:55 -0500
 

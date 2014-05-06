@@ -82,6 +82,9 @@ setup_boot_resources() {
 setup_desktop() {
 	su -l ubuntu -c "gsettings set org.gnome.desktop.background picture-uri file:///usr/share/orange-box/orange-box-background.png"
 	su -l ubuntu -c "gsettings set com.canonical.Unity.Launcher favorites \"['firefox.desktop', 'byobu.desktop', 'remmina.desktop']\""
+	su -l ubuntu -c "gsettings set org.gnome.desktop.session idle-delay 0"
+	su -l ubuntu -c "gsettings set org.gnome.desktop.screensaver idle-activation-enabled false"
+	su -l ubuntu -c "gsettings set org.gnome.desktop.screensaver lock-enabled false"
 }
 
 setup_ssh_keys() {
