@@ -39,6 +39,10 @@ setup_maas_networking() {
 	done < /proc/net/route
 	external_interface="$Iface"
 	orange-box-setup-nat $internal_interface $external_interface
+	# Redirect to MAAS web interface
+	cat >/var/www/html/index.html <<EOF
+<meta http-equiv="refresh" content="0; url=/MAAS">
+EOF
 }
 
 setup_resolv() {
