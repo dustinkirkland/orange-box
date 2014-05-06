@@ -1,9 +1,9 @@
-orange-box (1.12) unreleased; urgency=medium
+orange-box (1.12-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst:
     - fix typo in ip allocation
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Sun, 04 May 2014 23:51:34 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 05 May 2014 21:12:14 -0500
 
 orange-box (1.11-0ubuntu1) utopic; urgency=medium
 
