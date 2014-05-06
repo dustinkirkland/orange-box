@@ -32,8 +32,8 @@ virsh net-info default && virsh net-destroy default && virsh net-undefine defaul
 [ -d /home/maas ] || install -d /home/maas --owner maas --group maas
 chsh maas -s /bin/bash
 [ -d /home/maas/.ssh ] || echo -e "\n\n\n" | sudo -u maas ssh-keygen -N "" -t rsa -f /home/maas/.ssh/id_rsa
-grep 'maas@' ~/.ssh/authorized_keys || cat /home/maas/.ssh/id_rsa.pub | tee -a /home/ubuntu/.ssh/authorized_keys
-printf "%s,%s %s %s\n" "node0.maas" "10.14.4.1" $(awk '{print $1 " " $2}' /etc/ssh/ssh_host_ecdsa_key.pub) | sudo tee /home/maas/.ssh/known_hosts
+grep 'maas@' /home/ubuntu/.ssh/authorized_keys || cat /home/maas/.ssh/id_rsa.pub | tee -a /home/ubuntu/.ssh/authorized_keys
+printf "%s,%s %s %s\n" "node0.maas" "10.14.4.1" $(awk '{print $1 " " $2}' /etc/ssh/ssh_host_ecdsa_key.pub) | tee -a /home/maas/.ssh/known_hosts
 
 maas admin zones create name="node0-vms" || true
 maas admin tags new name=virtual || true
@@ -41,7 +41,6 @@ virsh destroy node0vm0.maas || true
 virsh undefine node0vm0.maas || true
 echo "INFO: Installing virtual machine"
 virt-install --debug --name node0vm0.maas --ram 4096 --disk=path=/home/ubuntu/node0vm0.img,size=10 --vcpus=2 --os-type=linux --pxe --network=bridge=br0 --boot network || true
-virsh console node0vm0.maas
 mac=$(virsh dumpxml node0vm0.maas | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
 system_id=$(maas admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
 if [ -n "$system_id" ]; then

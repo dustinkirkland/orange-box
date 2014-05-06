@@ -1,6 +1,12 @@
 orange-box (1.13) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/share/doc/orange-box/examples/openstack/00-bootstrap.sh:
+    - clean up bootstrap a bit
+  * debian/postinst, usr/bin/orange-box-add-virtual-nodes,
+    usr/share/doc/orange-box/examples/openstack/00-bootstrap.sh:
+    - set MAAS upstream DNS
+    - fix typos in virtual node add
+    - simplify openstack bootstrap
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 05 May 2014 21:12:16 -0500
 

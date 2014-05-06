@@ -29,6 +29,9 @@ setup_maas_networking() {
 	done
 	internal_interface=$(route -n | grep "^10\.14\.4\." | sed -e "s/.* //")
 	maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_high=10.14.4.250 ip_range_low=10.14.4.50 management=2 broadcast_ip=10.14.4.255 router_ip=10.14.4.1
+	# Set MAAS upstream DNS
+	dns=$(nmcli d list iface $internal_interface | grep -m 1 "^IP4.DNS" | awk '{ print $2 }')
+	maas admin maas set-config name=upstream_dns value=$dns
 	# Setup nat
 	local Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT
 	while read Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT; do
