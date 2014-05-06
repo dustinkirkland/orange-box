@@ -1,4 +1,4 @@
-orange-box (1.15) unreleased; urgency=medium
+orange-box (1.15-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst, debian/preinst, usr/share/doc/orange-
     box/examples/openstack/00-bootstrap.sh:
@@ -8,7 +8,7 @@ orange-box (1.15) unreleased; urgency=medium
   * debian/postinst:
     - add a redirect to the MAAS web interface
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 06 May 2014 00:00:55 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 06 May 2014 10:39:18 -0500
 
 orange-box (1.14-0ubuntu1) utopic; urgency=medium
 
