@@ -63,13 +63,22 @@ auto lo
 iface lo inet loopback
 
 auto $internal_interface
-iface $internal_interface inet static
+iface $internal_interface inet manual
+
+auto br0
+iface br0 inet static
         address 10.14.4.1
         netmask 255.255.255.0
         broadcast 10.14.4.255
+	bridge_ports $internal_interface
+	bridge_stp off
+	bridge_fd 0
+	bridge_maxwait 0
 EOF
 	ifdown $internal_interface || true
+	ifdown br0 || true
 	ifup $internal_interface
+	ifup br0
         # Wait a moment for the network to normalize
         sleep 5
 }

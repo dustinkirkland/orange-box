@@ -1,6 +1,10 @@
 orange-box (1.15) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst, debian/preinst, usr/share/doc/orange-
+    box/examples/openstack/00-bootstrap.sh:
+    - resurrect virtual machine creation
+    - use manual in /etc/network/interfaces to work around network manager
+      crashing
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 06 May 2014 00:00:55 -0500
 
