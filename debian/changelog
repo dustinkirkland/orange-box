@@ -1,4 +1,4 @@
-orange-box (1.13) unreleased; urgency=medium
+orange-box (1.13-0ubuntu1) utopic; urgency=medium
 
   * usr/share/doc/orange-box/examples/openstack/00-bootstrap.sh:
     - clean up bootstrap a bit
@@ -8,7 +8,7 @@ orange-box (1.13) unreleased; urgency=medium
     - fix typos in virtual node add
     - simplify openstack bootstrap
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 05 May 2014 21:12:16 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 05 May 2014 22:57:53 -0500
 
 orange-box (1.12-0ubuntu1) utopic; urgency=medium
 
