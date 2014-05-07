@@ -1,4 +1,4 @@
-orange-box (1.17) unreleased; urgency=medium
+orange-box (1.17-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst, debian/preinst (properties changed: -x to +x),
     usr/bin/orange-box-add-all-nodes:
@@ -12,7 +12,7 @@ orange-box (1.17) unreleased; urgency=medium
     - use ip to find default route (per elmo), more machine readable
     - move internal/external network detection into setup-nat script
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 06 May 2014 10:43:52 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 07 May 2014 10:16:16 -0500
 
 orange-box (1.16-0ubuntu1) utopic; urgency=medium
 
