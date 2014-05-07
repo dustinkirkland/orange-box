@@ -44,6 +44,7 @@ export AMT_PASSWORD="Password1+"
 grep -qs "^export AMT_PASSWORD" /home/ubuntu/.bashrc 2>/dev/null || echo 'export AMT_PASSWORD="Password1+"' >> /home/ubuntu/.bashrc
 # VNC Password MUST BE *exactly 8 characters long and contain 1 capital letter, a number, and a special character!!!
 export VNC_PASSWORD="Ubuntu1+"
+chmod 600 /home/ubuntu/.bashrc
 
 # Search for nodes listening on AMT's 16992
 ips=$(nmap -p 16992 -oG - 10.14.4.1/24 | grep 16992/open | awk '{print $2}')
@@ -88,7 +89,7 @@ for ip in $ips; do
 	sleep 1
 	wake_me_up_before_you_go_go $ip
 	yes | run-one-until-success amttool $ip powerup pxe
-	maas admin tags new name=phyiscal || true
+	maas admin tags new name=physical || true
 	system_id=$(maas admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
 	maas admin tag update-nodes "physical" add=$system_id || true
 done

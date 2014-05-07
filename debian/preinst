@@ -1,5 +1,6 @@
 #!/bin/sh
 set -e
+set -x
 
 preflight_checks() {
 	if [ "$(id -u ubuntu)" != "1000" ]; then
@@ -17,6 +18,7 @@ preflight_checks() {
 	esac
 	# TODO: Check that the AMTs are on static IPs
 	# TODO: Check dual hard drives, which one is which
+	# TODO: Ensure we have two interfaces, one internal, one external
 }
 
 setup_debconf() {
@@ -30,11 +32,13 @@ setup_debconf() {
 
 setup_networking() {
 	# Set up the two network interfaces
+	# TODO: ip route ls | grep ^default | awk '{print $5}'
 	local Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT
 	while read Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT; do
 		[ "$Mask" = "00000000" ] && break
 	done < /proc/net/route
 	external_interface="$Iface"
+	# TODO: ip addr ls
 	for interface in $(ifconfig -a -s | grep -v ^Iface | awk '{print $1}'); do
 		case "$interface" in
 			lo|br*)
@@ -51,6 +55,7 @@ setup_networking() {
 	done
 	# Set a sane default
 	[ -z "$internal_interface" ] && internal_interface=eth0
+	# TODO: use ip
 	default_mac=$(ifconfig "$internal_interface" | grep "^$internal_interface" | sed -e "s/.*HWaddr //")
 	# Tell NetworkManager to piss off
 	sed -i -e "/^unmanaged-devices=mac:$default_mac$/d" /etc/NetworkManager/NetworkManager.conf
@@ -76,8 +81,8 @@ iface br0 inet static
 	bridge_fd 0
 	bridge_maxwait 0
 EOF
-	ifdown $internal_interface || true
-	ifdown br0 || true
+	ifdown --force $internal_interface || true
+	ifdown --force br0 || true
 	ifup $internal_interface
 	ifup br0
         # Wait a moment for the network to normalize
@@ -89,6 +94,8 @@ setup_external_drive() {
 	#       a) on /dev/sdb
 	#       b) partitioned into 1 big partition
 	#       c) ext4 formatted
+	# TODO: look a little smarter for the 2nd drive
+	# TODO: use blkid for uuid in fstab
 	if [ -b /dev/sdb1 ] && ! grep -qs '^/dev/sdb1' /etc/fstab; then
 		echo "/dev/sdb1 /srv    ext4    defaults        1 1" >> /etc/fstab
 	fi

@@ -1,6 +1,13 @@
 orange-box (1.17) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst, debian/preinst (properties changed: -x to +x),
+    usr/bin/orange-box-add-all-nodes:
+    - fix upstream dns bug, use external interface
+    - try different escape of gsettings, still not working
+    - make preinst a set -x so we see what's going on
+    - force ifdown
+    - make ubuntu's bashrc 600, since it has passwords?
+    - fix typo in tagging physical machines
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 06 May 2014 10:43:52 -0500
 

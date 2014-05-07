@@ -30,14 +30,16 @@ setup_maas_networking() {
 	internal_interface=$(route -n | grep "^10\.14\.4\." | sed -e "s/.* //")
 	maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_high=10.14.4.250 ip_range_low=10.14.4.50 management=2 broadcast_ip=10.14.4.255 router_ip=10.14.4.1
 	# Set MAAS upstream DNS
-	dns=$(nmcli d list iface $internal_interface | grep -m 1 "^IP4.DNS" | awk '{ print $2 }')
-	maas admin maas set-config name=upstream_dns value=$dns
-	# Setup nat
+	# TODO: Use ip here
 	local Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT
 	while read Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT; do
 		[ "$Mask" = "00000000" ] && break
 	done < /proc/net/route
 	external_interface="$Iface"
+	dns=$(nmcli d list iface $external_interface | grep -m 1 "^IP4.DNS" | awk '{ print $2 }')
+	maas admin maas set-config name=upstream_dns value=$dns
+	# Setup nat
+	# TODO: move $internal_interface and $external_interface into orange-box-setup-nat
 	orange-box-setup-nat $internal_interface $external_interface
 	# Redirect to MAAS web interface
 	cat >/var/www/html/index.html <<EOF
@@ -85,7 +87,7 @@ setup_boot_resources() {
 
 setup_desktop() {
 	su -l ubuntu -c "gsettings set org.gnome.desktop.background picture-uri file:///usr/share/orange-box/orange-box-background.png"
-	su -l ubuntu -c "gsettings set com.canonical.Unity.Launcher favorites \"['firefox.desktop', 'byobu.desktop', 'remmina.desktop']\""
+	su -l ubuntu -c "gsettings set com.canonical.Unity.Launcher favorites \['firefox.desktop', 'byobu.desktop', 'remmina.desktop'\]"
 	su -l ubuntu -c "gsettings set org.gnome.desktop.session idle-delay 0"
 	su -l ubuntu -c "gsettings set org.gnome.desktop.screensaver idle-activation-enabled false"
 	su -l ubuntu -c "gsettings set org.gnome.desktop.screensaver lock-enabled false"
