@@ -1,11 +1,11 @@
-orange-box (1.19) unreleased; urgency=medium
+orange-box (1.19-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst, debian/preinst:
     - sleep longer to allow network to settle (necessary on slow
       DHCP/STP networks)
     - fix quoting typo
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 07 May 2014 16:09:10 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 07 May 2014 18:44:16 -0500
 
 orange-box (1.18-0ubuntu1) utopic; urgency=medium
 
