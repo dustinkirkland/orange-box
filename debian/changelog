@@ -1,11 +1,11 @@
-orange-box (1.18) unreleased; urgency=medium
+orange-box (1.18-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst:
     - after manually importing boot images, tell maas to import images,
       which should be a no-op download, but will let maas figure out that
       images have been imported more quickly
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 07 May 2014 10:16:18 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 07 May 2014 16:09:06 -0500
 
 orange-box (1.17-0ubuntu1) utopic; urgency=medium
 
