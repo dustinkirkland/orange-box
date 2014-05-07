@@ -1,6 +1,9 @@
 orange-box (1.19) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst, debian/preinst:
+    - sleep longer to allow network to settle (necessary on slow
+      DHCP/STP networks)
+    - fix quoting typo
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 07 May 2014 16:09:10 -0500
 

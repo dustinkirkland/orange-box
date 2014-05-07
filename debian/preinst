@@ -81,7 +81,8 @@ EOF
 	ifup $internal_interface
 	ifup br0
         # Wait a moment for the network to normalize
-        sleep 5
+	echo "INFO: Conservatively sleeping 60 seconds to ensure networking has settled"
+	sleep 60
 }
 
 setup_external_drive() {
