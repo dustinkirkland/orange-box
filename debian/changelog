@@ -1,6 +1,9 @@
 orange-box (1.18) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - after manually importing boot images, tell maas to import images,
+      which should be a no-op download, but will let maas figure out that
+      images have been imported more quickly
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 07 May 2014 10:16:18 -0500
 

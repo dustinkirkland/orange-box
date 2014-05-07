@@ -75,8 +75,9 @@ setup_boot_resources() {
 	# MAAS won't work very well until this is done, so we're going to block
 	# until this completes
 	run-this-one maas-import-pxe-files
-	# TODO: This following line doesn't actually cause MAAS to notice the pxe boot images, unfortunately
-	invoke-rc.d maas-cluster-celery restart
+	# Now, we tell maas to import the images, which should be mostly a
+	# no-op download, but this will actually *tell* maas that images have been imported
+	maas admin nodegroups $CLUSTER_UUID import_boot_images
 }
 
 setup_desktop() {
