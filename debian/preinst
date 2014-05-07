@@ -32,12 +32,7 @@ setup_debconf() {
 
 setup_networking() {
 	# Set up the two network interfaces
-	# TODO: ip route ls | grep ^default | awk '{print $5}'
-	local Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT
-	while read Iface Destination Gateway Flags RefCnt Use Metric Mask MTU Window IRTT; do
-		[ "$Mask" = "00000000" ] && break
-	done < /proc/net/route
-	external_interface="$Iface"
+	external_interface=$(ip route ls | grep ^default | awk '{print $5}')
 	# TODO: ip addr ls
 	for interface in $(ifconfig -a -s | grep -v ^Iface | awk '{print $1}'); do
 		case "$interface" in

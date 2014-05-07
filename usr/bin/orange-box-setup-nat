@@ -23,8 +23,9 @@ if [ "$(id -u)" != "0" ]; then
   exit 77
 fi
 
-internal="$1"
-external="$2"
+internal=$(route -n | grep "^10\.14\.4\." | sed -e "s/.* //")
+external=$(ip route ls | grep ^default | awk '{print $5}')
+
 
 if [ -z "$internal" ] || [ -z "$external" ]; then
 	echo "usage: $0 [INTERNAL_INTERFACE] [EXTERNAL_INTERFACE]" 1>&2

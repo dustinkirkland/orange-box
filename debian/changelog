@@ -8,6 +8,9 @@ orange-box (1.17) unreleased; urgency=medium
     - force ifdown
     - make ubuntu's bashrc 600, since it has passwords?
     - fix typo in tagging physical machines
+  * debian/postinst, debian/preinst, usr/bin/orange-box-setup-nat:
+    - use ip to find default route (per elmo), more machine readable
+    - move internal/external network detection into setup-nat script
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 06 May 2014 10:43:52 -0500
 
