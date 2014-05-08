@@ -1,6 +1,7 @@
 orange-box (1.27) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/preinst:
+    - skip wireless interfaces on the internal network detection
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 08 May 2014 18:11:54 -0500
 
