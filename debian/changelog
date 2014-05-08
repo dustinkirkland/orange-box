@@ -2,7 +2,7 @@ orange-box (1.22) unreleased; urgency=low
 
   * Re-release and push to PPA
 
- -- <dave@swires>  Thu, 08 May 2014 00:21:09 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com> Thu, 08 May 2014 00:21:09 -0500
 
 orange-box (1.21-0ubuntu1) utopic; urgency=medium
 
