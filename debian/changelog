@@ -1,8 +1,9 @@
 orange-box (1.20) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - fixed login to maas errors for 1.18
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 07 May 2014 18:44:35 -0500
+ -- Dave Russell <drussell@canonical.com>  Wed, 07 May 2014 18:44:35 -0500
 
 orange-box (1.19-0ubuntu1) utopic; urgency=medium
 

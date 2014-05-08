@@ -77,6 +77,9 @@ setup_boot_resources() {
 	run-this-one maas-import-pxe-files
 	# Now, we tell maas to import the images, which should be mostly a
 	# no-op download, but this will actually *tell* maas that images have been imported
+        . /etc/maas/maas_cluster.conf
+        APIKEY=$(maas-region-admin apikey --username admin)
+        maas login admin $MAAS_URL $APIKEY
 	maas admin nodegroups $CLUSTER_UUID import_boot_images
 }
 
