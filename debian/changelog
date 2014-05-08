@@ -1,6 +1,8 @@
 orange-box (1.25) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - move the maas admin import-boot-images down further, as we need
+      to have created the maas admin user and logged in
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 08 May 2014 09:45:57 -0500
 

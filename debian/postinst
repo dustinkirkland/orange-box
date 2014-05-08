@@ -75,12 +75,6 @@ setup_boot_resources() {
 	# MAAS won't work very well until this is done, so we're going to block
 	# until this completes
 	run-this-one maas-import-pxe-files
-	# Now, we tell maas to import the images, which should be mostly a
-	# no-op download, but this will actually *tell* maas that images have been imported
-        . /etc/maas/maas_cluster.conf
-        APIKEY=$(maas-region-admin apikey --username admin)
-        maas login admin $MAAS_URL $APIKEY
-	maas admin nodegroups import_boot_images
 }
 
 setup_desktop() {
@@ -164,6 +158,7 @@ ensure_running_maas() {
 setup_all_nodes() {
 	# Ensure that pxe and dhcp are running
 	ensure_running_maas
+	maas admin node-groups import-boot-images
 	orange-box-add-all-nodes
 	orange-box-add-virtual-nodes
 }
