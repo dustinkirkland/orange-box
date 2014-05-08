@@ -2,6 +2,8 @@
 set -e
 set -x
 
+#unnecessary comment
+
 preflight_checks() {
 	if [ "$(id -u ubuntu)" != "1000" ]; then
 		echo "ERROR: Read the docs; a proper OrangeBox setup requires the default user to be [ubuntu]" 1>&2

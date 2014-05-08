@@ -1,8 +1,11 @@
-orange-box (1.21) unreleased; urgency=medium
+orange-box (1.21) utopic; urgency=medium
 
-  * UNRELEASED
+  [ Dave Russell ]
+  
+  * debian/preinst:
+    - unnecessary comment added
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 07 May 2014 23:01:20 -0500
+ -- Dave Russell <drussell@canonical.com>  Thu, 08 May 2014 00:11:27 -0500
 
 orange-box (1.20-0ubuntu1) utopic; urgency=medium
 
