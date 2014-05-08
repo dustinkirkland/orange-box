@@ -4,6 +4,10 @@ orange-box (1.26) unreleased; urgency=medium
     - put all of the dns setup together
     - configure maas to propagate the squid proxy
     - add a few notes from the package review with maas team
+  * debian/links, usr/bin/orange-box-setup-nat:
+    - automatically reconfigure nat each time an interface comes up
+    - this should make the master node a bit smarter about interfaces
+      that show up or go down (like your wifi or usb tethered phone)
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 08 May 2014 11:30:52 -0500
 
