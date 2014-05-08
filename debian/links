@@ -1,1 +1,1 @@
-/usr/bin/orange-box-setup-nat /etc/network/if-up.d/
+/usr/bin/orange-box-setup-nat /etc/network/if-up.d/orange-box-setup-nat
