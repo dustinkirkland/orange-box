@@ -1,6 +1,9 @@
 orange-box (1.26) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst, usr/bin/orange-box-add-all-nodes:
+    - put all of the dns setup together
+    - configure maas to propagate the squid proxy
+    - add a few notes from the package review with maas team
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 08 May 2014 11:30:52 -0500
 

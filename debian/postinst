@@ -29,10 +29,6 @@ setup_maas_networking() {
 	done
 	internal_interface=$(route -n | grep "^10\.14\.4\." | sed -e "s/.* //")
 	maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_high=10.14.4.250 ip_range_low=10.14.4.50 management=2 broadcast_ip=10.14.4.255 router_ip=10.14.4.1
-	# Set MAAS upstream DNS
-	external_interface=$(ip route ls | grep ^default | awk '{print $5}')
-	dns=$(nmcli d list iface $external_interface | grep -m 1 "^IP4.DNS" | awk '{ print $2 }')
-	maas admin maas set-config name=upstream_dns value=$dns
 	# Setup nat
 	orange-box-setup-nat
 	# Redirect to MAAS web interface
@@ -41,15 +37,21 @@ setup_maas_networking() {
 EOF
 }
 
-setup_resolv() {
+setup_dns() {
+	# Set MAAS upstream DNS
+	external_interface=$(ip route ls | grep ^default | awk '{print $5}')
+	dns=$(nmcli d list iface $external_interface | grep -m 1 "^IP4.DNS" | awk '{ print $2 }')
+	maas admin maas set-config name=upstream_dns value=$dns
 	sed -i -e "/^nameserver 10.14.4.1$/d" /etc/resolvconf/resolv.conf.d/head
 	echo "nameserver 10.14.4.1" >> /etc/resolvconf/resolv.conf.d/head
 	resolvconf -u
 }
 
 setup_squid() {
+	# TODO: Consider making this a transparent proxy
 	cat /usr/lib/orange-box/inc/squid.conf > /etc/squid3/squid.conf
 	invoke-rc.d squid3 restart
+	maas admin maas set-config name=http_proxy value=http://10.14.4.1:3128
 }
 
 setup_local_mirror() {
@@ -186,7 +188,7 @@ case "$1" in
 		setup_ssh_keys
 		setup_juju
 		setup_all_nodes
-		setup_resolv
+		setup_dns
 	;;
 	abort-upgrade|abort-remove|abort-deconfigure)
 	;;
