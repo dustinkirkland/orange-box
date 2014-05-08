@@ -80,7 +80,7 @@ setup_boot_resources() {
         . /etc/maas/maas_cluster.conf
         APIKEY=$(maas-region-admin apikey --username admin)
         maas login admin $MAAS_URL $APIKEY
-	maas admin nodegroups $CLUSTER_UUID import_boot_images
+	maas admin nodegroups import_boot_images
 }
 
 setup_desktop() {
