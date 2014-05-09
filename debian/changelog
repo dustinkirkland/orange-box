@@ -1,6 +1,7 @@
 orange-box (1.28) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/orange-box-add-virtual-nodes:
+    - ensure that ubuntu owns its ssh keys
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 08 May 2014 18:35:00 -0500
 
