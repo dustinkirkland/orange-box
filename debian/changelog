@@ -1,9 +1,9 @@
-orange-box (1.29) unreleased; urgency=medium
+orange-box (1.29-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-add-virtual-nodes:
     - auto start the virtual machine node
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 09 May 2014 10:57:32 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 12 May 2014 16:32:53 -0400
 
 orange-box (1.28-0ubuntu1) utopic; urgency=medium
 
