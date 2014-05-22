@@ -1,6 +1,9 @@
 orange-box (1.30) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/orange-box-purge-everything:
+    - add a script that purges maas and the orange-box package
+    - this is useful, if you want to purge everything, and start
+      over again
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 12 May 2014 16:32:55 -0400
 
