@@ -1,6 +1,13 @@
 orange-box (1.31) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst, etc/apt/orange-box-mirror.list, usr/lib/orange-
+    box/inc/squid.conf:
+    - update squid configuration to use 2GB of RAM, 100MB max object size,
+      share squid-deb-proxy's directory
+    - update /etc/hosts to point archive.ubuntu.com and cloud archive to
+      localhost
+    - hardcode ip addresses in mirror list file, so that we don't try to
+      mirror against ourselves
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 22 May 2014 14:59:01 -0500
 

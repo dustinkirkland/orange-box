@@ -16,28 +16,28 @@ set _tilde 0
 ############# end config ##############
 
 ## Trusty
-deb http://archive.ubuntu.com/ubuntu trusty main restricted universe multiverse
-deb http://archive.ubuntu.com/ubuntu trusty-security main restricted universe multiverse
-deb http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe multiverse
-deb-i386 http://archive.ubuntu.com/ubuntu trusty main restricted universe multiverse
-deb-i386 http://archive.ubuntu.com/ubuntu trusty-security main restricted universe multiverse
-deb-i386 http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe multiverse
+deb http://91.189.91.14/ubuntu trusty main restricted universe multiverse
+deb http://91.189.91.14/ubuntu trusty-security main restricted universe multiverse
+deb http://91.189.91.14/ubuntu trusty-updates main restricted universe multiverse
+deb-i386 http://91.189.91.14/ubuntu trusty main restricted universe multiverse
+deb-i386 http://91.189.91.14/ubuntu trusty-security main restricted universe multiverse
+deb-i386 http://91.189.91.14/ubuntu trusty-updates main restricted universe multiverse
 
 ## precise
-deb http://archive.ubuntu.com/ubuntu precise main restricted universe multiverse
-deb http://archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
-deb http://archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse
-deb-i386 http://archive.ubuntu.com/ubuntu precise main restricted universe multiverse
-deb-i386 http://archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
-deb-i386 http://archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse
+deb http://91.189.91.14/ubuntu precise main restricted universe multiverse
+deb http://91.189.91.14/ubuntu precise-security main restricted universe multiverse
+deb http://91.189.91.14/ubuntu precise-updates main restricted universe multiverse
+deb-i386 http://91.189.91.14/ubuntu precise main restricted universe multiverse
+deb-i386 http://91.189.91.14/ubuntu precise-security main restricted universe multiverse
+deb-i386 http://91.189.91.14/ubuntu precise-updates main restricted universe multiverse
 
 ## Cloud-archive
-deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/cloud-tools main
-deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/havana main
-deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/icehouse main
-deb-i386 http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/cloud-tools main
-deb-i386 http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/havana main
-deb-i386 http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/icehouse main
+deb http://91.189.92.152/ubuntu precise-updates/cloud-tools main
+deb http://91.189.92.152/ubuntu precise-updates/havana main
+deb http://91.189.92.152/ubuntu precise-updates/icehouse main
+deb-i386 http://91.189.92.152/ubuntu precise-updates/cloud-tools main
+deb-i386 http://91.189.92.152/ubuntu precise-updates/havana main
+deb-i386 http://91.189.92.152/ubuntu precise-updates/icehouse main
 
-clean http://archive.ubuntu.com/ubuntu
-clean http://ubuntu-cloud.archive.canonical.com/ubuntu
+clean http://91.189.91.14/ubuntu
+clean http://91.189.92.152/ubuntu
