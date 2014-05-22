@@ -55,4 +55,6 @@ echo "Setting up ip forwarding"
 iptables -t nat -A POSTROUTING -o $external -j MASQUERADE
 iptables -A FORWARD -i $external -o $internal -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -i $internal -o $external -j ACCEPT
+iptables -A PREROUTING -t nat -i br0 -p tcp -m multiport --dports 80 -j REDIRECT --to-port 3128
+iptables -A PREROUTING -t nat -i br0 -p tcp -m multiport --dports 443 -j REDIRECT --to-port 3128
 iptables-save > /etc/iptables/rules.v4

@@ -8,6 +8,9 @@ orange-box (1.31) unreleased; urgency=medium
       localhost
     - hardcode ip addresses in mirror list file, so that we don't try to
       mirror against ourselves
+  * usr/bin/orange-box-setup-nat, usr/lib/orange-box/inc/squid.conf:
+    - transparently proxy 80 and 443 of all nodes; minimized pervasive
+      setup on slave nodes
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 22 May 2014 14:59:01 -0500
 
