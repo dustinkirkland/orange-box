@@ -19,6 +19,7 @@
 
 
 export AMT_PASSWORD=Password1+
+ERRORS=0
 
 okay() {
 	echo "OK:    $@"
@@ -26,16 +27,25 @@ okay() {
 
 error() {
 	echo "ERROR: $@"
+	ERRORS=$((ERRORS+1))
 }
 
-# Check powerstate in AMT
+# Check VM node
+if ps -ef | grep -qs "kvm.*node0vm0.maas" >/dev/null 2>&1; then
+	okay "[node0vm0]: is running"
+else
+	error "[node0vm0]: is not running"
+fi
+uptime=$(ssh node0vm0.maas "uptime" 2>/dev/null)
+if [ -n "$uptime" ]; then
+	okay "[node0vm0]: SSH to node successful; uptime=[$uptime]"
+else
+	error "[node0vm0]: SSH to node unsuccessful; uptime=[$uptime]"
+fi
+
+# Check all AMT nodes
 for i in $(seq 1 9); do
 	amtoutput=$(yes | amttool 10.14.4.1${i} info)
-	if [ "$amthostname" = "node${i}amt" ]; then
-		okay "[node${i}]: AMT is responsive"
-	else
-		error "[node${i}]: AMT is not responsive"
-	fi
 	amtpowerstate=$(echo "$amtoutput" | grep "^Powerstate:" | awk '{print $2}')
 	if [ -n "$amtpowerstate" ]; then
 		okay "[node${i}]: AMT powerstate [$amtpowerstate]"
@@ -48,5 +58,10 @@ for i in $(seq 1 9); do
 	else
 		error "[node${i}]: SSH to node unsuccessful; uptime=[$uptime]"
 	fi
-	echo
 done
+
+if [ $ERRORS -eq 0 ]; then
+	exit 0
+else
+	exit $ERRORS
+fi
