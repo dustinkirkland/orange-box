@@ -5,6 +5,10 @@ orange-box (1.32) unreleased; urgency=medium
   * usr/bin/orange-box-purge-everything:
     - when purging, some processes hang around (like the txlongpool); let's
       kill the shit of out these
+  * usr/bin/orange-box-setup-nat:
+    - comment out the iptables rules for transparent proxying
+    - this is currently breaking ssl connections from the nodes, such as
+      the charmstore
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 30 May 2014 11:18:41 -0500
 
