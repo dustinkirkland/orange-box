@@ -12,6 +12,11 @@ orange-box (1.32) unreleased; urgency=medium
   * usr/bin/orange-box-status-all-nodes:
     - exit non-zero if there are problems
     - add some checks for the vm
+  * debian/postinst:
+    - disable the login password for the desktop
+    - use sudo, rather than su -
+      + removes the need for one level of double quotes
+      + call dbus-launch
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 30 May 2014 11:18:41 -0500
 

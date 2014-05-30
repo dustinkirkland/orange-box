@@ -84,11 +84,13 @@ setup_boot_resources() {
 }
 
 setup_desktop() {
-	su -l ubuntu -c "gsettings set org.gnome.desktop.background picture-uri file:///usr/share/orange-box/orange-box-background.png"
-	su -l ubuntu -c "gsettings set com.canonical.Unity.Launcher favorites \"['firefox.desktop', 'byobu.desktop', 'remmina.desktop']\""
-	su -l ubuntu -c "gsettings set org.gnome.desktop.session idle-delay 0"
-	su -l ubuntu -c "gsettings set org.gnome.desktop.screensaver idle-activation-enabled false"
-	su -l ubuntu -c "gsettings set org.gnome.desktop.screensaver lock-enabled false"
+	sudo -u ubuntu dbus-launch gsettings set org.gnome.desktop.background picture-uri file:///usr/share/orange-box/orange-box-background.png
+	sudo -u ubuntu dbus-launch gsettings set com.canonical.Unity.Launcher favorites "['firefox.desktop', 'byobu.desktop', 'remmina.desktop']"
+	sudo -u ubuntu dbus-launch gsettings set org.gnome.desktop.session idle-delay 999999
+	sudo -u ubuntu dbus-launch gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
+	sudo -u ubuntu dbus-launch gsettings set org.gnome.desktop.screensaver lock-enabled false
+	sed -i -e "/autologin-user=/d" /etc/lightdm/lightdm.conf
+	echo "autologin-user=ubuntu" >> /etc/lightdm/lightdm.conf
 }
 
 setup_ssh_keys() {
