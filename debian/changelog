@@ -16,6 +16,8 @@ orange-box (1.31) unreleased; urgency=medium
     box/inc/squid.conf:
     - revert a few changes;  the archive and proxy still aren't working
       perfectly out of the box
+  * usr/bin/orange-box-status-all-nodes:
+    - enhance the status all nodes script, adding a bit more logic
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 22 May 2014 14:59:01 -0500
 
