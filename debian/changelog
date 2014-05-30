@@ -1,4 +1,4 @@
-orange-box (1.32) unreleased; urgency=medium
+orange-box (1.32-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst:
     - use capital E, Examples, to match the default desktop examples dir
@@ -18,7 +18,7 @@ orange-box (1.32) unreleased; urgency=medium
       + removes the need for one level of double quotes
       + call dbus-launch
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 30 May 2014 11:18:41 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 30 May 2014 13:29:21 -0500
 
 orange-box (1.31-0ubuntu1) utopic; urgency=medium
 
