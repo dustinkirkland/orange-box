@@ -44,16 +44,16 @@ setup_dns() {
 	maas admin maas set-config name=upstream_dns value=$dns
 	sed -i -e "/^nameserver 10.14.4.1$/d" /etc/resolvconf/resolv.conf.d/head
 	echo "nameserver 10.14.4.1" >> /etc/resolvconf/resolv.conf.d/head
-	sed -i -e "/^10.14.4.1 /d" /etc/hosts
-	echo "10.14.4.1 archive.ubuntu.com ubuntu-cloud.archive.canonical.com" >> /etc/hosts
 	resolvconf -u
+	invoke-rc.d squid3 restart
+	invoke-rc.d squid-deb-proxy restart
 }
 
 setup_squid() {
 	# This is now a transparent proxy
 	cat /usr/lib/orange-box/inc/squid.conf > /etc/squid3/squid.conf
 	invoke-rc.d squid3 restart
-	maas admin maas set-config name=http_proxy value=http://10.14.4.1:3128
+	#maas admin maas set-config name=http_proxy value=http://10.14.4.1:3128
 }
 
 setup_local_mirror() {
