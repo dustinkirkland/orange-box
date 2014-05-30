@@ -2,6 +2,9 @@ orange-box (1.32) unreleased; urgency=medium
 
   * debian/postinst:
     - use capital E, Examples, to match the default desktop examples dir
+  * usr/bin/orange-box-purge-everything:
+    - when purging, some processes hang around (like the txlongpool); let's
+      kill the shit of out these
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 30 May 2014 11:18:41 -0500
 
