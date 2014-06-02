@@ -30,6 +30,14 @@ error() {
 	ERRORS=$((ERRORS+1))
 }
 
+# (1) Ping AMT IP Addresses
+# (2) If AMT pingable, check for AMT open port 16992
+# (3) If AMT port open, check AMT for power state
+# (4) If power state is running, test SSH to OS
+# (5) If SSH'able, check connectivity to outside world
+
+
+
 # Check VM node
 if ps -ef | grep -qs "kvm.*node0vm0.maas" >/dev/null 2>&1; then
 	okay "[node0vm0]: is running"
