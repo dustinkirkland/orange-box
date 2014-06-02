@@ -4,6 +4,8 @@ orange-box (1.33) unreleased; urgency=medium
     - add some notes about what we should be testing here
   * usr/bin/orange-box-add-all-nodes:
     - sort the found ip addresses, to add nodes in order
+  * debian/postinst:
+    - add a simple redirect for the maas web app
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 30 May 2014 13:29:23 -0500
 

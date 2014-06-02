@@ -61,6 +61,8 @@ setup_local_mirror() {
 	a2ensite archive
 	a2ensite ubuntu-cloud
 	a2dissite 000-default
+	mkdir -p /srv/mirrors/archive.ubuntu.com
+	echo '<meta http-equiv="refresh" content="0; url=MAAS/">' > /srv/mirrors/archive.ubuntu.com/index.html
 	invoke-rc.d apache2 restart
 	mkdir -p /srv/charmstore/precise
 	run-one charm getall /srv/charmstore/precise 2>/dev/null &
