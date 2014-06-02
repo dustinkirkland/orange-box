@@ -1,4 +1,4 @@
-orange-box (1.33) unreleased; urgency=medium
+orange-box (1.33-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-status-all-nodes:
     - add some notes about what we should be testing here
@@ -10,7 +10,7 @@ orange-box (1.33) unreleased; urgency=medium
     - log mirror script progress
     - add a user name for the cron job; it hasn't been running previously
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 30 May 2014 13:29:23 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 02 Jun 2014 10:44:50 -0500
 
 orange-box (1.32-0ubuntu1) utopic; urgency=medium
 
