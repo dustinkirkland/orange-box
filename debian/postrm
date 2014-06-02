@@ -12,6 +12,7 @@ case "$1" in
 			fi
 		done
 		invoke-rc.d $webserver reload
+		rm -f /var/log/orange-box-mirror.log
 	;;
 esac
 

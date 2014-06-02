@@ -6,6 +6,9 @@ orange-box (1.33) unreleased; urgency=medium
     - sort the found ip addresses, to add nodes in order
   * debian/postinst:
     - add a simple redirect for the maas web app
+  * debian/postrm, etc/cron.d/orange-box-mirror:
+    - log mirror script progress
+    - add a user name for the cron job; it hasn't been running previously
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 30 May 2014 13:29:23 -0500
 
