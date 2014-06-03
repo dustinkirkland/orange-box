@@ -122,7 +122,9 @@ oauth_login() {
 }
 
 wake_me_up_before_you_go_go() {
-  for i in {0..3}; do
-    amttool $1 info > /dev/null 2>&1 || true
-  done
+	for i in $(seq 1 30); do
+		if amttool $1 info 2>/dev/null | grep -qs "Powerstate:" 2>/dev/null; then
+			break
+		fi
+	done
 }

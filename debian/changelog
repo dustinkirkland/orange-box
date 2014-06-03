@@ -17,6 +17,9 @@ orange-box (1.34) unreleased; urgency=medium
     - LP: #1321410
     - add a script to add individual nodes at a time
     - have the add all nodes script call this script
+  * usr/lib/orange-box/inc/common:
+    - let's make our amt wakeup check a little smarter...rather than
+      always running 4 times, break once we have a live connection
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 02 Jun 2014 10:44:51 -0500
 
