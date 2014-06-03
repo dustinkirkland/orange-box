@@ -39,6 +39,12 @@ fi
 
 set -e
 
+# Intel Centrino Advanced-N 6235 and Ubuntu don't work well with Wireless-N
+if lshw 2>/dev/null | grep -qs "Centrino Advanced-N 6235" 2>/dev/null; then
+	sed -i -e "/options iwlwifi 11n_disable=1/d" /etc/modprobe.d/iwlwifi.conf
+	echo "options iwlwifi 11n_disable=1" >> /etc/modprobe.d/iwlwifi.conf
+fi
+
 # Configure NAT and IP forwarding, giving slave NUCs external network access
 # through the master.
 

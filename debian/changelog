@@ -20,6 +20,9 @@ orange-box (1.34) unreleased; urgency=medium
   * usr/lib/orange-box/inc/common:
     - let's make our amt wakeup check a little smarter...rather than
       always running 4 times, break once we have a live connection
+  * usr/bin/orange-box-setup-nat:
+    - Intel Centrino Advanced-N 6235 and Ubuntu don't work well with Wireless-N
+    - disable 802.11n if we see this adapter
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 02 Jun 2014 10:44:51 -0500
 
