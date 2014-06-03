@@ -13,6 +13,10 @@ orange-box (1.34) unreleased; urgency=medium
     - scan the network a couple of times (10) looking for 16992 ports
     - it seems that occasionally we miss a node;  let's widen the window
       through which we're looking
+  * usr/bin/orange-box-add-all-nodes, usr/bin/orange-box-add-node:
+    - LP: #1321410
+    - add a script to add individual nodes at a time
+    - have the add all nodes script call this script
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 02 Jun 2014 10:44:51 -0500
 

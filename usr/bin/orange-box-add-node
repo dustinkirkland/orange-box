@@ -1,0 +1,89 @@
+#!/bin/bash
+#
+#    orange-box-add-node - add one or more nodes in the micro-cluster
+#    Copyright (C) 2014 Canonical Ltd.
+#
+#    Authors: Dustin Kirkland <kirkland@canonical.com>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, version 3 of the License.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+. /usr/lib/orange-box/inc/common
+. /etc/maas/maas_cluster.conf
+
+set -e
+set -x
+
+ip_to_mac() {
+	local ip="$1"
+	arp -n | sort | grep -m1 "^$ip\s" | awk '{print $3}'
+}
+
+node_name() {
+	local num="${1##*.}"
+	num=$((num-10))
+	echo "node${num}"
+}
+
+hostname_to_system_id() {
+	maas admin nodes list | grep -A 50 "hostname.*${1}" | grep -m 1 system_id | awk -F\" '{print $4}'
+}
+
+oauth_login
+
+export AMT_PASSWORD="Password1+"
+grep -qs "^export AMT_PASSWORD" /home/ubuntu/.bashrc 2>/dev/null || echo 'export AMT_PASSWORD="Password1+"' >> /home/ubuntu/.bashrc
+# VNC Password MUST BE *exactly 8 characters long and contain 1 capital letter, a number, and a special character!!!
+export VNC_PASSWORD="Ubuntu1+"
+chmod 600 /home/ubuntu/.bashrc
+
+# Mark all future nodes to be fast path installed
+maas admin tags new name='use-fastpath-installer' comment='fp' "definition=true()" || true
+
+# Loop over the list of ip addresses listening on 16992
+for ip in $@; do
+	mac=$(ip_to_mac $ip)
+	hostname=$(node_name $ip)
+	info "$ip --> $hostname --> $mac"
+	if [ -z "$ip" ] || [ "$ip" = "10.14.4.1" ]; then
+		continue
+	fi
+	# Remove it, if it's already here
+	system_id=$(hostname_to_system_id $hostname)
+	if [ -n "$system_id" ]; then
+		maas admin node delete $system_id
+	fi
+	# Sorry for the name
+	wake_me_up_before_you_go_go $ip
+	# Enable remote VNC to each node
+	# set the vnc password
+	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k RFBPassword=${VNC_PASSWORD} > /dev/null 2>&1
+	# enable KVM redirection to port 5900
+	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k Is5900PortEnabled=true > /dev/null 2>&1
+	# disable opt-in policy
+	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k OptInPolicy=false > /dev/null 2>&1
+	# disable session timeout
+	wsman put http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData -h $ip -P 16992 -u admin -p ${AMT_PASSWORD} -k SessionTimeout=0 > /dev/null 2>&1
+	# enable KVM
+	wsman invoke -a RequestStateChange http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_KVMRedirectionSAP -h ${ip} -P 16992 -u admin -p ${AMT_PASSWORD} -k RequestedState=2 > /dev/null 2>&1
+	# Add the node to MAAS
+	# TODO: MAAS teams says: a) power down node, b) define node and then it should start commissioning automatically
+	run-one-until-success maas admin nodes new nodegroup=$CLUSTER_UUID architecture=amd64 power_type=amt mac_addresses=$mac power_parameters_mac_address=$mac power_parameters_power_pass=$AMT_PASSWORD hostname=$hostname
+	wake_me_up_before_you_go_go $ip
+	(yes | amttool $ip powerdown >/dev/null 2>&1) || true
+	sleep 1
+	wake_me_up_before_you_go_go $ip
+	yes | run-one-until-success amttool $ip powerup pxe
+	maas admin tags new name=physical || true
+	system_id=$(maas admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
+	maas admin tag update-nodes "physical" add=$system_id || true
+done
