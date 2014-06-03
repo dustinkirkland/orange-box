@@ -1,6 +1,7 @@
 orange-box (1.34) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/orange-box-status-all-nodes:
+    - add a bit more testing to status script
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 02 Jun 2014 10:44:51 -0500
 
