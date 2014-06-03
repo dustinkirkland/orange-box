@@ -8,6 +8,11 @@ orange-box (1.34) unreleased; urgency=medium
         and these oranage-box environments aren't around long enough
         to worry about the logs filling up
     - quote log config
+  * usr/bin/orange-box-add-all-nodes, usr/lib/orange-box/inc/common:
+    - add an info function
+    - scan the network a couple of times (10) looking for 16992 ports
+    - it seems that occasionally we miss a node;  let's widen the window
+      through which we're looking
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 02 Jun 2014 10:44:51 -0500
 
