@@ -7,6 +7,7 @@ orange-box (1.34) unreleased; urgency=medium
       + without this, Juju logs are pretty friggin useless,
         and these oranage-box environments aren't around long enough
         to worry about the logs filling up
+    - quote log config
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 02 Jun 2014 10:44:51 -0500
 
