@@ -33,51 +33,58 @@ error() {
 
 # Check VM node
 if ps -ef | grep -qs "kvm.*node0vm0.maas" >/dev/null 2>&1; then
-	okay "[node0vm0]: is running"
+	okay "[node0vm0]: Is running"
 else
-	error "[node0vm0]: is not running"
+	error "[node0vm0]: Is not running"
 fi
 uptime=$(ssh node0vm0.maas "uptime" 2>/dev/null)
 if [ -n "$uptime" ]; then
-	okay "[node0vm0]: SSH to node successful; uptime=[$uptime]"
+	okay "[node0vm0]:  SSH to node successful; uptime=[$uptime]"
 else
-	error "[node0vm0]: SSH to node unsuccessful; uptime=[$uptime]"
+	error "[node0vm0]:  SSH to node unsuccessful; uptime=[$uptime]"
 fi
 
 # Check all AMT nodes
 for i in $(seq 1 9); do
+	hostname="node${i}.maas"
 	# (1) Ping AMT IP Addresses
-	if ping -c 1 -q 10.14.4.$i >/devnull 2>&1; then
-		okay "[node${i}]: AMT responding to ping"
+	amt_ip="10.14.4.1$i"
+	if ping -c 1 -q $amt_ip >/dev/null 2>&1; then
+		okay "[$hostname]: AMT responding to ping [$amt_ip]"
 	else
-		error "[node${i}]: AMT not responding to ping"
+		error "[$hostname]: AMT not responding to ping [$amt_ip]"
+		continue
 	fi
 	# (2) If AMT pingable, check for AMT open port 16992
-	if netcat -z -v 10.14.4.$i 16992 >/devnull 2>&1; then
-		okay "[node${i}]: AMT listening on port [16992]"
+	if netcat -z -v $amt_ip 16992 >/dev/null 2>&1; then
+		okay "[$hostname]:  AMT listening on port [16992] [$amt_ip]"
 	else
-		error "[node${i}]: AMT not listening on port [16992]"
+		error "[$hostname]:  AMT not listening on port [16992] [$amt_ip]"
+		continue
 	fi
-	amtoutput=$(yes | amttool 10.14.4.1${i} info)
+	amtoutput=$(yes | amttool $amt_ip info)
 	amtpowerstate=$(echo "$amtoutput" | grep "^Powerstate:" | awk '{print $2}')
 	# (3) If AMT port open, check AMT for power state
 	if [ -n "$amtpowerstate" ]; then
-		okay "[node${i}]: AMT powerstate [$amtpowerstate]"
+		okay "[$hostname]:   AMT powerstate [$amtpowerstate] on [$amt_ip]"
 	else
-		error "[node${i}]: AMT powerstate unknown [$amtpowerstate]"
+		error "[$hostname]:   AMT powerstate unknown [$amtpowerstate] on [$amt_ip]"
+		continue
 	fi
 	# (5) If power state is running, test pingable OS
-	if ping -c 1 -q node${i}.maas >/devnull 2>&1; then
-		okay "[node${i}]: Responding to ping"
+	if ping -c 1 -q $hostname >/dev/null 2>&1; then
+		okay "[$hostname]:    Responding to ping"
 	else
-		error "[node${i}]: Not responding to ping"
+		error "[$hostname]:   Not responding to ping"
+		continue
 	fi
-	uptime=$(ssh node${i}.maas "uptime" 2>/dev/null)
+	uptime=$(ssh $hostname "uptime" 2>/dev/null)
 	# (5) If OS is pingable, test SSH to OS
 	if [ -n "$uptime" ]; then
-		okay "[node${i}]: SSH to node successful; uptime=[$uptime]"
+		okay "[$hostname]:     SSH to node successful; uptime=[$uptime]"
 	else
-		error "[node${i}]: SSH to node unsuccessful; uptime=[$uptime]"
+		error "[$hostname]:    SSH to node unsuccessful; uptime=[$uptime]"
+		continue
 	fi
 done
 
