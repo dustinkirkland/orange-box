@@ -1,9 +1,9 @@
-orange-box (1.36) unreleased; urgency=medium
+orange-box (1.36-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst:
     - update the right lightdm file
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 04 Jun 2014 12:22:42 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 07 Jun 2014 08:35:08 -0500
 
 orange-box (1.35-0ubuntu1) utopic; urgency=medium
 
