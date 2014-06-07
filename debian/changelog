@@ -1,6 +1,7 @@
 orange-box (1.36) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - update the right lightdm file
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 04 Jun 2014 12:22:42 -0500
 

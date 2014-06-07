@@ -91,8 +91,10 @@ setup_desktop() {
 	sudo -u ubuntu dbus-launch gsettings set org.gnome.desktop.session idle-delay 999999
 	sudo -u ubuntu dbus-launch gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
 	sudo -u ubuntu dbus-launch gsettings set org.gnome.desktop.screensaver lock-enabled false
-	sed -i -e "/autologin-user=/d" /etc/lightdm/lightdm.conf
-	echo "autologin-user=ubuntu" >> /etc/lightdm/lightdm.conf
+	if [ -e /etc/lightdm/lightdm.conf ]; then
+		sed -i -e "/autologin-user=/d" /etc/lightdm/users.conf
+		echo "autologin-user=ubuntu" >> /etc/lightdm/users.conf
+	fi
 }
 
 setup_ssh_keys() {
