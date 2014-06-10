@@ -1,4 +1,4 @@
-orange-box (1.37) unreleased; urgency=medium
+orange-box (1.37-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-setup-nat:
     - use set -x to see what's going on
@@ -6,7 +6,7 @@ orange-box (1.37) unreleased; urgency=medium
     - clean out all iptables rules, before applying our nat
     - restart squid-deb-proxy and iptables
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 07 Jun 2014 08:35:11 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 10 Jun 2014 16:13:44 -0700
 
 orange-box (1.36-0ubuntu1) utopic; urgency=medium
 
