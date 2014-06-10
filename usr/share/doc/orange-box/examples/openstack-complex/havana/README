@@ -1,6 +1,0 @@
-This demo bundle deploys Openstack Havana with Ceph and Swift and Ceilometer with LDS
-
-01pre-deploy.sh - deploys Juju bootstrap and the Juju GUI
-02deploy.sh - deploys the Openstack Bundle
-03configure-cloud.sh - sets up networks and uploads an image and configures the Juju environment for Openstack as the default.
-04cleanup.sh - destroys the MAAS Juju environment

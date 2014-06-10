@@ -1,6 +1,147 @@
 orange-box (1.38) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/control, debian/postinst, === removed directory
+    usr/share/doc/orange-box/examples, === removed directory
+    usr/share/doc/orange-box/examples/hadoop, === removed directory
+    usr/share/doc/orange-box/examples/openstack, === removed directory
+    usr/share/doc/orange-box/examples/openstack-complex, === removed
+    directory usr/share/doc/orange-box/examples/openstack-
+    complex/havana, === removed directory usr/share/doc/orange-
+    box/examples/openstack-complex/havana-colo, === removed directory
+    usr/share/doc/orange-box/examples/openstack-complex/havana-compute,
+    === removed directory usr/share/doc/orange-box/examples/openstack-
+    complex/havana-swift, === removed directory usr/share/doc/orange-
+    box/examples/openstack-complex/juju-config, === removed directory
+    usr/share/doc/orange-box/examples/openstack-complex/openstack-
+    configuration, === removed directory usr/share/doc/orange-
+    box/examples/openstack-complex/openstack-configuration/devstack, ===
+    removed directory usr/share/doc/orange-box/examples/openstack-
+    complex/openstack-configuration/devstack/test_utils, === removed
+    directory usr/share/doc/orange-box/examples/openstack-
+    complex/openstack-configuration/devstack/test_utils/juju, ===
+    removed directory usr/share/doc/orange-box/examples/openstack-
+    complex/openstack-configuration/etc_master, === removed directory
+    usr/share/doc/orange-box/examples/openstack-complex/openstack-
+    configuration/etc_master/devstack_templates, === removed directory
+    usr/share/doc/orange-box/examples/openstack-complex/openstack-
+    configuration/prepare_cloud, === removed symlink
+    usr/share/doc/orange-box/examples/openstack-complex/havana-
+    colo/01demo-prep.sh, === removed symlink usr/share/doc/orange-
+    box/examples/openstack-complex/havana-colo/02deploy.sh, === removed
+    symlink usr/share/doc/orange-box/examples/openstack-complex/havana-
+    colo/03configure-cloud.sh, === removed symlink usr/share/doc/orange-
+    box/examples/openstack-complex/havana-colo/04cleanup.sh, === removed
+    symlink usr/share/doc/orange-box/examples/openstack-complex/havana-
+    colo/README, === removed symlink usr/share/doc/orange-
+    box/examples/openstack-complex/havana-compute/01demo-prep.sh, ===
+    removed symlink usr/share/doc/orange-box/examples/openstack-
+    complex/havana-compute/02deploy.sh, === removed symlink
+    usr/share/doc/orange-box/examples/openstack-complex/havana-
+    compute/04cleanup.sh, === removed symlink usr/share/doc/orange-
+    box/examples/openstack-complex/havana-compute/README, === removed
+    symlink usr/share/doc/orange-box/examples/openstack-complex/havana-
+    swift/01demo-prep.sh, === removed symlink usr/share/doc/orange-
+    box/examples/openstack-complex/havana-swift/02deploy.sh, === removed
+    symlink usr/share/doc/orange-box/examples/openstack-complex/havana-
+    swift/03configure-cloud.sh, === removed symlink
+    usr/share/doc/orange-box/examples/openstack-complex/havana-
+    swift/04cleanup.sh, === removed symlink usr/share/doc/orange-
+    box/examples/openstack-complex/havana-swift/README, === removed
+    symlink usr/share/doc/orange-box/examples/openstack-
+    complex/openstack-configuration/prepare_cloud/essex, === removed
+    symlink usr/share/doc/orange-box/examples/openstack-
+    complex/openstack-configuration/prepare_cloud/grizzly, === removed
+    symlink usr/share/doc/orange-box/examples/openstack-
+    complex/openstack-configuration/prepare_cloud/havana, === removed
+    symlink usr/share/doc/orange-box/examples/openstack-
+    complex/openstack-configuration/prepare_cloud/icehouse, === target
+    was ufolsom, === target was ugrizzly, === target was uhavana, ===
+    target was u../havana/01demo-prep.sh, === target was
+    u../havana/02deploy.sh, === target was u../havana/03configure-
+    cloud.sh, === target was u../havana/04cleanup.sh, === target was
+    u../havana/README, usr/share/doc/orange-box/examples/hadoop/00-
+    bootstrap.sh, usr/share/doc/orange-box/examples/hadoop/01-get-juju-
+    gui-info.sh, usr/share/doc/orange-box/examples/hadoop/02-
+    hadoop.yaml, usr/share/doc/orange-box/examples/hadoop/03-run-
+    terasort.sh, usr/share/doc/orange-box/examples/hadoop/04-hive-
+    demo.txt, usr/share/doc/orange-box/examples/hadoop/demo.sh,
+    usr/share/doc/orange-box/examples/hadoop/get-hadoop-info.sh,
+    usr/share/doc/orange-box/examples/openstack/00-bootstrap.sh,
+    usr/share/doc/orange-box/examples/openstack/01-deploy.sh,
+    usr/share/doc/orange-box/examples/openstack/99-cleanup.sh,
+    usr/share/doc/orange-box/examples/openstack-complex/bridge2.xml,
+    usr/share/doc/orange-box/examples/openstack-complex/havana/01demo-
+    prep.sh, usr/share/doc/orange-box/examples/openstack-
+    complex/havana/02deploy.sh, usr/share/doc/orange-
+    box/examples/openstack-complex/havana/03configure-cloud.sh,
+    usr/share/doc/orange-box/examples/openstack-
+    complex/havana/04cleanup.sh, usr/share/doc/orange-
+    box/examples/openstack-complex/havana/bundle.yaml,
+    usr/share/doc/orange-box/examples/openstack-complex/havana-
+    colo/bundle.yaml, usr/share/doc/orange-box/examples/openstack-
+    complex/havana-compute/03configure-cloud.sh, usr/share/doc/orange-
+    box/examples/openstack-complex/havana-compute/bundle.yaml,
+    usr/share/doc/orange-box/examples/openstack-complex/havana/README,
+    usr/share/doc/orange-box/examples/openstack-complex/havana-
+    swift/bundle.yaml, usr/share/doc/orange-box/examples/openstack-
+    complex/juju-config/environments.yaml, usr/share/doc/orange-
+    box/examples/openstack-complex/juju-config/generate-jujuenv,
+    usr/share/doc/orange-box/examples/openstack-complex/openstack-
+    configuration/configure-tests, usr/share/doc/orange-
+    box/examples/openstack-complex/openstack-
+    configuration/configure_tests.py, usr/share/doc/orange-
+    box/examples/openstack-complex/openstack-
+    configuration/devstack/config.py, usr/share/doc/orange-
+    box/examples/openstack-complex/openstack-
+    configuration/devstack/__init__.py, usr/share/doc/orange-
+    box/examples/openstack-complex/openstack-
+    configuration/devstack/test_devstack_exercises.py,
+    usr/share/doc/orange-box/examples/openstack-complex/openstack-
+    configuration/devstack/test_utils/cloud.py, usr/share/doc/orange-
+    box/examples/openstack-complex/openstack-
+    configuration/devstack/test_utils/config.py, usr/share/doc/orange-
+    box/examples/openstack-complex/openstack-
+    configuration/devstack/test_utils/__init__.py, usr/share/doc/orange-
+    box/examples/openstack-complex/openstack-
+    configuration/devstack/test_utils/juju/client.py,
+    usr/share/doc/orange-box/examples/openstack-complex/openstack-
+    configuration/devstack/test_utils/juju/__init__.py,
+    usr/share/doc/orange-box/examples/openstack-complex/openstack-
+    configuration/devstack/test_utils/juju/juju_deployer.py,
+    usr/share/doc/orange-box/examples/openstack-complex/openstack-
+    configuration/etc_master/all_variables, usr/share/doc/orange-
+    box/examples/openstack-complex/openstack-
+    configuration/etc_master/devstack.conf, usr/share/doc/orange-
+    box/examples/openstack-complex/openstack-
+    configuration/etc_master/devstack_templates/exerciserc,
+    usr/share/doc/orange-box/examples/openstack-complex/openstack-
+    configuration/etc_master/devstack_templates/openrc.master,
+    usr/share/doc/orange-box/examples/openstack-complex/openstack-
+    configuration/etc_master/devstack_templates/openrc.stable_essex,
+    usr/share/doc/orange-box/examples/openstack-complex/openstack-
+    configuration/etc_master/devstack_templates/openrc.stable_folsom,
+    usr/share/doc/orange-box/examples/openstack-complex/openstack-
+    configuration/etc_master/devstack_templates/openrc.stable_havana,
+    usr/share/doc/orange-box/examples/openstack-complex/openstack-
+    configuration/etc_master/openstack.conf, usr/share/doc/orange-
+    box/examples/openstack-complex/openstack-configuration/get-cloud-
+    images, usr/share/doc/orange-box/examples/openstack-
+    complex/openstack-configuration/inspect-environment,
+    usr/share/doc/orange-box/examples/openstack-complex/openstack-
+    configuration/prepare-cloud, usr/share/doc/orange-
+    box/examples/openstack-complex/openstack-
+    configuration/prepare_cloud/folsom, usr/share/doc/orange-
+    box/examples/openstack-complex/openstack-configuration/README,
+    usr/share/doc/orange-box/examples/openstack-complex/openstack-
+    configuration/verify-cloud, usr/share/doc/orange-
+    box/examples/openstack-complex/openstack-prereqs-install.sh,
+    usr/share/doc/orange-box/examples/openstack-complex/README,
+    usr/share/doc/orange-box/examples/openstack-complex/remove-kvms.sh,
+    usr/share/doc/orange-box/examples/openstack/havanaOB.yaml,
+    usr/share/doc/orange-box/examples/openstack/README,
+    usr/share/doc/orange-box/examples/README:
+    - move all of the examples to a separate branch and package
+      lp:orange-box-examples
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 10 Jun 2014 16:13:46 -0700
 

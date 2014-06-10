@@ -1,1 +1,0 @@
-../havana/02deploy.sh

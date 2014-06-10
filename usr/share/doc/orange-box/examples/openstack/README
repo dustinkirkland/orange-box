@@ -1,6 +1,0 @@
-Simple OpenStack havana deployment
-
-Run commands in order:
-00-demp-prep.sh
-01-deploy.sh
-0X-demo-cleanup.sh

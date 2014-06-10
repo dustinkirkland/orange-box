@@ -1,9 +1,0 @@
-create database demo;
-juju ssh hive/0
-sudo su
-su - hdfs
-hive
-use demo;
-create external table demo (field1 STRING, field2 STRING) location '/user/hdfs/demo';
-load data inpath '/user/hdfs/out_dir/part-00001' into table demo;
-select count(field1) from demo;

@@ -1,6 +1,0 @@
-#!/bin/bash -e
-
-source envrc
-base=$(dirname $0)
-${base}/configure-tests
-nosetests -v

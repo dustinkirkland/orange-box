@@ -1,4 +1,0 @@
-#!/bin/bash -e
-
-mkdir -p ~/images
-wget -O ~/images/precise-server-cloudimg-amd64-disk1.img  http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64-disk1.img

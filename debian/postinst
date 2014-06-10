@@ -120,9 +120,6 @@ EOF
 	fi
 	chmod 600 /home/ubuntu/.ssh/config
 	chown -R ubuntu:ubuntu /home/ubuntu/.ssh/config
-	rm -rf /home/ubuntu/Examples
-	cp -a /usr/share/doc/orange-box/examples /home/ubuntu/Examples
-	chown -R ubuntu:ubuntu /home/ubuntu/Examples
 }
 
 setup_juju() {

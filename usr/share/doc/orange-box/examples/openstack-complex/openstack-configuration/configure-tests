@@ -1,6 +1,0 @@
-#!/bin/bash -e
-
-base=$(dirname $0)
-rm -rf etc
-cp -r ${base}/etc_master etc
-${base}/configure_tests.py --configure etc
