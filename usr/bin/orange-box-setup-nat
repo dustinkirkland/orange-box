@@ -18,6 +18,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+set -x
+
 if [ "$(id -u)" != "0" ]; then
 	echo "Must be run with sudo or by root"
 	exit 77
@@ -40,7 +42,7 @@ fi
 set -e
 
 # Intel Centrino Advanced-N 6235 and Ubuntu don't work well with Wireless-N
-if lshw 2>/dev/null | grep -qs "Centrino Advanced-N 6235" 2>/dev/null; then
+if lspci -v 2>/dev/null | grep -qs "Centrino Advanced-N 6235" 2>/dev/null; then
 	sed -i -e "/options iwlwifi 11n_disable=1/d" /etc/modprobe.d/iwlwifi.conf
 	echo "options iwlwifi 11n_disable=1" >> /etc/modprobe.d/iwlwifi.conf
 fi
@@ -48,19 +50,31 @@ fi
 # Configure NAT and IP forwarding, giving slave NUCs external network access
 # through the master.
 
-# Note that this script assumes no existing iptables rules. If you do have
-# any, they will be deleted.
-
 # Enable IP forwarding and save for next boot
 echo 1 > /proc/sys/net/ipv4/ip_forward
 echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/10-maas-ip-forward.conf
 sysctl --system
+
+# Note that this script assumes no existing iptables rules. If you do have
+# any, they will be deleted.
+iptables --flush
+iptables --table nat --flush
+iptables --delete-chain
+iptables --table nat --delete-chain
 
 # Some things use the MAAS proxy - some things don't. So turn on NAT.
 echo "Setting up ip forwarding"
 iptables -t nat -A POSTROUTING -o $external -j MASQUERADE
 iptables -A FORWARD -i $external -o $internal -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -i $internal -o $external -j ACCEPT
+# The following lines would setup a transparent proxy, but it's not currently working properly
 #iptables -A PREROUTING -t nat -i br0 -p tcp -m multiport --dports 80 -j REDIRECT --to-port 3128
 #iptables -A PREROUTING -t nat -i br0 -p tcp -m multiport --dports 443 -j REDIRECT --to-port 3128
+
 iptables-save > /etc/iptables/rules.v4
+
+service iptables-persistent restart
+
+# It seems we need to restart squid-deb-proxy after making these network changes
+service squid-deb-proxy stop || true
+service squid-deb-proxy start
