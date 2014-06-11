@@ -1,0 +1,45 @@
+#!/bin/sh
+#
+#    orange-box-run - run a command on every node
+#    Copyright (C) 2014 Canonical Ltd.
+#
+#    Authors: Dustin Kirkland <kirkland@canonical.com>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, version 3 of the License.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+if [ -n "$1" ]; then
+	cmd="$1"
+else
+	cmd="tail -f /var/log/cloud-init-output.log | ccze -A"
+fi
+
+tmux new-window -n all-nodes "ssh node1.maas $cmd" \; \
+	split-window -v "ssh node2.maas $cmd" \; \
+	select-layout tiled \; \
+	split-window -h "ssh node2.maas $cmd" \; \
+	select-layout tiled \; \
+	split-window -v "ssh node3.maas $cmd" \; \
+	select-layout tiled \; \
+	split-window -h "ssh node4.maas $cmd" \; \
+	select-layout tiled \; \
+	split-window -v "ssh node5.maas $cmd" \; \
+	select-layout tiled \; \
+	split-window -h "ssh node6.maas $cmd" \; \
+	select-layout tiled \; \
+	split-window -v "ssh node7.maas $cmd" \; \
+	select-layout tiled \; \
+	split-window -h "ssh node8.maas $cmd" \; \
+	select-layout tiled \; \
+	split-window -v "ssh node9.maas $cmd" \; \
+	select-layout tiled

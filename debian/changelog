@@ -1,6 +1,10 @@
 orange-box (1.39) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - handle in place upgrades of the orange-box package
+      + skip adding all nodes and importing boot images on upgrade
+  * usr/bin/orange-box-run:
+    - add a kickass command to run a command on all nodes
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 10 Jun 2014 17:09:27 -0700
 

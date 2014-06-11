@@ -177,8 +177,8 @@ apply_patches() {
 	# This is a DISGUSTING HACK that needs to go away
 	# as soon as MAAS ships these fixes
 	cd /
-	cat /usr/lib/orange-box/patches/arp_ip_order.patch | patch -p0
-	cat /usr/lib/orange-box/patches/try_amt_harder.patch | patch -p0
+	cat /usr/lib/orange-box/patches/arp_ip_order.patch | patch -p0 -N || true
+	cat /usr/lib/orange-box/patches/try_amt_harder.patch | patch -p0 -N || true
 	cd -
 	rm -f /usr/lib/python2.7/dist-packages/provisioningserver/utils/__init__.pyc
 	invoke-rc.d maas-cluster-celery restart
@@ -188,15 +188,34 @@ case "$1" in
 	configure)
 		setup_desktop
 		apply_patches
-		setup_boot_resources
+		if [ -n "$2" ]; then
+			echo
+			echo "INFO: Skipping importing boot resources, since this is a package upgrade"
+			echo "INFO: If you want to update boot resources, run:"
+			echo "INFO:   sudo maas-import-pxe-files"
+			echo "INFO:   sudo maas admin node-groups import-boot-images"
+			echo
+		else
+			setup_boot_resources
+		fi
 		setup_maas_admin
 		setup_maas_networking
 		setup_squid
 		setup_local_mirror
 		setup_ssh_keys
 		setup_juju
-		setup_all_nodes
 		setup_dns
+		if [ -n "$2" ]; then
+			echo
+			echo "INFO: Skipping adding all nodes, since this is a package upgrade"
+			echo "INFO: If you want to delete and add all nodes again, run:"
+			echo "INFO:   sudo orange-box-add-all-nodes"
+			echo "INFO:   sudo orange-box-add-virtual-nodes"
+			echo
+		else
+			# Only add all nodes on initial install, not upgrades
+			setup_all_nodes
+		fi
 	;;
 	abort-upgrade|abort-remove|abort-deconfigure)
 	;;
