@@ -1,3 +1,9 @@
+orange-box (1.39) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 10 Jun 2014 17:09:27 -0700
+
 orange-box (1.38-0ubuntu1) utopic; urgency=medium
 
   * debian/control, debian/postinst, === removed directory
