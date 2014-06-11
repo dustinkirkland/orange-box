@@ -1,4 +1,4 @@
-orange-box (1.39) unreleased; urgency=medium
+orange-box (1.39-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst:
     - handle in place upgrades of the orange-box package
@@ -6,7 +6,7 @@ orange-box (1.39) unreleased; urgency=medium
   * usr/bin/orange-box-run:
     - add a kickass command to run a command on all nodes
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 10 Jun 2014 17:09:27 -0700
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 10 Jun 2014 18:01:46 -0700
 
 orange-box (1.38-0ubuntu1) utopic; urgency=medium
 
