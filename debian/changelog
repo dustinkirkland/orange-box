@@ -1,4 +1,4 @@
-orange-box (1.38) unreleased; urgency=medium
+orange-box (1.38-0ubuntu1) utopic; urgency=medium
 
   * debian/control, debian/postinst, === removed directory
     usr/share/doc/orange-box/examples, === removed directory
@@ -143,7 +143,7 @@ orange-box (1.38) unreleased; urgency=medium
     - move all of the examples to a separate branch and package
       lp:orange-box-examples
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 10 Jun 2014 16:13:46 -0700
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 10 Jun 2014 17:09:25 -0700
 
 orange-box (1.37-0ubuntu1) utopic; urgency=medium
 
