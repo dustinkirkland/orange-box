@@ -2,6 +2,10 @@ orange-box (1.40) unreleased; urgency=medium
 
   * debian/control, debian/postinst:
     - install juju plugins, for pprint, git-deploy, clean
+  * debian/postinst:
+    - disable apport;  these demo machines are often customer facing
+      or used in public location like a tradeshow booth;  apport
+      crash messages are not appropriate for these environments
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 10 Jun 2014 18:01:47 -0700
 

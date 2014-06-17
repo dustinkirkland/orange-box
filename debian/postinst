@@ -95,6 +95,8 @@ setup_desktop() {
 		sed -i -e "/autologin-user=/d" /etc/lightdm/users.conf
 		echo "autologin-user=ubuntu" >> /etc/lightdm/users.conf
 	fi
+	echo "enabled=0" > /etc/default/apport
+	invoke-rc.d apport stop || true
 }
 
 setup_ssh_keys() {
