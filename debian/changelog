@@ -1,6 +1,7 @@
 orange-box (1.40) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/control, debian/postinst:
+    - install juju plugins, for pprint, git-deploy, clean
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 10 Jun 2014 18:01:47 -0700
 
