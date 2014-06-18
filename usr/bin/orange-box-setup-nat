@@ -41,6 +41,10 @@ fi
 
 set -e
 
+# Update MAAS upstream DNS
+dns=$(nmcli d list iface $external | grep -m 1 "^IP4.DNS" | awk '{ print $2 }')
+maas admin maas set-config name=upstream_dns value=$dns
+
 # Intel Centrino Advanced-N 6235 and Ubuntu don't work well with Wireless-N
 if lspci -v 2>/dev/null | grep -qs "Centrino Advanced-N 6235" 2>/dev/null; then
 	sed -i -e "/options iwlwifi 11n_disable=1/d" /etc/modprobe.d/iwlwifi.conf
@@ -76,5 +80,7 @@ iptables-save > /etc/iptables/rules.v4
 service iptables-persistent restart
 
 # It seems we need to restart squid-deb-proxy after making these network changes
+service squid3 stop || true
+service squid3 start
 service squid-deb-proxy stop || true
 service squid-deb-proxy start
