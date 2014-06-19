@@ -36,7 +36,6 @@ grep 'maas@' /home/ubuntu/.ssh/authorized_keys || cat /home/maas/.ssh/id_rsa.pub
 printf "%s,%s %s %s\n" "node0.maas" "10.14.4.1" $(awk '{print $1 " " $2}' /etc/ssh/ssh_host_ecdsa_key.pub) | tee -a /home/maas/.ssh/known_hosts
 chown -R ubuntu:ubuntu /home/ubuntu
 
-maas admin zones create name="node0-vms" || true
 maas admin tags new name=virtual || true
 virsh destroy node0vm0.maas || true
 virsh undefine node0vm0.maas || true

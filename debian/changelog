@@ -9,6 +9,8 @@ orange-box (1.40) unreleased; urgency=medium
   * usr/bin/orange-box-setup-nat:
     - update maas upstream dns on setup-nat run
     - restart squid3 as well as squid-deb-proxy
+  * usr/bin/orange-box-add-virtual-nodes:
+    - remove unused node0-vms zone
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 10 Jun 2014 18:01:47 -0700
 
