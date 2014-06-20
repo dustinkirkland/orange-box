@@ -46,7 +46,12 @@ for i in $(seq 0 2); do
 	virsh destroy $hostname || true
 	virsh undefine $hostname || true
 	echo "INFO: Installing virtual machine"
-	virt-install --debug --name $hostname --ram 4096 --disk=path=/home/ubuntu/${hostname}.img,size=10 --vcpus=1 --os-type=linux --pxe --network=bridge=br0 --boot network || true
+	if [ "$i" = "1" ]; then
+		extra_bridge="--network=bridge=br0"
+	else
+		extra_bridge=""
+	fi
+	virt-install --debug --name $hostname --ram 4096 --disk=path=/home/ubuntu/${hostname}.img,size=10 --vcpus=1 --os-type=linux --pxe --network=bridge=br0 $extra_bridge --boot network || true
 	virsh console $hostname || true
 	virsh autostart $hostname
 	mac=$(virsh dumpxml $hostname | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
