@@ -1,3 +1,9 @@
+orange-box (1.41) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 20 Jun 2014 14:11:36 -0500
+
 orange-box (1.40-0ubuntu1) utopic; urgency=medium
 
   * debian/control, debian/postinst:
