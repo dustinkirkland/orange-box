@@ -37,20 +37,38 @@ printf "%s,%s %s %s\n" "node0.maas" "10.14.4.1" $(awk '{print $1 " " $2}' /etc/s
 chown -R ubuntu:ubuntu /home/ubuntu
 
 maas admin tags new name=virtual || true
-virsh destroy node0vm0.maas || true
-virsh undefine node0vm0.maas || true
-echo "INFO: Installing virtual machine"
-virt-install --debug --name node0vm0.maas --ram 4096 --disk=path=/home/ubuntu/node0vm0.img,size=10 --vcpus=2 --os-type=linux --pxe --network=bridge=br0 --boot network || true
-virsh console node0vm0.maas || true
-virsh autostart node0vm0.maas
-mac=$(virsh dumpxml node0vm0.maas | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
-system_id=$(maas admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
-if [ -n "$system_id" ]; then
-	maas admin node update $system_id hostname=node0vm0.maas power_type=virsh power_parameters_power_address=qemu+ssh://ubuntu@10.14.4.1/system power_parameters_power_id=node0vm0.maas
-	maas admin tag update-nodes "virtual" add=$system_id
-	maas admin tag update-nodes use-fastpath-installer add=$system_id
-	maas admin node commission $system_id || true
-else
-	echo "ERROR: Could not find virtual machine in MAAS" 1>&2
-	exit 1
-fi
+maas admin tags new name=bootstrap || true
+maas admin tags new name=neutron || true
+maas admin tags new name=landscape || true
+
+for i in $(seq 0 2); do
+	hostname="node0vm${i}.maas"
+	virsh destroy $hostname || true
+	virsh undefine $hostname || true
+	echo "INFO: Installing virtual machine"
+	virt-install --debug --name $hostname --ram 4096 --disk=path=/home/ubuntu/${hostname}.img,size=10 --vcpus=1 --os-type=linux --pxe --network=bridge=br0 --boot network || true
+	virsh console $hostname || true
+	virsh autostart $hostname
+	mac=$(virsh dumpxml $hostname | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
+	system_id=$(maas admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
+	if [ -n "$system_id" ]; then
+		maas admin node update $system_id hostname=$hostname power_type=virsh power_parameters_power_address=qemu+ssh://ubuntu@10.14.4.1/system power_parameters_power_id=$hostname
+		maas admin tag update-nodes "virtual" add=$system_id
+		case $i in
+			0)
+				maas admin tag update-nodes "bootstrap" add=$system_id
+			;;
+			1)
+				maas admin tag update-nodes "neutron" add=$system_id
+			;;
+			2)
+				maas admin tag update-nodes "landscape" add=$system_id
+			;;
+		esac
+		maas admin tag update-nodes use-fastpath-installer add=$system_id
+		maas admin node commission $system_id || true
+	else
+		echo "ERROR: Could not find virtual machine in MAAS" 1>&2
+		exit 1
+	fi
+done

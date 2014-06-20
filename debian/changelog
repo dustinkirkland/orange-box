@@ -11,6 +11,9 @@ orange-box (1.40) unreleased; urgency=medium
     - restart squid3 as well as squid-deb-proxy
   * usr/bin/orange-box-add-virtual-nodes:
     - remove unused node0-vms zone
+  * usr/bin/orange-box-add-virtual-nodes:
+    - create a total of 3 VMs on node0, for juju bootstrap, landscape,
+      and openstack neutron
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 10 Jun 2014 18:01:47 -0700
 
