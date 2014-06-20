@@ -1,4 +1,4 @@
-orange-box (1.40) unreleased; urgency=medium
+orange-box (1.40-0ubuntu1) utopic; urgency=medium
 
   * debian/control, debian/postinst:
     - install juju plugins, for pprint, git-deploy, clean
@@ -16,7 +16,7 @@ orange-box (1.40) unreleased; urgency=medium
       and openstack neutron
     - ensure that we have two network interfaces in our neutron vm
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 10 Jun 2014 18:01:47 -0700
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 20 Jun 2014 14:11:34 -0500
 
 orange-box (1.39-0ubuntu1) utopic; urgency=medium
 
