@@ -86,6 +86,22 @@ for i in $(seq 1 9); do
 		error "[$hostname]:    SSH to node unsuccessful; uptime=[$uptime]"
 		continue
 	fi
+	memory=$(ssh $hostname "grep -m1 '^MemTotal:' /proc/meminfo | sed -e 's/.*:\s\+//'" 2>/dev/null)
+	# (6) If SSH works, test memory
+	if [ -n "$memory" ]; then
+		okay "[$hostname]:     Memory check of node successful; memory=[$memory]"
+	else
+		error "[$hostname]:    Memory check of node unsuccessful; memory=[$memory]"
+		continue
+	fi
+	# (7) If SSH works, test disk
+	disk=$(ssh $hostname "sudo fdisk -l | grep '^Disk /' | sed -e 's/^Disk //' -e 's/,.*//'" 2>/dev/null)
+	if [ -n "$disk" ]; then
+		okay "[$hostname]:     Disk check of node successful; disk=[$(echo $disk | tr '\n' ' ')]"
+	else
+		error "[$hostname]:    Disk check of node unsuccessful; disk=[$disk]"
+		continue
+	fi
 done
 
 if [ $ERRORS -eq 0 ]; then
