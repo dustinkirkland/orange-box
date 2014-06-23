@@ -141,6 +141,7 @@ EOF
 	rm -rf /home/ubuntu/.juju-plugins
 	git clone https://github.com/juju/plugins /home/ubuntu/.juju-plugins
 	sudo chown -R ubuntu:ubuntu /home/ubuntu/
+	echo "PATH=\$PATH:/home/ubuntu/.juju-plugins" >> /home/ubuntu/.bashrc
 }
 
 ensure_running() {

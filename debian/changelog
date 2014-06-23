@@ -1,6 +1,7 @@
 orange-box (1.41) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - add the juju plugins to our path
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 20 Jun 2014 14:11:36 -0500
 
