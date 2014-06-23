@@ -1,9 +1,9 @@
-orange-box (1.42) unreleased; urgency=medium
+orange-box (1.42-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-status-all-nodes:
     - add disk and memory checks for the status all nodes script
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Sun, 22 Jun 2014 21:49:44 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 23 Jun 2014 12:29:23 -0500
 
 orange-box (1.41-0ubuntu1) utopic; urgency=medium
 
