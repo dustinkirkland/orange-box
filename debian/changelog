@@ -1,9 +1,9 @@
-orange-box (1.41) unreleased; urgency=medium
+orange-box (1.41-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst:
     - add the juju plugins to our path
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 20 Jun 2014 14:11:36 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Sun, 22 Jun 2014 21:49:42 -0500
 
 orange-box (1.40-0ubuntu1) utopic; urgency=medium
 
