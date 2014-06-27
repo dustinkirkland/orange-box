@@ -33,5 +33,8 @@ if [ -z "$ips" ]; then
 fi
 info "Found: [$ips]"
 
+# Set nomodeset kernel parameter, to ensure we can vnc to the console
+maas admin maas set-config name=kernel_opts value=nomodeset
+
 # Loop over the list of ip addresses listening on 16992
 orange-box-add-node $ips

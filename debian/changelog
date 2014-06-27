@@ -1,6 +1,7 @@
 orange-box (1.44) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/orange-box-add-all-nodes:
+    - add nomodeset kernel parameter for better vnc access to console
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 27 Jun 2014 09:51:53 -0500
 
