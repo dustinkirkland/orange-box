@@ -1,6 +1,8 @@
 orange-box (1.43) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/control:
+    - install virt-manager, so that we can see the VMs running, and get to
+      the console if necessary
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 23 Jun 2014 12:29:27 -0500
 
