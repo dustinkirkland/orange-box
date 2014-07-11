@@ -1,3 +1,9 @@
+orange-box (1.45) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Jul 2014 10:45:10 -0500
+
 orange-box (1.44-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-add-all-nodes:
