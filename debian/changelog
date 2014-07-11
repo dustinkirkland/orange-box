@@ -2,6 +2,8 @@ orange-box (1.44) unreleased; urgency=medium
 
   * usr/bin/orange-box-add-all-nodes:
     - add nomodeset kernel parameter for better vnc access to console
+  * usr/bin/orange-box-status-all-nodes:
+    - status all vm nodes
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 27 Jun 2014 09:51:53 -0500
 

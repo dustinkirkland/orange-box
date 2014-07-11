@@ -31,18 +31,20 @@ error() {
 }
 
 
-# Check VM node
-if ps -ef | grep -qs "kvm.*node0vm0.maas" >/dev/null 2>&1; then
-	okay "[node0vm0]: Is running"
-else
-	error "[node0vm0]: Is not running"
-fi
-uptime=$(ssh node0vm0.maas "uptime" 2>/dev/null)
-if [ -n "$uptime" ]; then
-	okay "[node0vm0]:  SSH to node successful; uptime=[$uptime]"
-else
-	error "[node0vm0]:  SSH to node unsuccessful; uptime=[$uptime]"
-fi
+# Check all VM nodes
+for i in $(seq 0 2); do
+	if ps -ef | grep -qs "kvm.*node0vm${i}.maas" >/dev/null 2>&1; then
+		okay "[node0vm${i}]: Is running"
+	else
+		error "[node0vm${i}]: Is not running"
+	fi
+	uptime=$(ssh node0vm${i}.maas "uptime" 2>/dev/null)
+	if [ -n "$uptime" ]; then
+		okay "[node0vm${i}]:  SSH to node successful; uptime=[$uptime]"
+	else
+		error "[node0vm${i}]:  SSH to node unsuccessful; uptime=[$uptime]"
+	fi
+done
 
 # Check all AMT nodes
 for i in $(seq 1 9); do
@@ -71,7 +73,7 @@ for i in $(seq 1 9); do
 		error "[$hostname]:   AMT powerstate unknown [$amtpowerstate] on [$amt_ip]"
 		continue
 	fi
-	# (5) If power state is running, test pingable OS
+	# (4) If power state is running, test pingable OS
 	if ping -c 1 -q $hostname >/dev/null 2>&1; then
 		okay "[$hostname]:    Responding to ping"
 	else
