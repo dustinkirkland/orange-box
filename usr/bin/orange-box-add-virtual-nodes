@@ -41,7 +41,7 @@ maas admin tags new name=bootstrap || true
 maas admin tags new name=neutron || true
 maas admin tags new name=landscape || true
 
-for i in $(seq 0 2); do
+for i in $(seq 0 2 | sort -r); do
 	hostname="node0vm${i}.maas"
 	virsh destroy $hostname || true
 	virsh undefine $hostname || true

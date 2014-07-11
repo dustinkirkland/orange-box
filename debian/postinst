@@ -174,7 +174,7 @@ setup_all_nodes() {
 	# Ensure that pxe and dhcp are running
 	ensure_running_maas
 	maas admin node-groups import-boot-images
-	orange-box-add-all-nodes
+	orange-box-add-physical-nodes
 	orange-box-add-virtual-nodes
 }
 
@@ -214,7 +214,7 @@ case "$1" in
 			echo
 			echo "INFO: Skipping adding all nodes, since this is a package upgrade"
 			echo "INFO: If you want to delete and add all nodes again, run:"
-			echo "INFO:   sudo orange-box-add-all-nodes"
+			echo "INFO:   sudo orange-box-add-physical-nodes"
 			echo "INFO:   sudo orange-box-add-virtual-nodes"
 			echo
 		else

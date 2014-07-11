@@ -11,6 +11,12 @@ orange-box (1.45) unreleased; urgency=medium
       + format it, if necessary
       + use a blkid in fstab
       + ensure ownership and perms are correct
+  * debian/postinst, usr/bin/orange-box-add-all-nodes => usr/bin/orange-
+    box-add-physical-nodes, usr/bin/orange-box-add-virtual-nodes:
+    - rename physical nodes script
+    - reverse the order of the virtual and physical nodes, when adding them
+      + this will make them appear in the maas interface in the correct
+        numeric order by default
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Jul 2014 10:45:10 -0500
 
