@@ -1,11 +1,11 @@
-orange-box (1.44) unreleased; urgency=medium
+orange-box (1.44-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-add-all-nodes:
     - add nomodeset kernel parameter for better vnc access to console
   * usr/bin/orange-box-status-all-nodes:
     - status all vm nodes
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 27 Jun 2014 09:51:53 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Jul 2014 10:45:06 -0500
 
 orange-box (1.43-0ubuntu1) utopic; urgency=medium
 
