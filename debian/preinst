@@ -94,10 +94,10 @@ setup_external_drive() {
 	# Find root disk
 	root_disk=$(mount | grep " on / " | awk '{print $1}' | sed -e "s/[0-9]\+$//")
 	# Find biggest non-root disk
-	ext_disk=$(fdisk -l | grep "^Disk /" | grep -v $root_disk | sort -k4 -n -r)
+	ext_disk=$(fdisk -l | grep "^Disk /" | grep -v $root_disk | sort -k4 -n -r | awk '{print $2}' | awk -F: '{print $1}')
 	partition="${ext_disk}1"
 	if [ -b "$ext_disk" ]; then
-		if [ ! -b "$partition" ];
+		if [ ! -b "$partition" ]; then
 			# Create the partition, if it doesn't exist already
 			echo "n
 p
@@ -108,7 +108,7 @@ w
 "|fdisk "$ext_disk"
 			mkfs.ext4 "$partition"
 		fi
-		sed -i -e ": /srv:d" /etc/fstab
+		sed -i -e "/ \/srv/d" /etc/fstab
 		# Add the fstab entry
 		uuid=$(blkid -s UUID -o value "$partition")
 		echo "UUID=$uuid /srv    ext4    defaults        1 1" >> /etc/fstab

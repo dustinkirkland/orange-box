@@ -11,6 +11,7 @@ orange-box (1.45) unreleased; urgency=medium
       + format it, if necessary
       + use a blkid in fstab
       + ensure ownership and perms are correct
+      + fix a typo and add a bit better logic
   * debian/postinst, usr/bin/orange-box-add-all-nodes => usr/bin/orange-
     box-add-physical-nodes, usr/bin/orange-box-add-virtual-nodes:
     - rename physical nodes script
