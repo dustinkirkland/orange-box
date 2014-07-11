@@ -89,16 +89,34 @@ EOF
 
 setup_external_drive() {
 	# External drive must be:
-	#       a) on /dev/sdb
-	#       b) partitioned into 1 big partition
-	#       c) ext4 formatted
-	# TODO: look a little smarter for the 2nd drive
-	# TODO: use blkid for uuid in fstab
-	if [ -b /dev/sdb1 ] && ! grep -qs '^/dev/sdb1' /etc/fstab; then
-		echo "/dev/sdb1 /srv    ext4    defaults        1 1" >> /etc/fstab
+	#       a) partitioned into 1 big partition
+	#       b) ext4 formatted
+	# Find root disk
+	root_disk=$(mount | grep " on / " | awk '{print $1}' | sed -e "s/[0-9]\+$//")
+	# Find biggest non-root disk
+	ext_disk=$(fdisk -l | grep "^Disk /" | grep -v $root_disk | sort -k4 -n -r)
+	partition="${ext_disk}1"
+	if [ -b "$ext_disk" ]; then
+		if [ ! -b "$partition" ];
+			# Create the partition, if it doesn't exist already
+			echo "n
+p
+1
+
+
+w
+"|fdisk "$ext_disk"
+			mkfs.ext4 "$partition"
+		fi
+		sed -i -e ": /srv:d" /etc/fstab
+		# Add the fstab entry
+		uuid=$(blkid -s UUID -o value "$partition")
+		echo "UUID=$uuid /srv    ext4    defaults        1 1" >> /etc/fstab
 	fi
-	umount /dev/sdb1 || true
+	umount $partition || true
 	mount -a
+	chown root:root /srv
+	chmod 755 /srv
 }
 
 

@@ -4,6 +4,13 @@ orange-box (1.45) unreleased; urgency=medium
     - purge /etc/maas on purge everything
   * usr/bin/orange-box-add-virtual-nodes:
     - add two network interfaces to all 3 VMs
+  * debian/preinst:
+    - improve the preinst logic around the 2nd disk
+      + find the largest non-root disk in the system
+      + partition it, if necessary
+      + format it, if necessary
+      + use a blkid in fstab
+      + ensure ownership and perms are correct
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Jul 2014 10:45:10 -0500
 
