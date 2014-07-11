@@ -2,6 +2,8 @@ orange-box (1.45) unreleased; urgency=medium
 
   * debian/postrm:
     - purge /etc/maas on purge everything
+  * usr/bin/orange-box-add-virtual-nodes:
+    - add two network interfaces to all 3 VMs
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Jul 2014 10:45:10 -0500
 
