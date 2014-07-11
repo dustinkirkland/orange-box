@@ -1,6 +1,7 @@
 orange-box (1.45) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postrm:
+    - purge /etc/maas on purge everything
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Jul 2014 10:45:10 -0500
 

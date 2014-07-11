@@ -13,6 +13,7 @@ case "$1" in
 		done
 		invoke-rc.d $webserver reload
 		rm -f /var/log/orange-box-mirror.log
+		rm -rf /etc/maas
 	;;
 esac
 
