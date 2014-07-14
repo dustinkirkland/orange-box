@@ -1,4 +1,4 @@
-orange-box (1.45) unreleased; urgency=medium
+orange-box (1.45-0ubuntu1) utopic; urgency=medium
 
   * debian/postrm:
     - purge /etc/maas on purge everything
@@ -19,7 +19,7 @@ orange-box (1.45) unreleased; urgency=medium
       + this will make them appear in the maas interface in the correct
         numeric order by default
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 11 Jul 2014 10:45:10 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 14 Jul 2014 11:40:02 -0500
 
 orange-box (1.44-0ubuntu1) utopic; urgency=medium
 
