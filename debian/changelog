@@ -1,6 +1,7 @@
 orange-box (1.46) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - change the maas managed ip range to .100-.199
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 14 Jul 2014 11:40:05 -0500
 
