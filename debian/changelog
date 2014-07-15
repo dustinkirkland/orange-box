@@ -2,6 +2,8 @@ orange-box (1.47) unreleased; urgency=medium
 
   * usr/bin/orange-box-status-all-nodes:
     - colorize status output
+  * usr/bin/orange-box-purge-everything:
+    - kill any potentially hung maas machine adding
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 14 Jul 2014 13:15:41 -0500
 

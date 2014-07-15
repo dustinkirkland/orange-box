@@ -19,3 +19,4 @@
 
 sudo apt-get purge $(dpkg -l | egrep "orange-box|maas" | awk '{print $2}')
 sudo kill -9 $(ps -ef | grep maas | grep "^maas" | awk '{print $2}')
+sudo killall run-one-until-success
