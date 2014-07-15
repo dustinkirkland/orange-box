@@ -31,80 +31,83 @@ error() {
 }
 
 
-# Check all VM nodes
-for i in $(seq 0 2); do
-	if ps -ef | grep -qs "kvm.*node0vm${i}.maas" >/dev/null 2>&1; then
-		okay "[node0vm${i}]: Is running"
-	else
-		error "[node0vm${i}]: Is not running"
-	fi
-	uptime=$(ssh node0vm${i}.maas "uptime" 2>/dev/null)
-	if [ -n "$uptime" ]; then
-		okay "[node0vm${i}]:  SSH to node successful; uptime=[$uptime]"
-	else
-		error "[node0vm${i}]:  SSH to node unsuccessful; uptime=[$uptime]"
-	fi
-done
+status_all_nodes() {
+	# Check all VM nodes
+	for i in $(seq 0 2); do
+		if ps -ef | grep -qs "kvm.*node0vm${i}.maas" >/dev/null 2>&1; then
+			okay "[node0vm${i}]: Is running"
+		else
+			error "[node0vm${i}]: Is not running"
+		fi
+		uptime=$(ssh node0vm${i}.maas "uptime" 2>/dev/null)
+		if [ -n "$uptime" ]; then
+			okay "[node0vm${i}]:  SSH to node successful; uptime=[$uptime]"
+		else
+			error "[node0vm${i}]:  SSH to node unsuccessful; uptime=[$uptime]"
+		fi
+	done
+	# Check all AMT nodes
+	for i in $(seq 1 9); do
+		hostname="node${i}.maas"
+		# (1) Ping AMT IP Addresses
+		amt_ip="10.14.4.1$i"
+		if ping -c 1 -q $amt_ip >/dev/null 2>&1; then
+			okay "[$hostname]: AMT responding to ping [$amt_ip]"
+		else
+			error "[$hostname]: AMT not responding to ping [$amt_ip]"
+			continue
+		fi
+		# (2) If AMT pingable, check for AMT open port 16992
+		if netcat -z -v $amt_ip 16992 >/dev/null 2>&1; then
+			okay "[$hostname]:  AMT listening on port [16992] [$amt_ip]"
+		else
+			error "[$hostname]:  AMT not listening on port [16992] [$amt_ip]"
+			continue
+		fi
+		amtoutput=$(yes | amttool $amt_ip info)
+		amtpowerstate=$(echo "$amtoutput" | grep "^Powerstate:" | awk '{print $2}')
+		# (3) If AMT port open, check AMT for power state
+		if [ -n "$amtpowerstate" ]; then
+			okay "[$hostname]:   AMT powerstate [$amtpowerstate] on [$amt_ip]"
+		else
+			error "[$hostname]:   AMT powerstate unknown [$amtpowerstate] on [$amt_ip]"
+			continue
+		fi
+		# (4) If power state is running, test pingable OS
+		if ping -c 1 -q $hostname >/dev/null 2>&1; then
+			okay "[$hostname]:    Responding to ping"
+		else
+			error "[$hostname]:   Not responding to ping"
+			continue
+		fi
+		uptime=$(ssh $hostname "uptime" 2>/dev/null)
+		# (5) If OS is pingable, test SSH to OS
+		if [ -n "$uptime" ]; then
+			okay "[$hostname]:     SSH to node successful; uptime=[$uptime]"
+		else
+			error "[$hostname]:    SSH to node unsuccessful; uptime=[$uptime]"
+			continue
+		fi
+		memory=$(ssh $hostname "grep -m1 '^MemTotal:' /proc/meminfo | sed -e 's/.*:\s\+//'" 2>/dev/null)
+		# (6) If SSH works, test memory
+		if [ -n "$memory" ]; then
+			okay "[$hostname]:     Memory check of node successful; memory=[$memory]"
+		else
+			error "[$hostname]:    Memory check of node unsuccessful; memory=[$memory]"
+			continue
+		fi
+		# (7) If SSH works, test disk
+		disk=$(ssh $hostname "sudo fdisk -l | grep '^Disk /' | sed -e 's/^Disk //' -e 's/,.*//'" 2>/dev/null)
+		if [ -n "$disk" ]; then
+			okay "[$hostname]:     Disk check of node successful; disk=[$(echo $disk | tr '\n' ' ')]"
+		else
+			error "[$hostname]:    Disk check of node unsuccessful; disk=[$disk]"
+			continue
+		fi
+	done
+}
 
-# Check all AMT nodes
-for i in $(seq 1 9); do
-	hostname="node${i}.maas"
-	# (1) Ping AMT IP Addresses
-	amt_ip="10.14.4.1$i"
-	if ping -c 1 -q $amt_ip >/dev/null 2>&1; then
-		okay "[$hostname]: AMT responding to ping [$amt_ip]"
-	else
-		error "[$hostname]: AMT not responding to ping [$amt_ip]"
-		continue
-	fi
-	# (2) If AMT pingable, check for AMT open port 16992
-	if netcat -z -v $amt_ip 16992 >/dev/null 2>&1; then
-		okay "[$hostname]:  AMT listening on port [16992] [$amt_ip]"
-	else
-		error "[$hostname]:  AMT not listening on port [16992] [$amt_ip]"
-		continue
-	fi
-	amtoutput=$(yes | amttool $amt_ip info)
-	amtpowerstate=$(echo "$amtoutput" | grep "^Powerstate:" | awk '{print $2}')
-	# (3) If AMT port open, check AMT for power state
-	if [ -n "$amtpowerstate" ]; then
-		okay "[$hostname]:   AMT powerstate [$amtpowerstate] on [$amt_ip]"
-	else
-		error "[$hostname]:   AMT powerstate unknown [$amtpowerstate] on [$amt_ip]"
-		continue
-	fi
-	# (4) If power state is running, test pingable OS
-	if ping -c 1 -q $hostname >/dev/null 2>&1; then
-		okay "[$hostname]:    Responding to ping"
-	else
-		error "[$hostname]:   Not responding to ping"
-		continue
-	fi
-	uptime=$(ssh $hostname "uptime" 2>/dev/null)
-	# (5) If OS is pingable, test SSH to OS
-	if [ -n "$uptime" ]; then
-		okay "[$hostname]:     SSH to node successful; uptime=[$uptime]"
-	else
-		error "[$hostname]:    SSH to node unsuccessful; uptime=[$uptime]"
-		continue
-	fi
-	memory=$(ssh $hostname "grep -m1 '^MemTotal:' /proc/meminfo | sed -e 's/.*:\s\+//'" 2>/dev/null)
-	# (6) If SSH works, test memory
-	if [ -n "$memory" ]; then
-		okay "[$hostname]:     Memory check of node successful; memory=[$memory]"
-	else
-		error "[$hostname]:    Memory check of node unsuccessful; memory=[$memory]"
-		continue
-	fi
-	# (7) If SSH works, test disk
-	disk=$(ssh $hostname "sudo fdisk -l | grep '^Disk /' | sed -e 's/^Disk //' -e 's/,.*//'" 2>/dev/null)
-	if [ -n "$disk" ]; then
-		okay "[$hostname]:     Disk check of node successful; disk=[$(echo $disk | tr '\n' ' ')]"
-	else
-		error "[$hostname]:    Disk check of node unsuccessful; disk=[$disk]"
-		continue
-	fi
-done
+status_all_nodes | ccze -A
 
 if [ $ERRORS -eq 0 ]; then
 	exit 0

@@ -1,6 +1,7 @@
 orange-box (1.47) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/orange-box-status-all-nodes:
+    - colorize status output
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 14 Jul 2014 13:15:41 -0500
 
