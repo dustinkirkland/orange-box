@@ -1,6 +1,9 @@
 orange-box (1.48) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - move the managed dhcp range back to 50-99;  the 3-digit addresses
+      were not working well with the sorted() hack, when arp returns
+      multiple addresses for a given mac;  we need a better fix for that
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 15 Jul 2014 15:58:40 -0500
 
