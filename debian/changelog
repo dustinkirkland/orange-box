@@ -1,3 +1,9 @@
+orange-box (1.50) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 16 Jul 2014 00:44:01 -0500
+
 orange-box (1.49-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-purge-everything:
