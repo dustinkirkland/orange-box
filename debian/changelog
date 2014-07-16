@@ -1,6 +1,7 @@
 orange-box (1.50) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/orange-box-status-all-nodes:
+    - minor clarification on info/error text
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 16 Jul 2014 00:44:01 -0500
 
