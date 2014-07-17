@@ -71,8 +71,8 @@ iface $internal_interface inet manual
 auto br0
 iface br0 inet static
         address 10.14.4.1
-        netmask 255.255.255.0
-        broadcast 10.14.4.255
+        netmask 255.255.0.0
+        broadcast 10.14.255.255
 	bridge_ports $internal_interface
 	bridge_stp off
 	bridge_fd 0

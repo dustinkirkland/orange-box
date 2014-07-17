@@ -27,8 +27,8 @@ setup_maas_networking() {
 			error "[maas admin node-group-interfaces list] failed [$RETRY] times"
 		fi
 	done
-	internal_interface=$(route -n | grep "^10\.14\.4\." | sed -e "s/.* //")
-	maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_high=10.14.4.99 ip_range_low=10.14.4.50 management=2 broadcast_ip=10.14.4.255 router_ip=10.14.4.1
+	internal_interface=$(route -n | grep "^10\.14\." | sed -e "s/.* //")
+	maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_low=10.14.100.1 ip_range_high=10.14.199.254 management=2 broadcast_ip=10.14.255.255 router_ip=10.14.4.1
 	# Setup nat
 	orange-box-setup-nat
 	# Redirect to MAAS web interface

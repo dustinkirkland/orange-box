@@ -74,10 +74,11 @@ status_all_nodes() {
 			continue
 		fi
 		# (4) If power state is running, test pingable OS
+		ip=$(host $hostname | tail -n1  | sed -e "s/.* //")
 		if ping -c 1 -q $hostname >/dev/null 2>&1; then
-			okay "[$hostname]:    OS responding to ping"
+			okay "[$hostname]:    OS responding to ping, ip=[$ip]"
 		else
-			error "[$hostname]:   OS not responding to ping"
+			error "[$hostname]:   OS not responding to ping, ip=[$ip]"
 			continue
 		fi
 		uptime=$(ssh $hostname "uptime" 2>/dev/null)

@@ -77,7 +77,7 @@ for ip in $@; do
 	wsman invoke -a RequestStateChange http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_KVMRedirectionSAP -h ${ip} -P 16992 -u admin -p ${AMT_PASSWORD} -k RequestedState=2 > /dev/null 2>&1
 	# Add the node to MAAS
 	# TODO: MAAS teams says: a) power down node, b) define node and then it should start commissioning automatically
-	run-one-until-success maas admin nodes new nodegroup=$CLUSTER_UUID architecture=amd64 power_type=amt mac_addresses=$mac power_parameters_mac_address=$mac power_parameters_power_pass=$AMT_PASSWORD hostname=$hostname
+	run-one-until-success maas admin nodes new nodegroup=$CLUSTER_UUID architecture=amd64 power_type=amt mac_addresses=$mac power_parameters_mac_address=$mac power_parameters_power_address=$ip power_parameters_power_pass=$AMT_PASSWORD hostname=$hostname
 	wake_me_up_before_you_go_go $ip
 	(yes | amttool $ip powerdown >/dev/null 2>&1) || true
 	sleep 1

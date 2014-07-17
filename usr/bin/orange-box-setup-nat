@@ -30,7 +30,7 @@ if [ "$IFACE" = lo ]; then
 	exit 0
 fi
 
-internal=$(route -n | grep "^10\.14\.4\." | sed -e "s/.* //")
+internal=$(route -n | grep "^10\.14\." | sed -e "s/.* //")
 external=$(ip route ls | grep ^default | awk '{print $5}')
 
 
