@@ -1,11 +1,11 @@
-orange-box (1.51) unreleased; urgency=medium
+orange-box (1.51-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-add-virtual-nodes:
     - be a little more generous with our vm's
       + up disk from 10G to 20G (since they're sparse)
       + up vcpus to 2
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 16 Jul 2014 23:13:50 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 16 Jul 2014 23:29:27 -0500
 
 orange-box (1.50-0ubuntu1) utopic; urgency=medium
 
