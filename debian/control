@@ -36,6 +36,7 @@ Depends: ${misc:Depends},
  vim,
  virtinst,
  virt-manager,
+ vlan,
  wsmancli,
 Recommends:
  orange-box-examples,

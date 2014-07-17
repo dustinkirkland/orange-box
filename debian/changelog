@@ -13,6 +13,9 @@ orange-box (1.50) unreleased; urgency=medium
     - the MAAS managed DHCP range expanded from ~50 addresses to 25K,
       from 10.14.100.1 - 10.14.199.254
     - feed the AMT ip address in when adding nodes
+  * debian/control, debian/preinst:
+    - add /etc/network/interfaces stanza for a VLAN to access the
+      network switch configuration interface on 10.90.90.90
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 16 Jul 2014 00:44:01 -0500
 

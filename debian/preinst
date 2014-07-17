@@ -33,6 +33,9 @@ setup_debconf() {
 }
 
 setup_networking() {
+	modprobe 8021q || true
+	sed -i -e "/8021q/d" /etc/modules || true
+	echo "8021q" >> /etc/modules
 	# Set up the two network interfaces
 	external_interface=$(ip route ls | grep ^default | awk '{print $5}')
 	# TODO: ip addr ls
@@ -77,6 +80,16 @@ iface br0 inet static
 	bridge_stp off
 	bridge_fd 0
 	bridge_maxwait 0
+
+# VLAN 1, Network configuration network
+#auto eth0.1
+#iface eth0.1 inet static
+#vlan-raw-device eth0
+#address 10.90.90.1
+#netmask 255.0.0.0
+#gateway 0.0.0.0
+#broadcast 10.255.255.255
+
 EOF
 	ifdown --force $internal_interface || true
 	ifdown --force br0 || true
