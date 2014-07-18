@@ -1,6 +1,7 @@
 orange-box (1.52) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/orange-box-purge-everything:
+    - purge safely
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 16 Jul 2014 23:29:29 -0500
 
