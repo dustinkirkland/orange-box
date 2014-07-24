@@ -3,7 +3,8 @@ orange-box (1.52) unreleased; urgency=medium
   * usr/bin/orange-box-purge-everything:
     - purge safely
   * debian/control, debian/postinst:
-    - manage master node installs with Landscape
+    - manage master node installs with Landscape, if the hostname starts with
+      OrangeBox*
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 16 Jul 2014 23:29:29 -0500
 
