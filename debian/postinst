@@ -189,6 +189,12 @@ apply_patches() {
 	invoke-rc.d maas-cluster-celery restart
 }
 
+setup_landscape() {
+	# The master node will be managed by Landscape
+	# TODO: this is currently hardcoded to our own landscape account
+	landscape-config -a canonical-orange -t "$(hostname)__$(dmidecode -s baseboard-serial-number)" -p ubuntu-aubergine --script-users=ALL --silent --include-manager-plugins=ScriptExecution
+}
+
 case "$1" in
 	configure)
 		setup_desktop
@@ -210,6 +216,7 @@ case "$1" in
 		setup_ssh_keys
 		setup_juju
 		setup_dns
+		setup_landscape
 		if [ -n "$2" ]; then
 			echo
 			echo "INFO: Skipping adding all nodes, since this is a package upgrade"
