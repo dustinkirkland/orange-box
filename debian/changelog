@@ -4,7 +4,7 @@ orange-box (1.53) unreleased; urgency=medium
     - add a bootstrap-juju script
   * usr/bin/orange-box-add-virtual-nodes:
     - only add 2 virtual nodes, for juju and neutron;  landscape doesn't
-      do well in our VM
+      do well in our VM; drop the tag
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 24 Jul 2014 23:17:01 -0500
 

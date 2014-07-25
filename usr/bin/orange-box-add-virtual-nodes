@@ -39,7 +39,6 @@ chown -R ubuntu:ubuntu /home/ubuntu
 maas admin tags new name=virtual || true
 maas admin tags new name=bootstrap || true
 maas admin tags new name=neutron || true
-maas admin tags new name=landscape || true
 
 for i in $(seq 0 1 | sort -r); do
 	hostname="node0vm${i}.maas"
