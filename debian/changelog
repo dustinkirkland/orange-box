@@ -1,3 +1,9 @@
+orange-box (1.54) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 25 Jul 2014 14:41:14 -0500
+
 orange-box (1.53-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-bootstrap-juju:
