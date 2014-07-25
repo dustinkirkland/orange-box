@@ -41,7 +41,7 @@ maas admin tags new name=bootstrap || true
 maas admin tags new name=neutron || true
 maas admin tags new name=landscape || true
 
-for i in $(seq 0 2 | sort -r); do
+for i in $(seq 0 1 | sort -r); do
 	hostname="node0vm${i}.maas"
 	virsh destroy $hostname || true
 	virsh undefine $hostname || true
@@ -60,9 +60,6 @@ for i in $(seq 0 2 | sort -r); do
 			;;
 			1)
 				maas admin tag update-nodes "neutron" add=$system_id
-			;;
-			2)
-				maas admin tag update-nodes "landscape" add=$system_id
 			;;
 		esac
 		maas admin tag update-nodes use-fastpath-installer add=$system_id
