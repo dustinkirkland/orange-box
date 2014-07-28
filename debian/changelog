@@ -1,9 +1,9 @@
-orange-box (1.54) unreleased; urgency=medium
+orange-box (1.54-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-status-all-nodes:
     - only status 2 vm's now
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 25 Jul 2014 14:41:14 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 28 Jul 2014 11:15:22 +0100
 
 orange-box (1.53-0ubuntu1) utopic; urgency=medium
 
