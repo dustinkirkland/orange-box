@@ -1,3 +1,9 @@
+orange-box (1.55) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 28 Jul 2014 11:15:24 +0100
+
 orange-box (1.54-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-status-all-nodes:
