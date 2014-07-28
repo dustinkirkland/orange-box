@@ -1,6 +1,7 @@
 orange-box (1.54) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/orange-box-status-all-nodes:
+    - only status 2 vm's now
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 25 Jul 2014 14:41:14 -0500
 
