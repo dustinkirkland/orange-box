@@ -40,6 +40,7 @@ Depends: ${misc:Depends},
  virt-manager,
  vlan,
  wsmancli,
+ x11vnc,
 Recommends:
  orange-box-examples,
 Description: Orange Box master node easy installation

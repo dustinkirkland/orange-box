@@ -1,6 +1,8 @@
 orange-box (1.55) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/control:
+    - add x11vnc;  this is essential when trying to access the desktop
+      of node0, when there is no monitor
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 28 Jul 2014 11:15:24 +0100
 
