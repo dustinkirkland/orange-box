@@ -30,7 +30,7 @@ home=$PWD
 IP=10.14.4.1
 
 function run_mirror { 
-    echo "apt-mirror /etc/apt/mirror.list" 
+    echo "apt-mirror /etc/apt/orange-box-mirror.list >>/var/log/orange-box-mirror.log 2>&1"
 }
 
 echo THIS IS MEANT TO BE RUN FROM WITHIN THE TOP LEVEL micro-cluster BRANCH
@@ -78,24 +78,19 @@ echo Done. && echo
 # Create our charm mirror
 echo Creating Charm Store Mirror ...
 echo Creating Charm Store directories ...
-[ -e /srv/charmstore/precise ] || mkdir -p /srv/charmstore/precise
+[ -e /srv/charmstore ] || mkdir -p /srv/charmstore
 
 echo Mirroring the Charmstore ...
-# This may not work :/ Ran into issues on my test precise VM
-cd /srv/charmstore/
-charm getall precise
-
-echo Making Trusty Charms *THIS IS A HACK TO BE FIXED WHEN TRUSTY CHARMS EXIST
-cp -a /srv/charmstore/precise /srv/charmstore/trusty
+orange-box-sync-charmstore
 echo Done. && echo
 
 # Set up apt-mirror to mirror the archives
 echo Setting up Apt Mirror ...
 cd $home
-if [ -f /etc/apt/mirror.list ]; then
-    mv /etc/apt/mirror.list /etc/apt/mirror.list.orig
+if [ -f /etc/apt/orange-box-mirror.list ]; then
+    mv /etc/apt/orange-box-mirror.list /etc/apt/orange-box-mirror.list.orig
 fi
-cp etc/apt/mirror.list /etc/apt
+cp etc/apt/orange-box-mirror.list /etc/apt
 
 echo Making mirror directories ...
 mkdir -p /srv/mirrors /srv/skel /srv/var
@@ -117,7 +112,9 @@ ln -s /srv/mirrors/ubuntu-cloud.archive.canonical.com/ubuntu /var/www/html/ubunt
 
 echo Copying config file to apache ...
 cd $home
-cp etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled
+cp etc/apache2/sites-enabled/* /etc/apache2/sites-enabled
+a2ensite archive
+a2ensite ubuntu-cloud
 
 echo Restarting Apache ...
 service apache2 restart
