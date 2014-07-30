@@ -47,7 +47,13 @@ export VNC_PASSWORD="Ubuntu1+"
 chmod 600 /home/ubuntu/.bashrc
 
 # Mark all future nodes to be fast path installed
-maas admin tags new name='use-fastpath-installer' comment='fp' "definition=true()" || true
+# Support MAAS 1.5, and 1.6
+maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
+if dpkg --compare-versions $maas_ver lt 1.6; then
+	maas admin tags new name='use-fastpath-installer' comment='fp' "definition=true()" || true
+else
+	maas admin tags new name='use-fastpath-installer' comment='fp' || true
+fi
 
 # Loop over the list of ip addresses listening on 16992
 for ip in $@; do
