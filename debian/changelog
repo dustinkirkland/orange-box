@@ -1,6 +1,10 @@
 orange-box (1.56) unreleased; urgency=medium
 
-  * UNRELEASED
+  * === added directory usr/lib/orange-box/dgs-1100, usr/lib/orange-
+    box/dgs-1100/config.bin, usr/lib/orange-box/dgs-1100/firmware.bin:
+    - save a snapshot of a working, properly configured DGS-1100 switch
+      firmware and configuration
+      + this includes vlan.2 on port 1+16, for uplink
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 29 Jul 2014 09:30:27 +0100
 
