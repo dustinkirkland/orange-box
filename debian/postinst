@@ -28,7 +28,13 @@ setup_maas_networking() {
 		fi
 	done
 	internal_interface=$(route -n | grep "^10\.14\." | sed -e "s/.* //")
-	maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_low=10.14.100.1 ip_range_high=10.14.199.254 management=2 broadcast_ip=10.14.255.255 router_ip=10.14.4.1
+	# Support MAAS 1.5, and 1.6
+	maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
+	if dpkg --compare-versions $maas_ver lt 1.6; then
+		maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_low=10.14.100.1 ip_range_high=10.14.199.254 management=2 broadcast_ip=10.14.255.255 router_ip=10.14.4.1
+	else
+		maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_low=10.14.50.1 ip_range_high=10.14.99.254 static_ip_range_low=10.14.100.1 static_ip_range_high=10.14.199.254 management=2 broadcast_ip=10.14.255.255 router_ip=10.14.4.1
+	fi
 	# Setup nat
 	orange-box-setup-nat
 	# Redirect to MAAS web interface
@@ -82,7 +88,18 @@ setup_boot_resources() {
 	# and this should be fast;  if not, this might take a long time
 	# MAAS won't work very well until this is done, so we're going to block
 	# until this completes
-	run-this-one maas-import-pxe-files
+	# Network access may not be immediately available;
+	# wait until we can talk to maas
+	while ! ping -c 1 maas.ubuntu.com; do
+		sleep 1
+	done
+	# Support MAAS 1.5, and 1.6
+	maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
+	if dpkg --compare-versions $maas_ver lt 1.6; then
+		run-this-one maas-import-pxe-files /etc/maas/import_pxe_files
+	else
+		run-this-one maas-import-pxe-files --sources-file /etc/maas/bootresources.yaml
+	fi
 }
 
 setup_desktop() {

@@ -17,6 +17,8 @@ orange-box (1.56) unreleased; urgency=medium
     - drop automatic bring up of eth0.2; there's no guarantee that this
       network will be plugged in;  we can't put it in NetworkManager,
       since NM doesn't support VLANs
+  * debian/postinst:
+    - more changes for MAAS 1.6 support; handle new command line invocations
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 29 Jul 2014 09:30:27 +0100
 
