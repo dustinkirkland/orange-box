@@ -7,6 +7,9 @@ orange-box (1.56) unreleased; urgency=medium
       + this includes vlan.2 on port 1+16, for uplink
   * usr/bin/orange-box-add-node:
     - add MAAS 1.6 support, for new syntax for fastpath install tag
+  * etc/maas/bootresources.yaml:
+    - add new bootresources.yaml file for MAAS 1.6, only download
+      trusty+precise 64-bit
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 29 Jul 2014 09:30:27 +0100
 
