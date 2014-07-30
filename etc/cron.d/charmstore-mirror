@@ -1,0 +1,4 @@
+#Run every Staurday at 03:23 in the morning, if plugged in and internet is accessible the charmstore will be updated.
+#Remove any charmstore directories inot modified in the last 90 days to save space.
+23 3 * * 6	root	run-one orange-box-sync-charmstore >>/var/log/orange-box-sync-charmstore.log 2>&1
+38 4 1 * *	root	run-one find /srv/charmstore/ -maxdepth 1 -mindepth 1 -type d -mtime +90 -exec rm -rf {} \;
