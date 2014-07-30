@@ -14,6 +14,9 @@ orange-box (1.56) unreleased; urgency=medium
     - try to update upstream DNS, but let's not fail if we can't
   * debian/preinst:
     - add vlan interface for wired uplink in port 16
+    - drop automatic bring up of eth0.2; there's no guarantee that this
+      network will be plugged in;  we can't put it in NetworkManager,
+      since NM doesn't support VLANs
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 29 Jul 2014 09:30:27 +0100
 

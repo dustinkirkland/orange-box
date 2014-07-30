@@ -82,7 +82,6 @@ iface br0 inet static
 	bridge_maxwait 0
 
 # VLAN 2, Uplink network
-auto eth0.2
 iface eth0.2 inet dhcp
 vlan-raw-device eth0
 
