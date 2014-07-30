@@ -81,14 +81,16 @@ iface br0 inet static
 	bridge_fd 0
 	bridge_maxwait 0
 
-# VLAN 1, Network configuration network
-#auto eth0.1
-#iface eth0.1 inet static
-#vlan-raw-device eth0
-#address 10.90.90.1
-#netmask 255.0.0.0
-#gateway 0.0.0.0
-#broadcast 10.255.255.255
+# VLAN 2, Uplink network
+auto eth0.2
+iface eth0.2 inet dhcp
+vlan-raw-device eth0
+
+# Network management alias
+iface br0:1 inet static
+address 10.90.90.91
+netmask 255.255.255.0
+broadcast 10.90.90.255
 
 EOF
 	ifdown --force $internal_interface || true

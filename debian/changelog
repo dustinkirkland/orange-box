@@ -12,6 +12,8 @@ orange-box (1.56) unreleased; urgency=medium
       trusty+precise 64-bit
   * usr/bin/orange-box-setup-nat:
     - try to update upstream DNS, but let's not fail if we can't
+  * debian/preinst:
+    - add vlan interface for wired uplink in port 16
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 29 Jul 2014 09:30:27 +0100
 
