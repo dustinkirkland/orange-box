@@ -1,4 +1,4 @@
-orange-box (1.57) unreleased; urgency=medium
+orange-box (1.57-0ubuntu1) utopic; urgency=medium
 
   * debian/control, debian/postinst, debian/preinst,
     etc/maas/bootresources.yaml => usr/lib/orange-
@@ -16,7 +16,7 @@ orange-box (1.57) unreleased; urgency=medium
     - use some ping tests, to ensure outbound network connectivity
     - install separate bootresources configuration for both maas 1.5 and 1.6
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 30 Jul 2014 15:54:54 +0100
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 01 Aug 2014 12:03:55 +0100
 
 orange-box (1.56-0ubuntu1) utopic; urgency=medium
 
