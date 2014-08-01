@@ -8,6 +8,8 @@ Homepage: http://launchpad.net/orange-box
 
 Package: orange-box
 Architecture: all
+Pre-Depends:
+ run-one,
 Depends: ${misc:Depends},
  amtterm,
  apache2,
@@ -32,8 +34,6 @@ Depends: ${misc:Depends},
  pastebinit,
  qemu-kvm,
  remmina,
- run-one,
- squid3,
  ubuntu-desktop,
  vim,
  virtinst,

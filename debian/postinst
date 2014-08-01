@@ -36,6 +36,8 @@ setup_maas_networking() {
 		maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_low=10.14.50.1 ip_range_high=10.14.99.254 static_ip_range_low=10.14.100.1 static_ip_range_high=10.14.199.254 management=2 broadcast_ip=10.14.255.255 router_ip=10.14.4.1
 	fi
 	# Setup nat
+	# Ensure we have an external connection
+	run-one-until-success ping -c 3 maas.ubuntu.com
 	orange-box-setup-nat
 	# Redirect to MAAS web interface
 	cat >/var/www/html/index.html <<EOF
@@ -51,14 +53,16 @@ setup_dns() {
 	sed -i -e "/^nameserver 10.14.4.1$/d" /etc/resolvconf/resolv.conf.d/head
 	echo "nameserver 10.14.4.1" >> /etc/resolvconf/resolv.conf.d/head
 	resolvconf -u
-	invoke-rc.d squid3 restart
 	invoke-rc.d squid-deb-proxy restart
 }
 
 setup_squid() {
 	# This is now a transparent proxy
+	cat /usr/lib/orange-box/inc/squid.conf > /etc/squid-deb-proxy/squid-deb-proxy.conf
 	cat /usr/lib/orange-box/inc/squid.conf > /etc/squid3/squid.conf
-	invoke-rc.d squid3 restart
+	invoke-rc.d squid3 stop || true
+	update-rc.d -f squid3 remove
+	invoke-rc.d squid-deb-proxy restart
 	#maas admin maas set-config name=http_proxy value=http://10.14.4.1:3128
 }
 
@@ -90,14 +94,14 @@ setup_boot_resources() {
 	# until this completes
 	# Network access may not be immediately available;
 	# wait until we can talk to maas
-	while ! ping -c 1 maas.ubuntu.com; do
-		sleep 1
-	done
+	run-one-until-success ping -c 3 maas.ubuntu.com
 	# Support MAAS 1.5, and 1.6
 	maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
 	if dpkg --compare-versions $maas_ver lt 1.6; then
-		run-this-one maas-import-pxe-files /etc/maas/import_pxe_files
+		cat /usr/lib/orange-box/inc/bootresources_1.5.yaml > /etc/maas/bootresources.yaml
+		run-this-one maas-import-pxe-files --config-file /etc/maas/bootresources.yaml
 	else
+		cat /usr/lib/orange-box/inc/bootresources_1.6.yaml > /etc/maas/bootresources.yaml
 		run-this-one maas-import-pxe-files --sources-file /etc/maas/bootresources.yaml
 	fi
 }

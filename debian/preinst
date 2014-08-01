@@ -97,8 +97,8 @@ EOF
 	ifup $internal_interface
 	ifup br0
         # Wait a moment for the network to normalize
-	echo "INFO: Conservatively sleeping 30 seconds to ensure networking has settled"
-	sleep 30
+	echo "INFO: Ensure networking has settled"
+	run-one-until-success ping -c 10 maas.ubuntu.com
 }
 
 setup_external_drive() {

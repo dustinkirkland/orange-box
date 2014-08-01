@@ -71,9 +71,8 @@ echo "Setting up ip forwarding"
 iptables -t nat -A POSTROUTING -o $external -j MASQUERADE
 iptables -A FORWARD -i $external -o $internal -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -i $internal -o $external -j ACCEPT
-# The following lines would setup a transparent proxy, but it's not currently working properly
-#iptables -A PREROUTING -t nat -i br0 -p tcp -m multiport --dports 80 -j REDIRECT --to-port 3128
-#iptables -A PREROUTING -t nat -i br0 -p tcp -m multiport --dports 443 -j REDIRECT --to-port 3128
+# The following line sets up a transparent proxy
+iptables -A PREROUTING -t nat -i br0 -p tcp -m multiport --dports 80 -j REDIRECT --to-port 3128
 
 iptables-save > /etc/iptables/rules.v4
 

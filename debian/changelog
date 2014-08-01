@@ -1,6 +1,20 @@
 orange-box (1.57) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/control, debian/postinst, debian/preinst,
+    etc/maas/bootresources.yaml => usr/lib/orange-
+    box/inc/bootresources_1.6.yaml, usr/bin/orange-box-setup-nat,
+    usr/lib/orange-box/inc/bootresources_1.5.yaml, usr/lib/orange-
+    box/inc/squid.conf:
+    - provide a transparent caching working squid proxy by default
+      on node0
+    - no longer depend on squid3
+    - we are going to overwrite the squid-deb-proxy config file
+      with our own caching squid proxy conf (copied from Canonical's
+      UDS's conference mirror caching proxy)
+    - transparent proxy runs on 3128, though we will also run an
+      explicit proxy on 8000 (squid-deb-proxy's port) for compatibility
+    - use some ping tests, to ensure outbound network connectivity
+    - install separate bootresources configuration for both maas 1.5 and 1.6
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 30 Jul 2014 15:54:54 +0100
 
