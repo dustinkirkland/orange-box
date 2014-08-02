@@ -31,8 +31,8 @@ DATE=`date +%Y%m%d-%H%M%S`
 mkdir -p /srv/charmstore/snapshot-$DATE
 
 echo Mirroring the Charmstore ...
-cd /srv/charmstore/snapshot-$DATE
-run-one charm getall 2>/dev/null &
+cd /srv/charmstore/
+run-one charm getall snapshot-$DATE 2>/dev/null
 #Branch the Landscape charm - required for Landscape demo to minimise network dependencies
 bzr branch lp:~landscape/landscape-charm/stable landscape
 #Link directories for service aliases
