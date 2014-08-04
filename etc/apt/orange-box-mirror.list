@@ -16,20 +16,20 @@ set _tilde 0
 ############# end config ##############
 
 ## Trusty
-deb http://archive.ubuntu.com/ubuntu trusty main restricted universe multiverse
-deb http://archive.ubuntu.com/ubuntu trusty-security main restricted universe multiverse
-deb http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe multiverse
-deb-i386 http://archive.ubuntu.com/ubuntu trusty main restricted universe multiverse
-deb-i386 http://archive.ubuntu.com/ubuntu trusty-security main restricted universe multiverse
-deb-i386 http://archive.ubuntu.com/ubuntu trusty-updates main restricted universe multiverse
+deb http://orange-box.archive.ubuntu.com/ubuntu trusty main restricted universe multiverse
+deb http://orange-box.archive.ubuntu.com/ubuntu trusty-security main restricted universe multiverse
+deb http://orange-box.archive.ubuntu.com/ubuntu trusty-updates main restricted universe multiverse
+deb-i386 http://orange-box.archive.ubuntu.com/ubuntu trusty main restricted universe multiverse
+deb-i386 http://orange-box.archive.ubuntu.com/ubuntu trusty-security main restricted universe multiverse
+deb-i386 http://orange-box.archive.ubuntu.com/ubuntu trusty-updates main restricted universe multiverse
 
 ## precise
-deb http://archive.ubuntu.com/ubuntu precise main restricted universe multiverse
-deb http://archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
-deb http://archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse
-deb-i386 http://archive.ubuntu.com/ubuntu precise main restricted universe multiverse
-deb-i386 http://archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
-deb-i386 http://archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse
+deb http://orange-box.archive.ubuntu.com/ubuntu precise main restricted universe multiverse
+deb http://orange-box.archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
+deb http://orange-box.archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse
+deb-i386 http://orange-box.archive.ubuntu.com/ubuntu precise main restricted universe multiverse
+deb-i386 http://orange-box.archive.ubuntu.com/ubuntu precise-security main restricted universe multiverse
+deb-i386 http://orange-box.archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse
 
 ## Cloud-archive
 deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/cloud-tools main
