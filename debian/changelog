@@ -1,3 +1,9 @@
+orange-box (1.59) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 07 Aug 2014 14:08:18 +0200
+
 orange-box (1.58-0ubuntu1) utopic; urgency=medium
 
   * etc/apt/orange-box-mirror.list, usr/bin/orange-box-setup-nat:
