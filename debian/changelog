@@ -1,4 +1,4 @@
-orange-box (1.58) unreleased; urgency=medium
+orange-box (1.58-0ubuntu1) utopic; urgency=medium
 
   * etc/apt/orange-box-mirror.list, usr/bin/orange-box-setup-nat:
     - go back to using wild carded dns host names, so that we
@@ -9,7 +9,7 @@ orange-box (1.58) unreleased; urgency=medium
     - deprecate orange-box-examples package, in favor of a branch
       at lp:orange-box-examples
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 01 Aug 2014 12:03:57 +0100
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 07 Aug 2014 14:08:16 +0200
 
 orange-box (1.57-0ubuntu1) utopic; urgency=medium
 
