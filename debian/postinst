@@ -215,7 +215,7 @@ setup_landscape() {
 	# TODO: this is currently hardcoded to our own landscape account
 	case "$(hostname)" in
 		OrangeBox*|orangebox*)
-			landscape-config -a canonical-orange -t "$(hostname)__$(dmidecode -s baseboard-serial-number)" -p ubuntu-aubergine --script-users=ALL --silent --include-manager-plugins=ScriptExecution
+			landscape-config -a canonical-orange -t "$(hostname)__$(dmidecode -s baseboard-serial-number)" -p ubuntu-aubergine --script-users=ALL --silent --include-manager-plugins=ScriptExecution || true
 		;;
 	esac
 }
