@@ -220,6 +220,19 @@ setup_landscape() {
 	esac
 }
 
+setup_examples() {
+	mkdir -p /home/ubuntu
+	if [ -d /home/ubuntu/Examples/.bzr ]; then
+		bzr pull lp:orange-box-examples || true
+	elif [ -d /home/ubuntu/Examples ]; then
+		mv -f /home/ubuntu/Examples /home/ubuntu/.Examples
+		bzr branch lp:orange-box-examples /home/ubuntu/Examples || true
+	else
+		bzr branch lp:orange-box-examples /home/ubuntu/Examples || true
+	fi
+	chown -R ubuntu:ubuntu /home/ubuntu
+}
+
 case "$1" in
 	configure)
 		setup_desktop
@@ -253,6 +266,7 @@ case "$1" in
 			# Only add all nodes on initial install, not upgrades
 			setup_all_nodes
 		fi
+		setup_examples
 	;;
 	abort-upgrade|abort-remove|abort-deconfigure)
 	;;

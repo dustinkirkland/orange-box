@@ -41,8 +41,6 @@ Depends: ${misc:Depends},
  vlan,
  wsmancli,
  x11vnc,
-Recommends:
- orange-box-examples,
 Description: Orange Box master node easy installation
  This package can be installed on an Ubuntu Orange Box's master node
  to automatically configure MAAS and Juju.

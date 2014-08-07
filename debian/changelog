@@ -5,6 +5,9 @@ orange-box (1.58) unreleased; urgency=medium
       always sync against the real archive
   * debian/postinst:
     - don't fail package install on failed landscape registration
+  * debian/control, debian/postinst:
+    - deprecate orange-box-examples package, in favor of a branch
+      at lp:orange-box-examples
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 01 Aug 2014 12:03:57 +0100
 
