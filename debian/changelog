@@ -12,6 +12,8 @@ orange-box (1.59) unreleased; urgency=medium
     - Versioned directories to allow linking to use older sync.
     - Weekly cron job to sync the charm store.
     - Monthly cron job to delete charm store syncs older than 90 days.
+  * usr/lib/orange-box/inc/squid.conf:
+    - use /var/cache/squid3 for the cache dir
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 07 Aug 2014 14:08:18 +0200
 
