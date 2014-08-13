@@ -35,9 +35,9 @@ cd /srv/charmstore/
 run-one charm getall snapshot-$DATE 2>/dev/null
 #Branch the Landscape charm - required for Landscape demo to minimise network dependencies
 cd snapshot-$DATE
-bzr branch lp:~landscape/landscape-charm/stable landscape
+bzr branch lp:~landscape/landscape-charm/stable landscape || (cd landscape && bzr pull)
 #Branch the cinder-ceph charm - required for openstack
-bzr branch lp:charms/cinder-ceph
+bzr branch lp:charms/cinder-ceph || (cd cinder-ceph && bzr pull)
 #Link directories for service aliases
 ln -s quantum-gateway neutron-gateway
 ln -s rabbitmq-server rabbitmq

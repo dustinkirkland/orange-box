@@ -1,6 +1,7 @@
 orange-box (1.60) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst, usr/bin/orange-box-sync-charmstore:
+    - branch more safely, don't double call charm getall
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 13 Aug 2014 16:24:48 -0500
 

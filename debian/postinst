@@ -76,7 +76,6 @@ setup_local_mirror() {
 	invoke-rc.d apache2 restart
 	#sync the charm store to /srv/charmstore
 	orange-box-sync-charmstore
-	run-one charm getall /srv/charmstore/precise 2>/dev/null &
 	#Branch the Landscape charm - required for Landscape demo to minimise network dependencies
 	cd /srv/charmstore/precise
 	bzr branch lp:~landscape/landscape-charm/stable landscape
