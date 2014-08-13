@@ -1,6 +1,8 @@
 orange-box (1.59) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/orange-box-amt-flush, usr/bin/orange-box-bootstrap-juju
+    (properties changed: -x to +x):
+    - add a script to flush connections to an AMT address
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 07 Aug 2014 14:08:18 +0200
 
