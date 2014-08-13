@@ -1,4 +1,4 @@
-orange-box (1.59) unreleased; urgency=medium
+orange-box (1.59-0ubuntu1) utopic; urgency=medium
 
   [ Dustin Kirkland ]
   * usr/bin/orange-box-amt-flush, usr/bin/orange-box-bootstrap-juju
@@ -18,7 +18,7 @@ orange-box (1.59) unreleased; urgency=medium
     - Set execute bit on orange-box-bootstrap-juju
     - Add orange-box-destroy-juju.
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 07 Aug 2014 14:08:18 +0200
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 13 Aug 2014 16:24:46 -0500
 
 orange-box (1.58-0ubuntu1) utopic; urgency=medium
 
