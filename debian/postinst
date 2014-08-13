@@ -74,8 +74,12 @@ setup_local_mirror() {
 	mkdir -p /srv/mirrors/archive.ubuntu.com
 	echo '<meta http-equiv="refresh" content="0; url=MAAS/">' > /srv/mirrors/archive.ubuntu.com/index.html
 	invoke-rc.d apache2 restart
-	mkdir -p /srv/charmstore/precise
+	#sync the charm store to /srv/charmstore
+	orange-box-sync-charmstore
 	run-one charm getall /srv/charmstore/precise 2>/dev/null &
+	#Branch the Landscape charm - required for Landscape demo to minimise network dependencies
+	cd /srv/charmstore/precise
+	bzr branch lp:~landscape/landscape-charm/stable landscape
 }
 
 setup_boot_resources() {
@@ -163,6 +167,9 @@ EOF
 	git clone https://github.com/juju/plugins /home/ubuntu/.juju-plugins
 	sudo chown -R ubuntu:ubuntu /home/ubuntu/
 	echo "PATH=\$PATH:/home/ubuntu/.juju-plugins" >> /home/ubuntu/.bashrc
+	#Required for local charm deployments to work.
+	sed -i -e '/^export JUJU_REPOSITORY=/d' /home/ubuntu/.bashrc
+	echo "export JUJU_REPOSITORY=/srv/charmstore" >> /home/ubuntu/.bashrc
 }
 
 ensure_running() {

@@ -1,8 +1,17 @@
 orange-box (1.59) unreleased; urgency=medium
 
+  [ Dustin Kirkland ]
   * usr/bin/orange-box-amt-flush, usr/bin/orange-box-bootstrap-juju
     (properties changed: -x to +x):
     - add a script to flush connections to an AMT address
+
+  [ Darryl Weaver ]
+  * debian/postinst, etc/cron.d/charmstore-mirror, usr/bin/orange-box-
+    create-package-mirror, usr/bin/orange-box-sync-charmstore:
+    - Improvements in local charm store sync handling.
+    - Versioned directories to allow linking to use older sync.
+    - Weekly cron job to sync the charm store.
+    - Monthly cron job to delete charm store syncs older than 90 days.
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 07 Aug 2014 14:08:18 +0200
 
