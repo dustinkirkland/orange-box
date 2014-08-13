@@ -14,6 +14,9 @@ orange-box (1.59) unreleased; urgency=medium
     - Monthly cron job to delete charm store syncs older than 90 days.
   * usr/lib/orange-box/inc/squid.conf:
     - use /var/cache/squid3 for the cache dir
+  * usr/bin/orange-box-destroy-juju:
+    - Set execute bit on orange-box-bootstrap-juju
+    - Add orange-box-destroy-juju.
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 07 Aug 2014 14:08:18 +0200
 
