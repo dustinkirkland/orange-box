@@ -1,6 +1,8 @@
 orange-box (1.61) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - background the charm store sync, so that we can go on
+      registering all nodes in MAAS
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 13 Aug 2014 20:05:14 -0500
 

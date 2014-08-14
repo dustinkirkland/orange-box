@@ -74,8 +74,9 @@ setup_local_mirror() {
 	mkdir -p /srv/mirrors/archive.ubuntu.com
 	echo '<meta http-equiv="refresh" content="0; url=MAAS/">' > /srv/mirrors/archive.ubuntu.com/index.html
 	invoke-rc.d apache2 restart
-	#sync the charm store to /srv/charmstore
-	orange-box-sync-charmstore
+	# Sync the charm store to /srv/charmstore
+	# Note: This is going to take a LONG time
+	orange-box-sync-charmstore &
 }
 
 setup_boot_resources() {
