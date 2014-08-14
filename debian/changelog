@@ -1,11 +1,11 @@
-orange-box (1.60) unreleased; urgency=medium
+orange-box (1.60-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst, usr/bin/orange-box-sync-charmstore:
     - branch more safely, don't double call charm getall
   * debian/postinst:
     - don't branch landscape here, since we do it in the sync script
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 13 Aug 2014 16:24:48 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 13 Aug 2014 20:05:12 -0500
 
 orange-box (1.59-0ubuntu1) utopic; urgency=medium
 
