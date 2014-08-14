@@ -1,10 +1,10 @@
-orange-box (1.61) unreleased; urgency=medium
+orange-box (1.61-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst:
     - background the charm store sync, so that we can go on
       registering all nodes in MAAS
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 13 Aug 2014 20:05:14 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 13 Aug 2014 20:11:08 -0500
 
 orange-box (1.60-0ubuntu1) utopic; urgency=medium
 
