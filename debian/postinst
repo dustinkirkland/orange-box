@@ -217,12 +217,13 @@ apply_patches() {
 setup_landscape() {
 	# The master node will be managed by Landscape
 	# TODO: this is currently hardcoded to our own landscape account
-	which landscape-config || return
-	case "$(hostname)" in
-		OrangeBox*|orangebox*)
-			landscape-config -a canonical-orange -t "$(hostname)__$(dmidecode -s baseboard-serial-number)" -p ubuntu-aubergine --script-users=ALL --silent --include-manager-plugins=ScriptExecution || true
-		;;
-	esac
+	if which landscape-config; then
+		case "$(hostname)" in
+			OrangeBox*|orangebox*)
+				landscape-config -a canonical-orange -t "$(hostname)__$(dmidecode -s baseboard-serial-number)" -p ubuntu-aubergine --script-users=ALL --silent --include-manager-plugins=ScriptExecution || true
+			;;
+		esac
+	fi
 }
 
 setup_examples() {
@@ -259,7 +260,6 @@ case "$1" in
 		setup_ssh_keys
 		setup_juju
 		setup_dns
-		setup_landscape
 		if [ -n "$2" ]; then
 			echo
 			echo "INFO: Skipping adding all nodes, since this is a package upgrade"
@@ -268,7 +268,8 @@ case "$1" in
 			echo "INFO:   sudo orange-box-add-virtual-nodes"
 			echo
 		else
-			# Only add all nodes on initial install, not upgrades
+			# Only add all nodes and configure landscape on initial install, not upgrades
+			setup_landscape
 			setup_all_nodes
 		fi
 		setup_examples

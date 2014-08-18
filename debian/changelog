@@ -1,6 +1,8 @@
 orange-box (1.64) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - test for landscape's existence
+    - don't re-register on upgrade
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 18 Aug 2014 11:39:24 -0500
 
