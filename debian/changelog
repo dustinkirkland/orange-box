@@ -1,3 +1,9 @@
+orange-box (1.66) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 18 Aug 2014 13:48:01 -0500
+
 orange-box (1.65-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-clean:
