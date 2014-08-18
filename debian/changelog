@@ -1,9 +1,9 @@
-orange-box (1.65) unreleased; urgency=medium
+orange-box (1.65-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-clean:
     - just purge ssh-import-id's, not all of authorized_keys
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 18 Aug 2014 12:26:57 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 18 Aug 2014 13:47:59 -0500
 
 orange-box (1.64-0ubuntu1) utopic; urgency=medium
 
