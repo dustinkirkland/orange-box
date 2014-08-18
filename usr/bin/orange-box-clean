@@ -25,4 +25,3 @@ sudo apt-get dist-upgrade -y
 sudo rm -f /root/.ssh/authorized_keys /home/ubuntu/.ssh/authorized_keys
 sudo apt-get purge -y landscape-client
 sudo su -l ubuntu -c "history -c"
-history -c

@@ -2,6 +2,8 @@ orange-box (1.63) unreleased; urgency=medium
 
   * debian/postinst:
     - fix bzr pull
+  * usr/bin/orange-box-clean:
+    - fix history call
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 18 Aug 2014 11:14:34 -0500
 
