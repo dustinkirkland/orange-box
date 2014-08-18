@@ -23,7 +23,6 @@ Depends: ${misc:Depends},
  iptables-persistent,
  juju-core,
  juju-deployer,
- landscape-client,
  libglib2.0-bin,
  libvirt-bin,
  openssh-server,
@@ -41,6 +40,8 @@ Depends: ${misc:Depends},
  vlan,
  wsmancli,
  x11vnc,
+Recommends:
+ landscape-client,
 Description: Orange Box master node easy installation
  This package can be installed on an Ubuntu Orange Box's master node
  to automatically configure MAAS and Juju.

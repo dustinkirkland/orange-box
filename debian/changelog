@@ -1,6 +1,8 @@
 orange-box (1.62) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/control, usr/bin/orange-box-clean:
+    - downgrade landscape-client to a recommends
+    - add a cleanup script for shipping an orange-box
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 13 Aug 2014 20:11:10 -0500
 
