@@ -1,6 +1,7 @@
 orange-box (1.63) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - fix bzr pull
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 18 Aug 2014 11:14:34 -0500
 

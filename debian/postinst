@@ -228,7 +228,7 @@ setup_landscape() {
 setup_examples() {
 	mkdir -p /home/ubuntu
 	if [ -d /home/ubuntu/Examples/.bzr ]; then
-		bzr pull lp:orange-box-examples || true
+		bzr pull || true
 	elif [ -d /home/ubuntu/Examples ]; then
 		mv -f /home/ubuntu/Examples /home/ubuntu/.Examples
 		bzr branch lp:orange-box-examples /home/ubuntu/Examples || true
