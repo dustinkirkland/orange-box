@@ -1,6 +1,7 @@
 orange-box (1.66) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/control:
+    - add ubuntu-restricted-extras, to play mp4 (transcode demo) in firefox
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 18 Aug 2014 13:48:01 -0500
 
