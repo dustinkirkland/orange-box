@@ -1,6 +1,7 @@
 orange-box (1.67) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/control:
+    - s/ubuntu-restricted-extras/ubuntu-restricted-addons/
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 20 Aug 2014 15:33:24 -0500
 
