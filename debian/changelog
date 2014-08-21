@@ -1,6 +1,7 @@
 orange-box (1.69) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst, usr/bin/orange-box-setup-nat:
+    - make sure we stop squid3
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 21 Aug 2014 17:13:19 -0500
 

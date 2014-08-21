@@ -53,6 +53,8 @@ setup_dns() {
 	sed -i -e "/^nameserver 10.14.4.1$/d" /etc/resolvconf/resolv.conf.d/head
 	echo "nameserver 10.14.4.1" >> /etc/resolvconf/resolv.conf.d/head
 	resolvconf -u
+	invoke-rc.d squid3 stop || true
+	update-rc.d -f squid3 remove
 	invoke-rc.d squid-deb-proxy restart
 }
 
