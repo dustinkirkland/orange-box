@@ -1,9 +1,9 @@
-orange-box (1.68) unreleased; urgency=medium
+orange-box (1.68-0ubuntu1) utopic; urgency=medium
 
   * debian/preinst:
     - drop the hostname requirement
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 21 Aug 2014 15:24:14 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 21 Aug 2014 17:13:17 -0500
 
 orange-box (1.67-0ubuntu1) utopic; urgency=medium
 
