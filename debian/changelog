@@ -1,6 +1,7 @@
 orange-box (1.68) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/preinst:
+    - drop the hostname requirement
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 21 Aug 2014 15:24:14 -0500
 

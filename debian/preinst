@@ -9,15 +9,6 @@ preflight_checks() {
 		echo "ERROR: Read the docs; a proper OrangeBox setup requires the default user to be [ubuntu]" 1>&2
 		exit 1
 	fi
-	case $(hostname) in
-		OrangeBox*)
-			true
-		;;
-		*)
-			echo "ERROR: Read the docs; a OrangeBox setup requires the hostname to be in the form [OrangeBox*]" 1>&2
-			exit 1
-		;;
-	esac
 	# TODO: Check that the AMTs are on static IPs
 	# TODO: Check dual hard drives, which one is which
 	# TODO: Ensure we have two interfaces, one internal, one external
