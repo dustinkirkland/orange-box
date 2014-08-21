@@ -1,3 +1,9 @@
+orange-box (1.69) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 21 Aug 2014 17:13:19 -0500
+
 orange-box (1.68-0ubuntu1) utopic; urgency=medium
 
   * debian/preinst:
