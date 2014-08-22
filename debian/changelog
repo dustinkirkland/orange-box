@@ -1,6 +1,7 @@
 orange-box (1.70) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst, usr/bin/orange-box-sync-charmstore:
+    - silence our (rather noisy) bzr branching and pulling
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 21 Aug 2014 17:20:31 -0500
 
