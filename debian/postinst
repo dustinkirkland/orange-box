@@ -63,7 +63,7 @@ setup_squid() {
 	update-rc.d -f squid-deb-proxy remove || true
 	invoke-rc.d squid-deb-proxy stop || true
 	# Create directories, if necessary
-	squid3 -z -N
+	squid3 -z -N || true
 	ensure_running squid3
 }
 
