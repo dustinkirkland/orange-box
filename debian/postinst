@@ -53,21 +53,18 @@ setup_dns() {
 	sed -i -e "/^nameserver 10.14.4.1$/d" /etc/resolvconf/resolv.conf.d/head
 	echo "nameserver 10.14.4.1" >> /etc/resolvconf/resolv.conf.d/head
 	resolvconf -u
-	invoke-rc.d squid3 stop || true
-	update-rc.d -f squid3 remove
-	invoke-rc.d squid-deb-proxy stop || true
-	invoke-rc.d squid-deb-proxy start
 }
 
 setup_squid() {
 	# This is now a transparent proxy
-	cat /usr/lib/orange-box/inc/squid.conf > /etc/squid-deb-proxy/squid-deb-proxy.conf
+	echo > /etc/squid-deb-proxy/squid-deb-proxy.conf
 	cat /usr/lib/orange-box/inc/squid.conf > /etc/squid3/squid.conf
-	invoke-rc.d squid3 stop || true
-	update-rc.d -f squid3 remove
+	# Disable squid3, enable squid-deb-proxy
+	update-rc.d -f squid-deb-proxy remove || true
 	invoke-rc.d squid-deb-proxy stop || true
-	invoke-rc.d squid-deb-proxy start
-	#maas admin maas set-config name=http_proxy value=http://10.14.4.1:3128
+	# Create directories, if necessary
+	squid3 -z -N
+	ensure_running squid3
 }
 
 setup_local_mirror() {
@@ -197,7 +194,7 @@ ensure_running_maas() {
 	ensure_running maas-txlongpoll
 	ensure_running maas-pserv
 	ensure_running maas-dhcp-server
-	ensure_running squid-deb-proxy
+	ensure_running squid3
 	invoke-rc.d tgt stop || true
 	invoke-rc.d tgt start
 	ensure_running tgt

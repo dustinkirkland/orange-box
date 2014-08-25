@@ -78,7 +78,9 @@ iptables-save > /etc/iptables/rules.v4
 
 service iptables-persistent restart
 
-# It seems we need to restart squid-deb-proxy after making these network changes
-service squid3 stop || true
+# It seems we need to restart squid3 after making these network changes
+# We now run squid3, and NOT squid-deb-proxy
+update-rc.d -f squid-deb-proxy remove || true
 service squid-deb-proxy stop || true
-service squid-deb-proxy start
+service squid3 stop || true
+service squid3 start
