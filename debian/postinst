@@ -55,7 +55,8 @@ setup_dns() {
 	resolvconf -u
 	invoke-rc.d squid3 stop || true
 	update-rc.d -f squid3 remove
-	invoke-rc.d squid-deb-proxy restart
+	invoke-rc.d squid-deb-proxy stop || true
+	invoke-rc.d squid-deb-proxy start
 }
 
 setup_squid() {
@@ -64,7 +65,8 @@ setup_squid() {
 	cat /usr/lib/orange-box/inc/squid.conf > /etc/squid3/squid.conf
 	invoke-rc.d squid3 stop || true
 	update-rc.d -f squid3 remove
-	invoke-rc.d squid-deb-proxy restart
+	invoke-rc.d squid-deb-proxy stop || true
+	invoke-rc.d squid-deb-proxy start
 	#maas admin maas set-config name=http_proxy value=http://10.14.4.1:3128
 }
 
@@ -75,7 +77,8 @@ setup_local_mirror() {
 	a2dissite 000-default
 	mkdir -p /srv/mirrors/archive.ubuntu.com
 	echo '<meta http-equiv="refresh" content="0; url=MAAS/">' > /srv/mirrors/archive.ubuntu.com/index.html
-	invoke-rc.d apache2 restart
+	invoke-rc.d apache2 stop || true
+	invoke-rc.d apache2 start
 	# Sync the charm store to /srv/charmstore
 	# Note: This is going to take a LONG time
 	orange-box-sync-charmstore &
@@ -128,7 +131,8 @@ setup_ssh_keys() {
 	# combo is very well known
 	if ! grep -qs "^PasswordAuthentication no" /etc/ssh/sshd_config 2>/dev/null; then
 		echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
-		invoke-rc.d ssh restart
+		invoke-rc.d ssh stop || true
+		invoke-rc.d ssh start
 	fi
 	if [ ! -e /home/ubuntu/.ssh/id_rsa ]; then
 		su -l ubuntu -c "ssh-keygen -N '' -f /home/ubuntu/.ssh/id_rsa"
@@ -193,7 +197,8 @@ ensure_running_maas() {
 	ensure_running maas-txlongpoll
 	ensure_running maas-pserv
 	ensure_running maas-dhcp-server
-	invoke-rc.d tgt restart
+	invoke-rc.d tgt stop || true
+	invoke-rc.d tgt start
 	ensure_running tgt
 }
 
@@ -213,7 +218,8 @@ apply_patches() {
 	cat /usr/lib/orange-box/patches/try_amt_harder.patch | patch -p0 -N || true
 	cd -
 	rm -f /usr/lib/python2.7/dist-packages/provisioningserver/utils/__init__.pyc
-	invoke-rc.d maas-cluster-celery restart
+	invoke-rc.d maas-cluster-celery stop || true
+	invoke-rc.d maas-cluster-celery start
 }
 
 setup_landscape() {

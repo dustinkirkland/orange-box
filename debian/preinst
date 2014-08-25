@@ -54,7 +54,8 @@ setup_networking() {
 [keyfile]
 unmanaged-devices=mac:$default_mac
 EOF
-	invoke-rc.d network-manager restart
+	invoke-rc.d network-manager stop || true
+	invoke-rc.d network-manager start
         cat >/etc/network/interfaces <<EOF
 auto lo
 iface lo inet loopback
