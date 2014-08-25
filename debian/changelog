@@ -1,3 +1,9 @@
+orange-box (1.73) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 25 Aug 2014 11:20:01 -0500
+
 orange-box (1.72-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst, usr/bin/orange-box-setup-nat:
