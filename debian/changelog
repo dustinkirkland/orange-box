@@ -4,6 +4,8 @@ orange-box (1.70) unreleased; urgency=medium
     - silence our (rather noisy) bzr branching and pulling
   * debian/postinst, debian/preinst:
     - stop and restart more safely
+  * debian/control:
+    - add the chromium browser as well, works better with transcode example
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Thu, 21 Aug 2014 17:20:31 -0500
 
