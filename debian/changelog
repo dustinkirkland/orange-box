@@ -1,9 +1,9 @@
-orange-box (1.73) unreleased; urgency=medium
+orange-box (1.73-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst:
     - only create cache dirs if necessary
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 25 Aug 2014 11:20:01 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 25 Aug 2014 11:41:47 -0500
 
 orange-box (1.72-0ubuntu1) utopic; urgency=medium
 
