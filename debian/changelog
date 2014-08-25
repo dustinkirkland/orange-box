@@ -1,10 +1,10 @@
-orange-box (1.72) unreleased; urgency=medium
+orange-box (1.72-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst, usr/bin/orange-box-setup-nat:
     - use squid3, not squid-deb-proxy
     - this should line us up better with where we're going in MAAS
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 25 Aug 2014 10:04:18 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 25 Aug 2014 11:19:59 -0500
 
 orange-box (1.71-0ubuntu1) utopic; urgency=medium
 
