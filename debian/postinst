@@ -197,6 +197,7 @@ ensure_running_maas() {
 	ensure_running maas-txlongpoll
 	ensure_running maas-pserv
 	ensure_running maas-dhcp-server
+	ensure_running squid-deb-proxy
 	invoke-rc.d tgt stop || true
 	invoke-rc.d tgt start
 	ensure_running tgt

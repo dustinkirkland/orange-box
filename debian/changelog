@@ -1,6 +1,7 @@
 orange-box (1.71) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - ensure that squid-deb-proxy is running
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 25 Aug 2014 10:02:04 -0500
 
