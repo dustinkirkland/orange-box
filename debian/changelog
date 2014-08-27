@@ -1,3 +1,9 @@
+orange-box (1.75) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 27 Aug 2014 18:18:05 -0500
+
 orange-box (1.74-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-add-virtual-nodes:
