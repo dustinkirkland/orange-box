@@ -37,7 +37,8 @@ setup_maas_networking() {
 	fi
 	# Setup nat
 	# Ensure we have an external connection
-	run-one-until-success ping -c 3 maas.ubuntu.com
+    orange-box-test-uplink
+	run-one-until-success
 	orange-box-setup-nat
 	# Redirect to MAAS web interface
 	cat >/var/www/html/index.html <<EOF
@@ -96,8 +97,7 @@ setup_boot_resources() {
 	# MAAS won't work very well until this is done, so we're going to block
 	# until this completes
 	# Network access may not be immediately available;
-	# wait until we can talk to maas
-	run-one-until-success ping -c 3 maas.ubuntu.com
+    orange-box-test-uplink
 	# Support MAAS 1.5, and 1.6
 	maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
 	if dpkg --compare-versions $maas_ver lt 1.6; then
