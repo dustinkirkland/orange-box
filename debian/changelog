@@ -1,6 +1,7 @@
 orange-box (1.74) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/orange-box-add-virtual-nodes:
+    - add a second, small, 2G disk to our VM images for Landscape
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Mon, 25 Aug 2014 11:41:48 -0500
 
