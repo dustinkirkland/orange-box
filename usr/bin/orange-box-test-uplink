@@ -1,6 +1,10 @@
 #!/bin/sh
+
+set -e
+set -x
+
 #
-#    orange-box-amt-recover - recover a dead AMT by dropping all connections
+#    orange-box-test-uplink - ensure network resources are reachable
 #    Copyright (C) 2014 Canonical Ltd.
 #
 #    Authors: David Britton <dpb@canonical.com>
@@ -20,27 +24,26 @@
 # Wait until tcp connection established to specified host:port
 # Expects: (host, port)
 wait_tcp_connect() {
-    timeout 2m run-one-until-success nc -w 10 -zvv $@
+	timeout 2m run-one-until-success nc -w 10 -zvv $@
 }
 
 wait_udp_connect() {
-    # Best effort on UDP, it's connectionless.  Short
-    # of starting up a real client, it's prone to false positives
-    timeout 2m run-one-until-success nc -w 5 -uzvv $@
+	# Best effort on UDP, it's connectionless.  Short
+	# of starting up a real client, it's prone to false positives
+	timeout 2m run-one-until-success nc -w 5 -uzvv $@
 }
 
 tcp_servers="maas.ubuntu.com:80 archive.ubuntu.com:80"
 udp_servers="ntp.ubuntu.com:123"
 
 for entry in $tcp_servers; do
-    server=$(echo $entry | awk -F : '{ print $1 }')
-    port=$(echo $entry | awk -F : '{ print $2 }')
-    wait_tcp_connect $server $port
+	server=$(echo $entry | awk -F : '{ print $1 }')
+	port=$(echo $entry | awk -F : '{ print $2 }')
+	wait_tcp_connect $server $port
 done
 
 for entry in $udp_servers; do
-    server=$(echo $entry | awk -F : '{ print $1 }')
-    port=$(echo $entry | awk -F : '{ print $2 }')
-    wait_udp_connect $server $port
+	server=$(echo $entry | awk -F : '{ print $1 }')
+	port=$(echo $entry | awk -F : '{ print $2 }')
+	wait_udp_connect $server $port
 done
-

@@ -38,7 +38,6 @@ setup_maas_networking() {
 	# Setup nat
 	# Ensure we have an external connection
     orange-box-test-uplink
-	run-one-until-success
 	orange-box-setup-nat
 	# Redirect to MAAS web interface
 	cat >/var/www/html/index.html <<EOF
