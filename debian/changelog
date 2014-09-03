@@ -1,3 +1,9 @@
+orange-box (1.77) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 03 Sep 2014 14:14:02 -0500
+
 orange-box (1.76-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-setup-nat:
