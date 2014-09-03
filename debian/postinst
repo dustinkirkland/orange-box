@@ -17,7 +17,7 @@ setup_maas_admin() {
 
 setup_maas_networking() {
 	. /etc/maas/maas_cluster.conf
-	APIKEY=$(maas-region-admin apikey --username admin)
+	APIKEY=$(maas-region-admin apikey --username admin | tail -n1)
 	maas login admin $MAAS_URL $APIKEY
 	count=0
 	while ! maas admin node-group-interfaces list $CLUSTER_UUID >/dev/null 2>&1; do
