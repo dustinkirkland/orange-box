@@ -1,10 +1,10 @@
-orange-box (1.75) unreleased; urgency=medium
+orange-box (1.75-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst:
     - work around bug in MAAS 1.7 that outputs the python version on
       stdout
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 27 Aug 2014 18:18:05 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 03 Sep 2014 13:41:19 -0500
 
 orange-box (1.74-0ubuntu1) utopic; urgency=medium
 
