@@ -1,6 +1,8 @@
 orange-box (1.76) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/orange-box-setup-nat:
+    - 14.10 deprecates the iptables-persistent service in favor of
+      netfilter-persistent
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 03 Sep 2014 13:41:21 -0500
 

@@ -76,7 +76,8 @@ iptables -A PREROUTING -t nat -i br0 -p tcp -m multiport --dports 80 -j REDIRECT
 
 iptables-save > /etc/iptables/rules.v4
 
-service iptables-persistent restart
+# 14.10 deprecates the iptables-persistent service in favor of netfilter-persistent
+service iptables-persistent restart || service netfilter-persistent restart
 
 # It seems we need to restart squid3 after making these network changes
 # We now run squid3, and NOT squid-deb-proxy
