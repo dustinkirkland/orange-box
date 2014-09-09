@@ -1,14 +1,13 @@
 orange-box (1.77) unreleased; urgency=medium
 
-  * usr/bin/orange-box-bootstrap-juju:
-    - deploy the latest juju-gui from the charmstore
-    - one day, we'll be able to do this entirely offline (hopefully)
   * usr/lib/orange-box/inc/bootresources_1.5.yaml, usr/lib/orange-
     box/inc/bootresources_1.6.yaml:
     - *drastically* improve juju bootstrap and juju deploys, but importing
       the daily LTS images, which will automatically have all of the latest
       security and updates;  this can save 5-10 minutes (or more on slow
       connections) for basic bootstraps and juju deploys
+  * usr/bin/orange-box-bootstrap-juju:
+    - bootstrap to trusty
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 03 Sep 2014 14:14:02 -0500
 
