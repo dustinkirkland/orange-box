@@ -1,6 +1,8 @@
 orange-box (1.77) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/orange-box-bootstrap-juju:
+    - deploy the latest juju-gui from the charmstore
+    - one day, we'll be able to do this entirely offline (hopefully)
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 03 Sep 2014 14:14:02 -0500
 
