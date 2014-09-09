@@ -2,14 +2,14 @@ boot:
   configure_me: True
   storage: "/var/lib/maas/boot-resources/"
   sources:
-    - path: "http://maas.ubuntu.com/images/ephemeral-v2/releases/"
+    - path: "http://maas.ubuntu.com/images/ephemeral-v2/daily/"
       keyring: "/usr/share/keyrings/ubuntu-cloudimage-keyring.gpg"
       selections:
         - release: "trusty"
           arches: ["amd64"]
           subarches: ["generic"]
-          labels: ["release"]
+          labels: ["daily"]
         - release: "precise"
           arches: ["amd64"]
           subarches: ["generic"]
-          labels: ["release"]
+          labels: ["daily"]

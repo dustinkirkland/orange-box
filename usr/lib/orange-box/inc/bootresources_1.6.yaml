@@ -1,17 +1,17 @@
 - keyring: /usr/share/keyrings/ubuntu-cloudimage-keyring.gpg
-  url: http://maas.ubuntu.com/images/ephemeral-v2/releases/
+  url: http://maas.ubuntu.com/images/ephemeral-v2/daily/
   selections:
   - arches:
     - amd64
     labels:
-    - release
+    - daily
     release: trusty
     subarches:
     - generic
   - arches:
     - amd64
     labels:
-    - release
+    - daily
     release: precise
     subarches:
     - generic
