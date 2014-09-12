@@ -4,6 +4,7 @@
 #    Copyright (C) 2014 Canonical Ltd.
 #
 #    Authors: David Britton <dpb@canonical.com>
+#             Dustin Kirkland <kirkland@canonical.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,35 +20,59 @@
 
 set -e
 
+ERRORS=0
+WARNINGS=0
+
 info() {
-	echo "INFO: $@"
+	echo -n "INFO: $@"
+}
+
+warn() {
+	echo "WARNING: Unable to connect"
+	WARNINGS=$((WARNINGS+1))
+}
+
+error() {
+	echo "ERROR: Unable to connect"
+	ERRORS=$((ERRORS+1))
 }
 
 # Wait until tcp connection established to specified host:port
 # Expects: (host, port)
-wait_tcp_connect() {
-	info "Trying TCP $@..."
-	timeout 2m run-one-until-success nc -w 10 -zvv $@
+tcp_connect() {
+	info "Trying TCP [$@] ... "
+	timeout 1m run-one-until-success nc -w 10 -zvv $@ 2>&1
 }
 
-wait_udp_connect() {
-	info "Trying UDP $@..."
+udp_connect() {
+	info "Trying UDP [$@] ... "
 	# Best effort on UDP, it's connectionless.  Short
 	# of starting up a real client, it's prone to false positives
-	timeout 2m run-one-until-success nc -w 5 -uzvv $@
+	timeout 1m run-one-until-success nc -w 5 -uzvv $@ 2>&1
 }
 
-tcp_servers="maas.ubuntu.com:80 archive.ubuntu.com:80"
-udp_servers="ntp.ubuntu.com:123"
+test_all() {
+	# Required connections
+	tcp_connect maas.ubuntu.com 80 				|| error	# Required for MAAS OS images
+	tcp_connect archive.ubuntu.com 80 			|| error	# Required for all packages and updates
+	udp_connect ntp.ubuntu.com 123 				|| error	# Required to remove clock skew kills OAUTH MAAS installs
+	tcp_connect security.ubuntu.com 80 			|| error	# Required for direct, non-mirrored access to security updates
+	tcp_connect juju.ubuntu.com 80 				|| error	# Required for charm deploys
+	tcp_connect juju.ubuntu.com 443 			|| error	# Required for charm deploys
+	tcp_connect ubuntu-cloud.archive.canonical.com 80 	|| error	# Recommended for updated cloud tools
+	# Recommended connections
+	tcp_connect ppa.launchpad.net 80 	|| warn				# Required for outside of archive packages
+	tcp_connect ppa.launchpad.net 443 	|| warn				# Required for outside of archive packages
+	tcp_connect keyserver.ubuntu.com 80 	|| warn				# Required to retrieve keys for PPA packages
+	tcp_connect entropy.ubuntu.com 443 	|| warn				# Recommended for seeding the Linux random number generator
+	tcp_connect changelogs.ubuntu.com 80 	|| warn				# Recommended to know when a new release of Ubuntu is available
+	tcp_connect daisy.ubuntu.com 443 	|| warn				# Recommended to submit error reports and crash logs
+	tcp_connect ports.ubuntu.com 80 	|| warn				# Required for non-x86 hardware
+	tcp_connect landscape.canonical.com 80	|| warn				# Recommended to manage this machine remotely via Landscape
+	tcp_connect landscape.canonical.com 443 || warn				# Recommended to manage this machine remotely via Landscape
+}
 
-for entry in $tcp_servers; do
-	server=$(echo $entry | awk -F : '{ print $1 }')
-	port=$(echo $entry | awk -F : '{ print $2 }')
-	wait_tcp_connect $server $port
-done
+test_all | ccze -A
 
-for entry in $udp_servers; do
-	server=$(echo $entry | awk -F : '{ print $1 }')
-	port=$(echo $entry | awk -F : '{ print $2 }')
-	wait_udp_connect $server $port
-done
+
+exit $ERRORS

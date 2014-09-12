@@ -9,6 +9,11 @@ orange-box (1.77) unreleased; urgency=medium
       connections) for basic bootstraps and juju deploys
   * usr/bin/orange-box-bootstrap-juju:
     - bootstrap to trusty
+  * usr/bin/orange-box-test-uplink:
+    - restructure the uplink test a bit
+    - add a bunch of other resources
+    - split into warnings and errors
+    - colorize
 
   [ David Britton ]
   * debian/postinst, usr/bin/orange-box-test-uplink:
