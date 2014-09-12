@@ -1,5 +1,6 @@
 orange-box (1.77) unreleased; urgency=medium
 
+  [ Dustin Kirkland ]
   * usr/lib/orange-box/inc/bootresources_1.5.yaml, usr/lib/orange-
     box/inc/bootresources_1.6.yaml:
     - *drastically* improve juju bootstrap and juju deploys, but importing
@@ -8,6 +9,11 @@ orange-box (1.77) unreleased; urgency=medium
       connections) for basic bootstraps and juju deploys
   * usr/bin/orange-box-bootstrap-juju:
     - bootstrap to trusty
+
+  [ David Britton ]
+  * debian/postinst, usr/bin/orange-box-test-uplink:
+    - replace ping maas test with a better, nc test
+    - test multiple servers/ports
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 03 Sep 2014 14:14:02 -0500
 
