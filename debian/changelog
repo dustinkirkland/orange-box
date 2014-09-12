@@ -1,4 +1,4 @@
-orange-box (1.77) unreleased; urgency=medium
+orange-box (1.77-0ubuntu1) utopic; urgency=medium
 
   [ Dustin Kirkland ]
   * usr/lib/orange-box/inc/bootresources_1.5.yaml, usr/lib/orange-
@@ -20,7 +20,7 @@ orange-box (1.77) unreleased; urgency=medium
     - replace ping maas test with a better, nc test
     - test multiple servers/ports
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 03 Sep 2014 14:14:02 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 12 Sep 2014 11:45:24 -0500
 
 orange-box (1.76-0ubuntu1) utopic; urgency=medium
 
