@@ -157,7 +157,7 @@ environments:
         type: maas
         maas-server: 'http://10.14.4.1/MAAS/'
         maas-oauth: '$APIKEY'
-        default-series: precise
+        default-series: trusty
         authorized-keys-path: /home/ubuntu/.ssh/id_rsa.pub
         admin-secret: 'admin'
         logging-config: '<root>=DEBUG'

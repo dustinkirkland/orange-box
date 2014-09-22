@@ -1,6 +1,7 @@
 orange-box (1.78) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - default to the trusty series in juju
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 12 Sep 2014 11:45:27 -0500
 
