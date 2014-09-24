@@ -45,6 +45,10 @@ Depends: ${misc:Depends},
  x11vnc,
 Recommends:
  landscape-client,
+ python-keystone,
+ python-neutronclient,
+ python-novaclient,
+ python-glanceclient
 Description: Orange Box master node easy installation
  This package can be installed on an Ubuntu Orange Box's master node
  to automatically configure MAAS and Juju.

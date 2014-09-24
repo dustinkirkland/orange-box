@@ -4,6 +4,9 @@ orange-box (1.78) unreleased; urgency=medium
     - default to the trusty series in juju
   * debian/control:
     - add tree command, useful when looking at charm anatomy
+  * debian/control:
+    - install some openstack administrative utilities, used by the
+      orange-box-configure-openstack script
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 12 Sep 2014 11:45:27 -0500
 
