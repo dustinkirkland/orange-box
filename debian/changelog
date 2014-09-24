@@ -1,4 +1,4 @@
-orange-box (1.78) unreleased; urgency=medium
+orange-box (1.78-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst:
     - default to the trusty series in juju
@@ -8,7 +8,7 @@ orange-box (1.78) unreleased; urgency=medium
     - install some openstack administrative utilities, used by the
       orange-box-configure-openstack script
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 12 Sep 2014 11:45:27 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 24 Sep 2014 14:16:09 +0200
 
 orange-box (1.77-0ubuntu1) utopic; urgency=medium
 
