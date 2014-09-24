@@ -1,3 +1,9 @@
+orange-box (1.79) unreleased; urgency=medium
+
+  * UNRELEASED
+
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 24 Sep 2014 14:16:11 +0200
+
 orange-box (1.78-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst:
