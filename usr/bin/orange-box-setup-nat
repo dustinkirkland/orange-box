@@ -66,6 +66,12 @@ iptables --table nat --flush
 iptables --delete-chain
 iptables --table nat --delete-chain
 
+# Firewalling this machine
+# Allow incoming SSH
+iptables -A INPUT -i $external -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -i $external -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -i $external -j DROP
+
 # Some things use the MAAS proxy - some things don't. So turn on NAT.
 echo "Setting up ip forwarding"
 iptables -t nat -A POSTROUTING -o $external -j MASQUERADE

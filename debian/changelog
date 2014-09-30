@@ -1,6 +1,11 @@
 orange-box (1.79) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/orange-box-bootstrap-juju: LP: #1372869
+    - fix syntax error
+  * usr/bin/orange-box-clean:
+    - properties changed: -x to +x
+  * usr/bin/orange-box-setup-nat:
+    - firewall the external port to only accept traffic on port 22
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 24 Sep 2014 14:16:11 +0200
 

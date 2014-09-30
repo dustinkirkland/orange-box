@@ -22,5 +22,5 @@ set -x
 juju status && echo "Existing deployment found, exiting." && exit 0
 juju bootstrap --constraints "tags=virtual" --show-log
 juju set-constraints "tags="
-+juju deploy --to 0 --repository=/srv/charmstore/ local:trusty/juju-gui
+juju deploy --to 0 --repository=/srv/charmstore/ local:trusty/juju-gui
 juju expose juju-gui
