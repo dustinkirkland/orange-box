@@ -1,4 +1,4 @@
-orange-box (1.79) unreleased; urgency=medium
+orange-box (1.79-0ubuntu1) utopic; urgency=medium
 
   * usr/bin/orange-box-bootstrap-juju: LP: #1372869
     - fix syntax error
@@ -9,7 +9,7 @@ orange-box (1.79) unreleased; urgency=medium
   * usr/bin/orange-box-test-uplink: LP: #1372907
     - test for simple streams access
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 24 Sep 2014 14:16:11 +0200
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 30 Sep 2014 16:29:10 -0500
 
 orange-box (1.78-0ubuntu1) utopic; urgency=medium
 

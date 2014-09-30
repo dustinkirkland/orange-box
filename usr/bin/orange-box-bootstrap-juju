@@ -19,6 +19,11 @@
 
 set -x
 
+tcp_connect() {
+        info "Trying TCP [$@] ... "
+        timeout 1m run-one-until-success nc -w 10 -zvv $@ 2>&1
+}
+
 juju status && echo "Existing deployment found, exiting." && exit 0
 juju bootstrap --constraints "tags=virtual" --show-log
 juju set-constraints "tags="
