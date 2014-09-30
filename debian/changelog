@@ -6,6 +6,8 @@ orange-box (1.79) unreleased; urgency=medium
     - properties changed: -x to +x
   * usr/bin/orange-box-setup-nat:
     - firewall the external port to only accept traffic on port 22
+  * usr/bin/orange-box-test-uplink: LP: #1372907
+    - test for simple streams access
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 24 Sep 2014 14:16:11 +0200
 

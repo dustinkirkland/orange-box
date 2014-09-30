@@ -70,6 +70,8 @@ test_all() {
 	tcp_connect ports.ubuntu.com 80 	|| warn				# Required for non-x86 hardware
 	tcp_connect landscape.canonical.com 80	|| warn				# Recommended to manage this machine remotely via Landscape
 	tcp_connect landscape.canonical.com 443 || warn				# Recommended to manage this machine remotely via Landscape
+	tcp_connect streams.canonical.com 80	|| warn				# Required for Simple Streams image data
+	tcp_connect streams.canonical.com 443	|| warn				# Required for Simple Streams image data
 }
 
 test_all | ccze -A
