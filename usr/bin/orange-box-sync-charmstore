@@ -32,12 +32,25 @@ mkdir -p /srv/charmstore/snapshot-$DATE
 
 echo Mirroring the Charmstore ...
 cd /srv/charmstore/
-run-one charm getall snapshot-$DATE 2>/dev/null
+sudo -i run-one charm getall /srv/charmstore/snapshot-$DATE 2>/dev/null
+#check some base charms are there:
+if [ ! -d juju-gui ]; then
+        echo "Juju-gui charm is missing - exiting"
+        exit
+elif [ ! -d nova-cloud-controller ]; then
+        echo "nova-cloud-controller charm is missing - exiting"
+        exit
+elif [ ! -d mongodb ]; then
+        echo "mongodb charm is missing - exiting"
+        exit
+fi
+
 #Branch the Landscape charm - required for Landscape demo to minimise network dependencies
 cd snapshot-$DATE
-bzr branch lp:~landscape/landscape-charm/stable landscape >/dev/null 2>&1 || (cd landscape && bzr pull >/dev/null 2>&1)
+sudo -i bzr branch lp:~landscape/landscape-charm/stable /srv/charmstore/snapshot-$DATE/landscape >/dev/null 2>&1 || (cd /srv/charmstore/snapshot-$DATE/landscape && bzr pull >/dev/null 2>&1)
 #Branch the cinder-ceph charm - required for openstack
-bzr branch lp:charms/cinder-ceph  >/dev/null 2>&1 || (cd cinder-ceph && bzr pull >/dev/null 2>&1)
+sudo -i bzr branch lp:charms/cinder-ceph /srv/charmstore/snapshot-$DATE/cinder-ceph >/dev/null 2>&1 || (cd /srv/charmstore/snapshot-$DATE/cinder-ceph && bzr pull >/dev/null 2>&1)
+
 #Link directories for service aliases
 ln -s quantum-gateway neutron-gateway
 ln -s rabbitmq-server rabbitmq
