@@ -1,4 +1,4 @@
-orange-box (1.80) unreleased; urgency=medium
+orange-box (1.80-0ubuntu1) utopic; urgency=medium
 
   * debian/postinst:
     - disable OS upgrades on juju bootstrap and deploy
@@ -13,7 +13,7 @@ orange-box (1.80) unreleased; urgency=medium
       + in particular, this seems to happen when the orange-box is
         behind a proxy (like in a hotel room)
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 30 Sep 2014 16:29:11 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Oct 2014 06:47:26 -0500
 
 orange-box (1.79-0ubuntu1) utopic; urgency=medium
 
