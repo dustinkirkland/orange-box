@@ -41,6 +41,7 @@ for series in precise trusty
 do
         cd $series
         bzr branch lp:~landscape/landscape-charm/stable landscape
+	bzr branch lp:charms/cinder-ceph cinder-ceph
         ln -s quantum-gateway neutron-gateway
         ln -s rabbitmq-server rabbitmq
         cd ..
