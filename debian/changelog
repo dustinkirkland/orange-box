@@ -4,6 +4,14 @@ orange-box (1.80) unreleased; urgency=medium
     - disable OS upgrades on juju bootstrap and deploy
       + massively speeds up juju deploys
       + requires a very recent Juju, 1.21
+  * debian/postinst, usr/lib/orange-
+    box/patches/acquire_languages_none.patch: LP: #1313576
+    - add patch to disable apt acquiring languages/translations
+      + this fixes a series of problems with Juju not bootstrapping
+        and services not deploying, with every machine hanging while
+        doing an apt-get update, while downloading translations
+      + in particular, this seems to happen when the orange-box is
+        behind a proxy (like in a hotel room)
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 30 Sep 2014 16:29:11 -0500
 

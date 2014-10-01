@@ -212,6 +212,7 @@ apply_patches() {
 	# This is a DISGUSTING HACK that needs to go away
 	# as soon as MAAS ships these fixes
 	cd /
+	cat /usr/lib/orange-box/patches/acquire_languages_none.patch | patch -p0 -N || true
 	cat /usr/lib/orange-box/patches/arp_ip_order.patch | patch -p0 -N || true
 	cat /usr/lib/orange-box/patches/try_amt_harder.patch | patch -p0 -N || true
 	cd -

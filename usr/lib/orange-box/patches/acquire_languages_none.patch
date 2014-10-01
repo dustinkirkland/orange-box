@@ -1,0 +1,11 @@
+--- /etc/mass/preseeds/curtin_userdata	2014-09-23 21:18:30 +0000
++++ /etc/mass/preseeds/curtin_userdata	2014-10-01 11:41:06 +0000
+@@ -14,6 +14,7 @@
+   driver_04_load: ["sh", "-c", "depmod && modprobe {{driver['module']}}"]
+ {{endif}}
+ late_commands:
++  lang: curtin in-target -- sh -c "/bin/echo 'Acquire::Languages \"none\";' > /etc/apt/apt.conf.d/99translations"
+   maas: [wget, '--no-proxy', '{{node_disable_pxe_url|escape.shell}}', '--post-data', '{{node_disable_pxe_data|escape.shell}}', '-O', '/dev/null']
+ {{if third_party_drivers and driver}}
+   driver_00_key_get: curtin in-target -- sh -c "/bin/echo -en '{{key_string}}' > /tmp/maas-{{driver['package']}}.gpg"
+
