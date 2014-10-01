@@ -1,6 +1,11 @@
 orange-box (1.81) unreleased; urgency=medium
 
-  * UNRELEASED
+  [ Darryl Weaver ]
+  * === added symlink usr/bin/orange-box-destroy-juju, debian/postinst,
+    === target is uorange-box-demo-cleanup, usr/bin/orange-box-destroy-
+    juju => usr/bin/orange-box-demo-cleanup, usr/lib/orange-
+    box/patches/acquire_languages_none.patch:
+    - merge from Darryl Weaver, with a couple of minor changes
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Oct 2014 06:47:28 -0500
 
