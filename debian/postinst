@@ -158,7 +158,8 @@ environments:
         maas-server: 'http://10.14.4.1/MAAS/'
         maas-oauth: '$APIKEY'
         default-series: trusty
-	enable-os-upgrade: false
+	#Enable below after juju 1.21 is released as stable
+        #enable-os-upgrade: false
         authorized-keys-path: /home/ubuntu/.ssh/id_rsa.pub
         admin-secret: 'admin'
         logging-config: '<root>=DEBUG'
@@ -166,7 +167,7 @@ EOF
 	rm -rf /home/ubuntu/.juju-plugins
 	git clone https://github.com/juju/plugins /home/ubuntu/.juju-plugins
 	sudo chown -R ubuntu:ubuntu /home/ubuntu/
-	echo "PATH=\$PATH:/home/ubuntu/.juju-plugins" >> /home/ubuntu/.bashrc
+	echo "PATH=\$PATH:/home/ubuntu/.juju-plugins:/home/ubuntu/examples/bin" >> /home/ubuntu/.bashrc
 	#Required for local charm deployments to work.
 	sed -i -e '/^export JUJU_REPOSITORY=/d' /home/ubuntu/.bashrc
 	echo "export JUJU_REPOSITORY=/srv/charmstore" >> /home/ubuntu/.bashrc
