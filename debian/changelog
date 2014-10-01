@@ -1,4 +1,4 @@
-orange-box (1.81) unreleased; urgency=medium
+orange-box (1.81-0ubuntu1) utopic; urgency=medium
 
   [ Darryl Weaver ]
   * === added symlink usr/bin/orange-box-destroy-juju, debian/postinst,
@@ -7,7 +7,7 @@ orange-box (1.81) unreleased; urgency=medium
     box/patches/acquire_languages_none.patch:
     - merge from Darryl Weaver, with a couple of minor changes
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Oct 2014 06:47:28 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Oct 2014 13:51:14 -0500
 
 orange-box (1.80-0ubuntu1) utopic; urgency=medium
 
