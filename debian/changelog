@@ -1,6 +1,9 @@
 orange-box (1.80) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - disable OS upgrades on juju bootstrap and deploy
+      + massively speeds up juju deploys
+      + requires a very recent Juju, 1.21
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 30 Sep 2014 16:29:11 -0500
 
