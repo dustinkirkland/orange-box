@@ -1,5 +1,5 @@
---- /etc/mass/preseeds/curtin_userdata	2014-09-23 21:18:30 +0000
-+++ /etc/mass/preseeds/curtin_userdata	2014-10-01 11:41:06 +0000
+--- /etc/maas/preseeds/curtin_userdata	2014-09-23 21:18:30 +0000
++++ /etc/maas/preseeds/curtin_userdata	2014-10-01 11:41:06 +0000
 @@ -14,6 +14,7 @@
    driver_04_load: ["sh", "-c", "depmod && modprobe {{driver['module']}}"]
  {{endif}}
