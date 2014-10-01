@@ -40,7 +40,7 @@ maas admin tags new name=virtual || true
 maas admin tags new name=bootstrap || true
 maas admin tags new name=neutron || true
 
-for i in $(seq 0 1 | sort -r); do
+for i in $(seq 0 2 | sort -r); do
 	hostname="node0vm${i}.maas"
 	virsh destroy $hostname || true
 	virsh undefine $hostname || true
