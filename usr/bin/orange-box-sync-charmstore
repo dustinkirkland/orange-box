@@ -31,7 +31,7 @@ DATE=`date +%Y%m%d-%H%M%S`
 mkdir -p /srv/charmstore/snapshot-$DATE
 
 echo Mirroring the Charmstore ...
-cd /srv/charmstore/
+cd /srv/charmstore/snapshot-$DATE
 sudo -i run-one charm getall /srv/charmstore/snapshot-$DATE 2>/dev/null
 #check some base charms are there:
 if [ ! -d juju-gui ]; then
@@ -46,7 +46,6 @@ elif [ ! -d mongodb ]; then
 fi
 
 #Branch the Landscape charm - required for Landscape demo to minimise network dependencies
-cd snapshot-$DATE
 sudo -i bzr branch lp:~landscape/landscape-charm/stable /srv/charmstore/snapshot-$DATE/landscape >/dev/null 2>&1 || (cd /srv/charmstore/snapshot-$DATE/landscape && bzr pull >/dev/null 2>&1)
 #Branch the cinder-ceph charm - required for openstack
 sudo -i bzr branch lp:charms/cinder-ceph /srv/charmstore/snapshot-$DATE/cinder-ceph >/dev/null 2>&1 || (cd /srv/charmstore/snapshot-$DATE/cinder-ceph && bzr pull >/dev/null 2>&1)
