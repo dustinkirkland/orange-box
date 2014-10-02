@@ -33,7 +33,7 @@ error() {
 
 status_all_nodes() {
 	# Check all VM nodes
-	for i in $(seq 0 1); do
+	for i in $(seq 0 2); do
 		if ps -ef | grep -qs "kvm.*node0vm${i}.maas" >/dev/null 2>&1; then
 			okay "[node0vm${i}]: Is running"
 		else
