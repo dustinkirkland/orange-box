@@ -8,6 +8,9 @@ orange-box (1.82) unreleased; urgency=medium
   [ Dustin Kirkland ]
   * debian/postinst:
     - fix typo, Examples
+  * usr/bin/orange-box-sync-charmstore:
+    - rework sync charmstore to use the tarball
+      based on work by Darryl, cleaned up by Dustin
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Oct 2014 13:51:15 -0500
 

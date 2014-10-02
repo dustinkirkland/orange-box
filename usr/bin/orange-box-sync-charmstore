@@ -1,9 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 #
 #    orange-box-sync-charmstore
 #    Copyright (C) 2014 Canonical Ltd.
 #
 #    Authors: Darryl Weaver <darryl.weaver@canonical.com>
+#             Dustin Kirkland <kirkland@canonical.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,39 +18,36 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+BASEDIR=/srv/charmstore
 
-# Only run this as root
-if [ $EUID -ne 0 ]
-then
-	echo Execute as root or with \"sudo $0\"
+set -x
+set -e
+
+if ! mkdir -p $BASEDIR; then
+	echo "Execute as root or with 'sudo $0'"
 	exit 1
 fi
 
-echo Creating Charm Store directories ...
-[ -e /srv/charmstore/ ] || mkdir -p /srv/charmstore/
-DATE=`date +%Y%m%d-%H%M%S`
-mkdir -p /srv/charmstore/snapshot-$DATE
-
-echo Mirroring the Charmstore ...
-cd /srv/charmstore/
-run-one charm getall snapshot-$DATE 2>/dev/null
-#Branch the Landscape charm - required for Landscape demo to minimise network dependencies
-cd snapshot-$DATE
-bzr branch lp:~landscape/landscape-charm/stable landscape >/dev/null 2>&1 || (cd landscape && bzr pull >/dev/null 2>&1)
-#Branch the cinder-ceph charm - required for openstack
-bzr branch lp:charms/cinder-ceph  >/dev/null 2>&1 || (cd cinder-ceph && bzr pull >/dev/null 2>&1)
-#Link directories for service aliases
-ln -s quantum-gateway neutron-gateway
-ln -s rabbitmq-server rabbitmq
-#Re-linking to current directories
-rm -f /srv/charmstore/current
-ln -s /srv/charmstore/snapshot-$DATE /srv/charmstore/current
-#Re-linking precise
-rm -rf /srv/charmstore/precise
-ln -s /srv/charmstore/current /srv/charmstore/precise
-#Re-linking trusty
-rm -rf /srv/charmstore/trusty
-ln -s /srv/charmstore/current /srv/charmstore/trusty
-echo Done. && echo
-
+cd $BASEDIR
+echo Grabbing the latest charmstore tarball...
+rm -f "$BASEDIR/latest.tar.gz"
+wget -q http://people.canonical.com/~marco/mirror/juju/charmstore/latest.tar.gz -O "$BASEDIR/latest.tar.gz"
+mkdir -p "$BASEDIR/staging"
+echo Untarring charmstore
+tar xzf "$BASEDIR/latest.tar.gz" -C "$BASEDIR/staging"
+for series in precise trusty; do
+	d="$BASEDIR/$series"
+	mkdir -p "$d"
+	bzr branch lp:landscape-charm "$d/landscape"
+	bzr branch lp:charms/cinder-ceph "$d/cinder-ceph"
+	ln -s quantum-gateway "$d/neutron-gateway"
+	ln -s rabbitmq-server "$d/rabbitmq"
+done
+echo "Removing the old directories..."
+rm -rf "$BASEDIR/current" "$BASEDIR/snapshot-"* "$BASEDIR/precise" "$BASEDIR/trusty"
+echo "Moving new charmstore into place"
+mv -f "$BASEDIR/staging/"* "$BASEDIR/"
+rm -rf "$BASEDIR/staging" "$BASEDIR/latest.tar.gz"
+echo "Done"
+echo
 echo "Charm store synced to directory /srv/charmstore/"
