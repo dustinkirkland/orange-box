@@ -5,6 +5,10 @@ orange-box (1.82) unreleased; urgency=medium
     - Added a third virtual node creation with orange-box-add-virtual-nodes
       + This is needed for the multi-region openstack deployment.
 
+  [ Dustin Kirkland ]
+  * debian/postinst:
+    - fix typo, Examples
+
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Oct 2014 13:51:15 -0500
 
 orange-box (1.81-0ubuntu1) utopic; urgency=medium
