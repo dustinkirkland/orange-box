@@ -13,12 +13,12 @@ setup_maas_admin() {
 	# Sadly, there's no way to test if the user has been created already,
 	# so ignore errors for idempotence
 	maas-region-admin createadmin --username admin --email maas-admin@example.com --password="admin" 2>/dev/null || true
-}
-
-setup_maas_networking() {
 	. /etc/maas/maas_cluster.conf
 	APIKEY=$(maas-region-admin apikey --username admin | tail -n1)
 	maas login admin $MAAS_URL $APIKEY
+}
+
+setup_maas_networking() {
 	count=0
 	while ! maas admin node-group-interfaces list $CLUSTER_UUID >/dev/null 2>&1; do
 		count=$((count+1))
@@ -57,7 +57,9 @@ setup_dns() {
 
 setup_squid() {
 	# This is now a transparent proxy
-	echo > /etc/squid-deb-proxy/squid-deb-proxy.conf
+	if [ -d "/etc/squid-deb-proxy" ]; then
+		echo > /etc/squid-deb-proxy/squid-deb-proxy.conf
+	fi
 	cat /usr/lib/orange-box/inc/squid.conf > /etc/squid3/squid.conf
 	# Disable squid3, enable squid-deb-proxy
 	update-rc.d -f squid-deb-proxy remove || true
@@ -89,6 +91,7 @@ setup_boot_resources() {
 	if [ ! -e /srv/boot-resources ]; then
 		mkdir -p /srv/boot-resources
 	fi
+	chown maas:maas /srv/boot-resources
 	ln -sf /srv/boot-resources /var/lib/maas/
 	# Importing boot resources
 	# If these were recently imported, they should be available in /srv
@@ -103,8 +106,11 @@ setup_boot_resources() {
 		cat /usr/lib/orange-box/inc/bootresources_1.5.yaml > /etc/maas/bootresources.yaml
 		run-this-one maas-import-pxe-files --config-file /etc/maas/bootresources.yaml
 	else
-		cat /usr/lib/orange-box/inc/bootresources_1.6.yaml > /etc/maas/bootresources.yaml
-		run-this-one maas-import-pxe-files --sources-file /etc/maas/bootresources.yaml
+		maas admin boot-resources import
+		while [ $(maas admin boot-images read $CLUSTER_UUID | wc -l) -lt 10 ]; do
+			# Waiting for images to download
+			sleep 10
+		done
 	fi
 }
 
@@ -189,12 +195,20 @@ ensure_running() {
 }
 
 ensure_running_maas() {
-	ensure_running maas-region-celery
-	ensure_running maas-cluster-celery
-	ensure_running maas-txlongpoll
-	ensure_running maas-pserv
-	ensure_running maas-dhcp-server
-	ensure_running squid3
+	maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
+	if dpkg --compare-versions $maas_ver lt 1.6; then
+		ensure_running maas-region-celery
+		ensure_running maas-cluster-celery
+		ensure_running maas-txlongpoll
+		ensure_running maas-pserv
+		ensure_running maas-dhcp-server
+		ensure_running squid3
+	else
+		ensure_running maas-cluster
+		ensure_running maas-cluster-register
+		ensure_running maas-dhcp-server
+		ensure_running maas-proxy
+	fi
 	invoke-rc.d tgt stop || true
 	invoke-rc.d tgt start
 	ensure_running tgt
@@ -217,8 +231,11 @@ apply_patches() {
 	cat /usr/lib/orange-box/patches/try_amt_harder.patch | patch -p0 -N || true
 	cd -
 	rm -f /usr/lib/python2.7/dist-packages/provisioningserver/utils/__init__.pyc
-	invoke-rc.d maas-cluster-celery stop || true
-	invoke-rc.d maas-cluster-celery start
+	maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
+	if dpkg --compare-versions $maas_ver lt 1.6; then
+		invoke-rc.d maas-cluster-celery stop || true
+		invoke-rc.d maas-cluster-celery start
+	fi
 }
 
 setup_landscape() {
@@ -250,6 +267,7 @@ case "$1" in
 	configure)
 		setup_desktop
 		apply_patches
+		setup_maas_admin
 		if [ -n "$2" ]; then
 			echo
 			echo "INFO: Skipping importing boot resources, since this is a package upgrade"
@@ -260,9 +278,11 @@ case "$1" in
 		else
 			setup_boot_resources
 		fi
-		setup_maas_admin
 		setup_maas_networking
-		setup_squid
+		maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
+		if dpkg --compare-versions $maas_ver lt 1.6; then
+			setup_squid
+		fi
 		setup_local_mirror
 		setup_ssh_keys
 		setup_juju

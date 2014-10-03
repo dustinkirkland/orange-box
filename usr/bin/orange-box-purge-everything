@@ -20,6 +20,7 @@
 set -e
 
 sudo apt-get purge $(dpkg -l | egrep "orange-box|maas" | awk '{print $2}')
+rm -rf /srv/boot-resources/*
 sudo kill -9 $(ps -ef | grep maas | grep "^maas" | awk '{print $2}') || true
 sudo killall run-one-until-success || true
 

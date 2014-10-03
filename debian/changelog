@@ -11,6 +11,10 @@ orange-box (1.82) unreleased; urgency=medium
   * usr/bin/orange-box-sync-charmstore:
     - rework sync charmstore to use the tarball
       based on work by Darryl, cleaned up by Dustin
+  * debian/postinst, usr/bin/orange-box-purge-everything,
+    usr/bin/orange-box-sync-charmstore:
+    - a bunch of changes necessary to support MAAS 1.7
+      + not quite working yet, but a step in the right direction
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Oct 2014 13:51:15 -0500
 

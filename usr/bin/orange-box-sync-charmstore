@@ -38,8 +38,8 @@ tar xzf "$BASEDIR/latest.tar.gz" -C "$BASEDIR/staging"
 for series in precise trusty; do
 	d="$BASEDIR/$series"
 	mkdir -p "$d"
-	bzr branch lp:landscape-charm "$d/landscape"
-	bzr branch lp:charms/cinder-ceph "$d/cinder-ceph"
+	bzr branch lp:landscape-charm "$d/landscape" || true
+	bzr branch lp:charms/cinder-ceph "$d/cinder-ceph" || true
 	ln -s quantum-gateway "$d/neutron-gateway"
 	ln -s rabbitmq-server "$d/rabbitmq"
 done
