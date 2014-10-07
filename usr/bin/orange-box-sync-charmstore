@@ -23,26 +23,51 @@ BASEDIR=/srv/charmstore
 set -x
 set -e
 
-if ! mkdir -p $BASEDIR; then
-	echo "Execute as root or with 'sudo $0'"
-	exit 1
+if [ "$(id -u)" != "0" ]; then
+        echo "Must be run with sudo or by root"
+        exit 1
 fi
 
+bzr launchpad-login && rm -rf ~/.bazaar && bzr launchpad-login && echo "Unkown error with bzr launchpad-login" && exit 1
+
+mkdir -p $BASEDIR
 cd $BASEDIR
 echo Grabbing the latest charmstore tarball...
 rm -f "$BASEDIR/latest.tar.gz"
-wget -q http://people.canonical.com/~marco/mirror/juju/charmstore/latest.tar.gz -O "$BASEDIR/latest.tar.gz"
+wget -q http://people.canonical.com/~marco/mirror/juju/charmstore/latest.tar.gz -O "$BASEDIR/latest.tar.gz" || exit 1
 mkdir -p "$BASEDIR/staging"
 echo Untarring charmstore
 tar xzf "$BASEDIR/latest.tar.gz" -C "$BASEDIR/staging"
 for series in precise trusty; do
-	d="$BASEDIR/$series"
-	mkdir -p "$d"
-	bzr branch lp:landscape-charm "$d/landscape"
-	bzr branch lp:charms/cinder-ceph "$d/cinder-ceph"
-	ln -s quantum-gateway "$d/neutron-gateway"
-	ln -s rabbitmq-server "$d/rabbitmq"
+	d="$BASEDIR/staging/$series"
+	if [ ! -e $d/landscape ];then
+		bzr branch lp:landscape-charm "$d/landscape"
+	fi
+	if [ ! -e $d/cinder-ceph ]; then
+		bzr branch lp:charms/cinder-ceph "$d/cinder-ceph"
+	fi
+	if [ ! -e $d/neutron-gateway ]; then
+		ln -s quantum-gateway "$d/neutron-gateway"
+	fi
+	if [ ! -e $d/rabbitmq ]; then
+		ln -s rabbitmq-server "$d/rabbitmq"
+	fi
+	#Check for some charms that are pre-requisites for demos to run.
+	if [ ! -e $d/juju-gui ]; then
+                echo "Cannot find juju-gui in charm store update, it is required, exiting."
+		exit 1
+        fi
+	if [ ! -e $d/mysql ]; then
+                echo "Cannot find mysql in charm store update, it is required, exiting."
+                exit 1
+        fi
+        if [ ! -e $d/rabbitmq-server ]; then
+                echo "Cannot find rabbitmq-server in charm store update, it is required, exiting."
+                exit 1
+        fi
 done
+
+chown -R root.root $BASEDIR
 echo "Removing the old directories..."
 rm -rf "$BASEDIR/current" "$BASEDIR/snapshot-"* "$BASEDIR/precise" "$BASEDIR/trusty"
 echo "Moving new charmstore into place"
