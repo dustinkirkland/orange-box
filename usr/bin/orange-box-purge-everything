@@ -19,12 +19,8 @@
 
 set -e
 
-sudo apt-get purge $(dpkg -l | egrep "orange-box|maas" | awk '{print $2}')
-rm -rf /srv/boot-resources/*
-sudo kill -9 $(ps -ef | grep maas | grep "^maas" | awk '{print $2}') || true
-sudo killall run-one-until-success || true
-
-echo
+sudo apt-get purge $(dpkg -l | egrep "orange-box|maas|squid" | awk '{print $2}') bind9
+rm -rf /srv/boot-resources/* /etc/bind /root/.maascli.db
 echo
 echo "=== IT IS HIGHLY RECOMMENDED THAT YOU REBOOT NOW! ==="
 echo

@@ -36,7 +36,7 @@ mkdir -p "$BASEDIR/staging"
 echo Untarring charmstore
 tar xzf "$BASEDIR/latest.tar.gz" -C "$BASEDIR/staging"
 for series in precise trusty; do
-	d="$BASEDIR/$series"
+	d="$BASEDIR/staging/$series"
 	mkdir -p "$d"
 	bzr branch lp:landscape-charm "$d/landscape" || true
 	bzr branch lp:charms/cinder-ceph "$d/cinder-ceph" || true

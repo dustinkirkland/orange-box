@@ -33,7 +33,8 @@ setup_maas_networking() {
 	if dpkg --compare-versions $maas_ver lt 1.6; then
 		maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_low=10.14.100.1 ip_range_high=10.14.199.254 management=2 broadcast_ip=10.14.255.255 router_ip=10.14.4.1
 	else
-		maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_low=10.14.50.1 ip_range_high=10.14.99.254 static_ip_range_low=10.14.100.1 static_ip_range_high=10.14.199.254 management=2 broadcast_ip=10.14.255.255 router_ip=10.14.4.1
+		sh -x /var/lib/dpkg/info/maas-dns.postinst configure
+		run-one-until-success maas admin node-group-interface update $CLUSTER_UUID $internal_interface ip_range_low=10.14.50.1 ip_range_high=10.14.99.254 static_ip_range_low=10.14.100.1 static_ip_range_high=10.14.199.254 management=2 broadcast_ip=10.14.255.255 router_ip=10.14.4.1
 	fi
 	# Setup nat
 	# Ensure we have an external connection
@@ -56,17 +57,21 @@ setup_dns() {
 }
 
 setup_squid() {
-	# This is now a transparent proxy
-	if [ -d "/etc/squid-deb-proxy" ]; then
-		echo > /etc/squid-deb-proxy/squid-deb-proxy.conf
+	maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
+	if dpkg --compare-versions $maas_ver lt 1.6; then
+		# This is now a transparent proxy
+		if [ -d "/etc/squid-deb-proxy" ]; then
+			echo > /etc/squid-deb-proxy/squid-deb-proxy.conf
+		fi
+		cat /usr/lib/orange-box/inc/squid.conf > /etc/squid3/squid.conf
+		# Disable squid3, enable squid-deb-proxy
+		update-rc.d -f squid-deb-proxy remove || true
+		invoke-rc.d squid-deb-proxy stop || true
+		# Create directories, if necessary
+		squid3 -z -N || true
+		ensure_running squid3
 	fi
-	cat /usr/lib/orange-box/inc/squid.conf > /etc/squid3/squid.conf
-	# Disable squid3, enable squid-deb-proxy
-	update-rc.d -f squid-deb-proxy remove || true
-	invoke-rc.d squid-deb-proxy stop || true
-	# Create directories, if necessary
-	squid3 -z -N || true
-	ensure_running squid3
+	true
 }
 
 setup_local_mirror() {
@@ -164,7 +169,7 @@ environments:
         maas-server: 'http://10.14.4.1/MAAS/'
         maas-oauth: '$APIKEY'
         default-series: trusty
-        enable-os-upgrade: false
+        #enable-os-upgrade: false
         authorized-keys-path: /home/ubuntu/.ssh/id_rsa.pub
         admin-secret: 'admin'
         logging-config: '<root>=DEBUG'
@@ -182,7 +187,7 @@ ensure_running() {
 	job="$1"
 	count=1
 	while true; do
-		if (status $job | grep -qs "start/running,"); then
+		if (service $job status | grep -qs "running"); then
 			break
 		fi
 		invoke-rc.d $job start
@@ -204,8 +209,8 @@ ensure_running_maas() {
 		ensure_running maas-dhcp-server
 		ensure_running squid3
 	else
+		ensure_running apache2
 		ensure_running maas-cluster
-		ensure_running maas-cluster-register
 		ensure_running maas-dhcp-server
 		ensure_running maas-proxy
 	fi
@@ -227,15 +232,15 @@ apply_patches() {
 	# as soon as MAAS ships these fixes
 	cd /
 	cat /usr/lib/orange-box/patches/acquire_languages_none.patch | patch -p0 -N || true
-	cat /usr/lib/orange-box/patches/arp_ip_order.patch | patch -p0 -N || true
-	cat /usr/lib/orange-box/patches/try_amt_harder.patch | patch -p0 -N || true
-	cd -
-	rm -f /usr/lib/python2.7/dist-packages/provisioningserver/utils/__init__.pyc
 	maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
 	if dpkg --compare-versions $maas_ver lt 1.6; then
+		cat /usr/lib/orange-box/patches/arp_ip_order.patch | patch -p0 -N || true
+		cat /usr/lib/orange-box/patches/try_amt_harder.patch | patch -p0 -N || true
+		rm -f /usr/lib/python2.7/dist-packages/provisioningserver/utils/__init__.pyc
 		invoke-rc.d maas-cluster-celery stop || true
 		invoke-rc.d maas-cluster-celery start
 	fi
+	cd -
 }
 
 setup_landscape() {
@@ -268,6 +273,7 @@ case "$1" in
 		setup_desktop
 		apply_patches
 		setup_maas_admin
+		setup_dns
 		if [ -n "$2" ]; then
 			echo
 			echo "INFO: Skipping importing boot resources, since this is a package upgrade"
@@ -286,7 +292,6 @@ case "$1" in
 		setup_local_mirror
 		setup_ssh_keys
 		setup_juju
-		setup_dns
 		if [ -n "$2" ]; then
 			echo
 			echo "INFO: Skipping adding all nodes, since this is a package upgrade"

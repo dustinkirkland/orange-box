@@ -15,6 +15,21 @@ orange-box (1.82) unreleased; urgency=medium
     usr/bin/orange-box-sync-charmstore:
     - a bunch of changes necessary to support MAAS 1.7
       + not quite working yet, but a step in the right direction
+  * debian/postinst, usr/bin/orange-box-purge-everything, usr/bin/orange-
+    box-setup-nat, usr/bin/orange-box-sync-charmstore:
+    - rework to support MAAS 1.7
+    - manually run "maas-dns.postinst configure", fixes issue with bind9
+      that started showing up in MAAS 1.7
+    - run-one-until-success of maas networking configuration
+    - squid configuration is now a relic of MAAS 1.5
+    - juju 1.18 does NOT gracefully handle the unknown enable-os-upgrade key
+      despite what Kapil says
+    - ensure that apache2 is running, in MAAS 1.7
+    - our patches are now upstream in MAAS 1.7
+    - setup dns earlier
+    - purge a bit harder, clear out squid, bind9, remove boot resources
+    - setup nat in 1.7 only needs to restart maas-proxy
+    - fix charmstore sync, by branching in staging
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Oct 2014 13:51:15 -0500
 

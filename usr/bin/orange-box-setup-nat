@@ -86,8 +86,14 @@ iptables-save > /etc/iptables/rules.v4
 service iptables-persistent restart || service netfilter-persistent restart
 
 # It seems we need to restart squid3 after making these network changes
+maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
+if dpkg --compare-versions $maas_ver lt 1.6; then
 # We now run squid3, and NOT squid-deb-proxy
-update-rc.d -f squid-deb-proxy remove || true
-service squid-deb-proxy stop || true
-service squid3 stop || true
-service squid3 start
+	update-rc.d -f squid-deb-proxy remove || true
+	service squid-deb-proxy stop || true
+	service squid3 stop || true
+	service squid3 start
+else
+	service maas-proxy stop || true
+	service maas-proxy start || true
+fi
