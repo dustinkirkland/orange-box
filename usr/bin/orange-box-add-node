@@ -68,6 +68,7 @@ for ip in $@; do
 	if [ -n "$system_id" ]; then
 		maas admin node delete $system_id
 	fi
+	orange-box-amt-flush $ip
 	# Sorry for the name
 	wake_me_up_before_you_go_go $ip
 	# Enable remote VNC to each node

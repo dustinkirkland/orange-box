@@ -30,6 +30,8 @@ orange-box (1.82) unreleased; urgency=medium
     - purge a bit harder, clear out squid, bind9, remove boot resources
     - setup nat in 1.7 only needs to restart maas-proxy
     - fix charmstore sync, by branching in staging
+  * usr/bin/orange-box-add-node:
+    - flush amt before trying to wake up
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Oct 2014 13:51:15 -0500
 
