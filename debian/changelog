@@ -1,6 +1,8 @@
 orange-box (1.83) unreleased; urgency=medium
 
-  * UNRELEASED
+  [ Samuel Cozannet ]
+  * usr/bin/orange-box-status-all-nodes:
+    - improve status script by checking virsh for running VMs
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 10 Oct 2014 09:38:12 +0200
 
