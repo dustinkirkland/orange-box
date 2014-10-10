@@ -34,16 +34,16 @@ error() {
 status_all_nodes() {
 	# Check all VM nodes
 	for i in $(seq 0 2); do
-		if ps -ef | grep -qs "kvm.*node0vm${i}.maas" >/dev/null 2>&1; then
+		if virsh list --all | grep node0vm${i} | grep running >/dev/null 2>&1; then
 			okay "[node0vm${i}]: Is running"
+			uptime=$(ssh node0vm${i}.maas "uptime" 2>/dev/null)
+			if [ -n "$uptime" ]; then
+				okay "[node0vm${i}]:  SSH to node successful; uptime=[$uptime]"
+			else
+				error "[node0vm${i}]:  SSH to node unsuccessful; uptime=[$uptime]"
+			fi
 		else
 			error "[node0vm${i}]: Is not running"
-		fi
-		uptime=$(ssh node0vm${i}.maas "uptime" 2>/dev/null)
-		if [ -n "$uptime" ]; then
-			okay "[node0vm${i}]:  SSH to node successful; uptime=[$uptime]"
-		else
-			error "[node0vm${i}]:  SSH to node unsuccessful; uptime=[$uptime]"
 		fi
 	done
 	# Check all AMT nodes
