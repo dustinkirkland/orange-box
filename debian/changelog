@@ -4,6 +4,10 @@ orange-box (1.83) unreleased; urgency=medium
   * usr/bin/orange-box-status-all-nodes:
     - improve status script by checking virsh for running VMs
 
+  [ Dustin Kirkland ]
+  * usr/bin/orange-box-test-uplink:
+    - speed up uplink checks
+
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 10 Oct 2014 09:38:12 +0200
 
 orange-box (1.82-0ubuntu1) utopic; urgency=medium

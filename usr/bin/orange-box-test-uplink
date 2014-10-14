@@ -41,14 +41,14 @@ error() {
 # Expects: (host, port)
 tcp_connect() {
 	info "Trying TCP [$@] ... "
-	timeout 1m run-one-until-success nc -w 10 -zvv $@ 2>&1
+	timeout 1m run-one-until-success nc -q 0 -zvv $@ 2>&1
 }
 
 udp_connect() {
 	info "Trying UDP [$@] ... "
 	# Best effort on UDP, it's connectionless.  Short
 	# of starting up a real client, it's prone to false positives
-	timeout 1m run-one-until-success nc -w 5 -uzvv $@ 2>&1
+	timeout 1m run-one-until-success nc -q 0 -uzvv $@ 2>&1
 }
 
 test_all() {
