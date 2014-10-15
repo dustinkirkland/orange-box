@@ -210,8 +210,8 @@ ensure_running_maas() {
 		ensure_running squid3
 	else
 		ensure_running apache2
-		ensure_running maas-cluster
-		ensure_running maas-dhcp-server
+		ensure_running maas-clusterd
+		ensure_running maas-dhcpd-server
 		ensure_running maas-proxy
 	fi
 	invoke-rc.d tgt stop || true

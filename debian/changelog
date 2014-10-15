@@ -1,6 +1,7 @@
 orange-box (1.84) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - handle maas service renames in 1.7
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 14 Oct 2014 23:17:32 +0200
 
