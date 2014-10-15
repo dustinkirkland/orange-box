@@ -211,7 +211,7 @@ ensure_running_maas() {
 	else
 		ensure_running apache2
 		ensure_running maas-clusterd
-		ensure_running maas-dhcpd-server
+		ensure_running maas-dhcpd
 		ensure_running maas-proxy
 	fi
 	invoke-rc.d tgt stop || true

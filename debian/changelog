@@ -1,6 +1,7 @@
 orange-box (1.85) unreleased; urgency=medium
 
-  * UNRELEASED
+  * debian/postinst:
+    - handle maas service rename in maas-dhcpd-server
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 15 Oct 2014 15:27:13 +0200
 
