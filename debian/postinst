@@ -89,23 +89,12 @@ setup_local_mirror() {
 }
 
 setup_boot_resources() {
-	# Use our boot resources as found on the external storage
-	if [ -e /var/lib/maas/boot-resources ]; then
-		mv -f /var/lib/maas/boot-resources /var/lib/maas/boot-resources.orig
-	fi
-	if [ ! -e /srv/boot-resources ]; then
-		mkdir -p /srv/boot-resources
-	fi
-	chown maas:maas /srv/boot-resources /srv/boot-resources/*
-	ln -sf /srv/boot-resources /var/lib/maas/
 	# Importing boot resources
-	# If these were recently imported, they should be available in /srv
-	# and this should be fast;  if not, this might take a long time
+	# This might take a long time.
 	# MAAS won't work very well until this is done, so we're going to block
-	# until this completes
-	# Network access may not be immediately available;
+	# until this completes.
 	orange-box-test-uplink
-	# Support MAAS 1.5, and 1.6
+	# Support MAAS 1.5, and newer
 	maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
 	if dpkg --compare-versions $maas_ver lt 1.6; then
 		cat /usr/lib/orange-box/inc/bootresources_1.5.yaml > /etc/maas/bootresources.yaml

@@ -1,7 +1,11 @@
 orange-box (1.86) unreleased; urgency=medium
 
   * debian/postinst:
-    - fix permissions on boot-resources
+    - caching/reusing boot images has not worked very well in a long
+      time;  disable this support for now;  each new install of
+      orange-box.deb will need to download the boot image; fortunately
+      as of MAAS 1.7, it's only a single image;  we should still find
+      a way to cache this
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 15 Oct 2014 15:43:58 +0200
 
