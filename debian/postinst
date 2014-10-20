@@ -96,7 +96,7 @@ setup_boot_resources() {
 	if [ ! -e /srv/boot-resources ]; then
 		mkdir -p /srv/boot-resources
 	fi
-	chown maas:maas /srv/boot-resources
+	chown maas:maas /srv/boot-resources /srv/boot-resources/*
 	ln -sf /srv/boot-resources /var/lib/maas/
 	# Importing boot resources
 	# If these were recently imported, they should be available in /srv
