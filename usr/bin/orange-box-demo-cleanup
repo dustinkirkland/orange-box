@@ -23,7 +23,10 @@ ENVIRONMENT=`juju env`
 #Destroy juju environment
 juju destroy-environment $ENVIRONMENT
 #make sure AMTs are all powered off
-export AMT_PASSWORD=Password1+
-for i in $(seq 11 19); do
-        yes | amttool 10.14.4.$i powerdown >/dev/null 2>&1
-done
+maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
+if dpkg --compare-versions $maas_ver lt 1.6; then
+	export AMT_PASSWORD=Password1+
+	for i in $(seq 11 19); do
+        	yes | amttool 10.14.4.$i powerdown >/dev/null 2>&1
+	done
+fi
