@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+#    orange-box-apm-power-fix - fix for issue with orange-box-apm-power
+#    Copyright (C) 2014 Canonical Ltd.
+#
+#    Authors: Darryl Weaver <darryl.weaver@canonical.com>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, version 3 of the License.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+set -x
+
+cd /srv/data
+wget https://launchpadlibrarian.net/187530745/acpioff.c32
+cd /var/lib/maas/boot-resources/current/syslinux
+sudo mv poweroff.com poweroff-APM.com
+sudo mv /srv/data/acpioff.c32 poweroff.c32
+
+exit
+
