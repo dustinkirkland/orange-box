@@ -40,12 +40,22 @@ maas admin tags new name=virtual || true
 maas admin tags new name=bootstrap || true
 maas admin tags new name=neutron || true
 
+# Mark all nodes to be fast path installed
+# Support MAAS 1.5, and 1.6
+maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
+if dpkg --compare-versions $maas_ver lt 1.6; then
+	maas admin tags new name='use-fastpath-installer' comment='fp' "definition=true()" || true
+else
+	maas admin tags new name='use-fastpath-installer' comment='fp' || true
+fi
+
+
 for i in $(seq 0 2 | sort -r); do
 	hostname="node0vm${i}.maas"
 	virsh destroy $hostname || true
 	virsh undefine $hostname || true
 	echo "INFO: Installing virtual machine"
-	virt-install --debug --name $hostname --ram 4096 --disk=path=/var/lib/orange-box/${hostname}-1.img,size=20 --disk=path=/var/lib/orange-box/${hostname}-2.img,size=2 --vcpus=2 --os-type=linux --pxe --network=bridge=br0 --network=bridge=br0 --boot network || true
+	virt-install --debug --name $hostname --ram 4096 --disk=path=/var/lib/orange-box/${hostname}-1.img,size=20 --disk=path=/var/lib/orange-box/${hostname}-2.img,size=2 --vcpus=2 --os-type=linux --pxe --network=bridge=br0 --network=bridge=br0 --boot network --video=cirrus --graphics vnc|| true
 	virsh console $hostname || true
 	virsh autostart $hostname
 	mac=$(virsh dumpxml $hostname | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
