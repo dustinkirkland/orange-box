@@ -1,3 +1,15 @@
+orange-box (1.86-0ubuntu3) utpoic; urgency=medium
+
+  * usr/bin/orange-box-add-node: correct typo
+
+ -- Darryl Weaver <darryl@ubuntu.com>  Mon, 27 Oct 2014 21:2300 +0000
+
+orange-box (1.86-0ubuntu2) utopic; urgency=medium
+
+  * debian/install: Put the files in the right place.
+
+ -- Darryl Weaver <darryl@ubuntu.com>  Mon, 27 Oct 2014 15:43:55 +0000
+
 orange-box (1.86-0ubuntu1) utopic; urgency=medium
 
   * Bug fixing and improvements for MAAS 1.7 environments.
