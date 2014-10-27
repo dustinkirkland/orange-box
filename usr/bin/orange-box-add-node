@@ -106,6 +106,6 @@ for ip in $@; do
 	maas admin tags new name=physical || true
 	system_id=$(maas admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
 	maas admin tag update-nodes "physical" add=$system_id || true
-	maas admin nodes set-zone $zone $system_id
+	maas admin nodes set-zone zone=$zone nodes=$system_id
 	maas admin network connect-macs maas-br0 macs=$mac
 done

@@ -79,7 +79,7 @@ for i in $(seq 0 2 | sort -r); do
 		esac
 		maas admin tag update-nodes use-fastpath-installer add=$system_id
 		maas admin node commission $system_id || true
-		maas admin nodes set-zone zone0 $system_id
+		maas admin nodes set-zone zone=zone0 nodes=$system_id
 		maas admin network connect-macs maas-br0 macs=$mac
 		maas admin network connect-macs maas-br0 macs=$mac2
 	else
