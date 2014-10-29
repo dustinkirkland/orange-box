@@ -1,8 +1,8 @@
-orange-box (1.88) UNRELEASED; urgency=medium
+orange-box (1.88-0ubuntu1) unstable; urgency=medium
 
-  * 
+  * Releasing 1.88
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 29 Oct 2014 09:42:27 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 29 Oct 2014 09:58:33 -0500
 
 orange-box (1.87-0ubuntu1) utpoic; urgency=medium
 
@@ -30,7 +30,7 @@ orange-box (1.86-0ubuntu1) utopic; urgency=medium
 
  -- Darryl Weaver <darryl@ubuntu.com>  Mon, 27 Oct 2014 14:49:00 +0200
 
-orange-box (1.86) unreleased; urgency=medium
+orange-box (1.86-0ubuntu1) unstable; urgency=medium
 
   * debian/postinst:
     - caching/reusing boot images has not worked very well in a long
