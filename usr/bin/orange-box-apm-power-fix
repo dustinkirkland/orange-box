@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 #
-#    orange-box-demo-cleanup
+#    orange-box-apm-power-fix - fix for issue with orange-box-apm-power
 #    Copyright (C) 2014 Canonical Ltd.
 #
 #    Authors: Darryl Weaver <darryl.weaver@canonical.com>
@@ -17,16 +17,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+set -x
 
-ENVIRONMENT=`juju env`
+cd /srv/data
+wget https://launchpadlibrarian.net/187530745/acpioff.c32
+cd /var/lib/maas/boot-resources/current/syslinux
+sudo mv poweroff.com poweroff-APM.com
+sudo mv /srv/data/acpioff.c32 poweroff.c32
 
-#Destroy juju environment
-juju destroy-environment $ENVIRONMENT
-#make sure AMTs are all powered off
-maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
-if dpkg --compare-versions $maas_ver lt 1.6; then
-	export AMT_PASSWORD=Password1+
-	for i in $(seq 11 19); do
-        	yes | amttool 10.14.4.$i powerdown >/dev/null 2>&1
-	done
-fi
+exit
+

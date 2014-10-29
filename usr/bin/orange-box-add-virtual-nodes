@@ -40,15 +40,31 @@ maas admin tags new name=virtual || true
 maas admin tags new name=bootstrap || true
 maas admin tags new name=neutron || true
 
+# Mark all nodes to be fast path installed
+# Support MAAS 1.5, and 1.6
+maas_ver=$(dpkg -l maas | tail -n1 | awk '{print $3}')
+if dpkg --compare-versions $maas_ver lt 1.6; then
+	maas admin tags new name='use-fastpath-installer' comment='fp' "definition=true()" || true
+else
+	maas admin tags new name='use-fastpath-installer' comment='fp' || true
+fi
+
+#Create zone0 for virtual nodes
+maas admin zone read zone0 || maas admin zones create name=zone0 description="Virtual machines on node0"
+
+#Create maas-br0 network if it does not already exist
+maas admin network read maas-br0 || maas admin networks create name=maas-br0 ip=10.14.0.0 netmask=255.255.0.0 default_gateway=10.14.4.1 dns_servers=10.14.4.1 description="Auto created when running orange-box-add-virtual-nodes"
+
 for i in $(seq 0 2 | sort -r); do
 	hostname="node0vm${i}.maas"
 	virsh destroy $hostname || true
 	virsh undefine $hostname || true
 	echo "INFO: Installing virtual machine"
-	virt-install --debug --name $hostname --ram 4096 --disk=path=/var/lib/orange-box/${hostname}-1.img,size=20 --disk=path=/var/lib/orange-box/${hostname}-2.img,size=2 --vcpus=2 --os-type=linux --pxe --network=bridge=br0 --network=bridge=br0 --boot network || true
+	virt-install --debug --name $hostname --ram 4096 --disk=path=/var/lib/orange-box/${hostname}-1.img,size=20 --disk=path=/var/lib/orange-box/${hostname}-2.img,size=2 --vcpus=2 --os-type=linux --pxe --network=bridge=br0 --network=bridge=br0 --boot network --video=cirrus --graphics vnc|| true
 	virsh console $hostname || true
 	virsh autostart $hostname
 	mac=$(virsh dumpxml $hostname | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
+	mac2=$(virsh dumpxml $hostname | python -c 'import sys, lxml.etree; print list(lxml.etree.parse(sys.stdin).iter("mac"))[0].get("address")')
 	system_id=$(maas admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
 	if [ -n "$system_id" ]; then
 		maas admin node update $system_id hostname=$hostname power_type=virsh power_parameters_power_address=qemu+ssh://ubuntu@10.14.4.1/system power_parameters_power_id=$hostname
@@ -63,6 +79,9 @@ for i in $(seq 0 2 | sort -r); do
 		esac
 		maas admin tag update-nodes use-fastpath-installer add=$system_id
 		maas admin node commission $system_id || true
+		maas admin nodes set-zone zone=zone0 nodes=$system_id
+		maas admin network connect-macs maas-br0 macs=$mac
+		maas admin network connect-macs maas-br0 macs=$mac2
 	else
 		echo "ERROR: Could not find virtual machine in MAAS" 1>&2
 		exit 1

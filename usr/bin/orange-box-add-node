@@ -55,10 +55,23 @@ else
 	maas admin tags new name='use-fastpath-installer' comment='fp' || true
 fi
 
+#Add zones for physical nodes
+maas admin zone read zone1 || maas admin zones create name=zone1 description="Physical machines on left side of Orange Box"
+maas admin zone read zone2 || maas admin zones create name=zone2 description="Physical machines on right side of Orange Box"
+
+#Create maas-br0 network if it does not already exist
+maas admin network read maas-br0 || maas admin networks create name=maas-br0 ip=10.14.0.0 netmask=255.255.0.0 default_gateway=10.14.4.1 dns_servers=10.14.4.1 description="Auto created when running orange-box-add-node"
+
 # Loop over the list of ip addresses listening on 16992
 for ip in $@; do
 	mac=$(ip_to_mac $ip)
 	hostname=$(node_name $ip)
+	node=${hostname#node}
+	if [ $node -lt 5 ]; then
+		zone="zone1"
+	else
+		zone="zone2"
+	fi
 	info "$ip --> $hostname --> $mac"
 	if [ -z "$ip" ] || [ "$ip" = "10.14.4.1" ]; then
 		continue
@@ -93,4 +106,6 @@ for ip in $@; do
 	maas admin tags new name=physical || true
 	system_id=$(maas admin nodes list mac_address=$mac | grep system_id | cut -d'"' -f4)
 	maas admin tag update-nodes "physical" add=$system_id || true
+	maas admin nodes set-zone zone=$zone nodes=$system_id
+	maas admin network connect-macs maas-br0 macs=$mac
 done

@@ -54,6 +54,7 @@ setup_dns() {
 	sed -i -e "/^nameserver 10.14.4.1$/d" /etc/resolvconf/resolv.conf.d/head
 	echo "nameserver 10.14.4.1" >> /etc/resolvconf/resolv.conf.d/head
 	resolvconf -u
+	sed -e 's/dnssec-validation  auto;/dnssec-enable no;dnssec-validation no;/g' -i /etc/bind/named.conf.options
 }
 
 setup_squid() {

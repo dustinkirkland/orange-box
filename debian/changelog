@@ -1,3 +1,29 @@
+orange-box (1.87-0ubuntu1) utpoic; urgency=medium
+
+  * release version 1.87
+
+ -- Darryl Weaver <darryl@ubuntu.com>  Mon, 27 Oct 2014 23:53:00 +0000
+
+orange-box (1.86-0ubuntu3) utpoic; urgency=medium
+
+  * usr/bin/orange-box-add-node: correct typo fixing node creation
+  * usr/bin/orange-box-add-virtual-node: correct typo fixing node creation
+  * debian/postinst: adding options to bind to disable dnssec
+
+ -- Darryl Weaver <darryl@ubuntu.com>  Mon, 27 Oct 2014 21:23:00 +0000
+
+orange-box (1.86-0ubuntu2) utopic; urgency=medium
+
+  * debian/install: Put the files in the right place.
+
+ -- Darryl Weaver <darryl@ubuntu.com>  Mon, 27 Oct 2014 15:43:55 +0000
+
+orange-box (1.86-0ubuntu1) utopic; urgency=medium
+
+  * Bug fixing and improvements for MAAS 1.7 environments.
+
+ -- Darryl Weaver <darryl@ubuntu.com>  Mon, 27 Oct 2014 14:49:00 +0200
+
 orange-box (1.86) unreleased; urgency=medium
 
   * debian/postinst:
