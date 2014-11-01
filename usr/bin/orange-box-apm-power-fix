@@ -19,11 +19,20 @@
 
 set -x
 
+if [ ! -f  /var/lib/maas/boot-resources/current/syslinux/poweroff-APM.com ]
+then
 cd /srv/data
 wget https://launchpadlibrarian.net/187530745/acpioff.c32
 cd /var/lib/maas/boot-resources/current/syslinux
 sudo mv poweroff.com poweroff-APM.com
 sudo mv /srv/data/acpioff.c32 poweroff.c32
+fi
+
+#fixing the AMT template 
+cd /srv/data
+wget https://launchpadlibrarian.net/187911231/not-permitted.patch
+cd /etc/maas/templates/power
+patch < /srv/data/not-permitted.patch
 
 exit
 
