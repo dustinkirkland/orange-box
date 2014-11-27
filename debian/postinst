@@ -163,7 +163,7 @@ environments:
         authorized-keys-path: /home/ubuntu/.ssh/id_rsa.pub
         admin-secret: 'admin'
         logging-config: '<root>=DEBUG'
-        lxc-use-clone: true
+        lxc-clone: true
 EOF
 	rm -rf /home/ubuntu/.juju-plugins
 	git clone https://github.com/juju/plugins /home/ubuntu/.juju-plugins
