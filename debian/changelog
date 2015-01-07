@@ -1,6 +1,7 @@
 orange-box (1.89) unreleased; urgency=medium
 
-  * UNRELEASED
+  * usr/bin/orange-box-bootstrap-juju:
+    - go back to --upload-tools, please keep this!
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 29 Oct 2014 09:58:53 -0500
 
