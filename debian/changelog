@@ -1,4 +1,4 @@
-orange-box (1.89) unreleased; urgency=medium
+orange-box (1.89-0ubuntu1) vivid; urgency=medium
 
   * usr/bin/orange-box-bootstrap-juju:
     - go back to --upload-tools, please keep this!
@@ -6,7 +6,7 @@ orange-box (1.89) unreleased; urgency=medium
     - use ~maas rather than hard coding to /home/maas
       + note that maas 1.7 has created a home directory in /var/lib/maas
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 29 Oct 2014 09:58:53 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 09 Jan 2015 11:13:49 -0600
 
 orange-box (1.88-0ubuntu1) unstable; urgency=medium
 
