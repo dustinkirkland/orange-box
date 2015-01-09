@@ -29,11 +29,11 @@ set -x
 
 virsh net-info default && virsh net-destroy default && virsh net-undefine default
 
-[ -d /home/maas ] || install -d /home/maas --owner maas --group maas
+[ -d ~maas ] || install -d /var/lib/maas --owner maas --group maas
 chsh maas -s /bin/bash
-[ -d /home/maas/.ssh ] || echo -e "\n\n\n" | sudo -u maas ssh-keygen -N "" -t rsa -f /home/maas/.ssh/id_rsa
-grep 'maas@' /home/ubuntu/.ssh/authorized_keys || cat /home/maas/.ssh/id_rsa.pub | tee -a /home/ubuntu/.ssh/authorized_keys
-printf "%s,%s %s %s\n" "node0.maas" "10.14.4.1" $(awk '{print $1 " " $2}' /etc/ssh/ssh_host_ecdsa_key.pub) | tee -a /home/maas/.ssh/known_hosts
+[ -d ~maas/.ssh ] || echo -e "\n\n\n" | sudo -u maas ssh-keygen -N "" -t rsa -f ~maas/.ssh/id_rsa
+grep 'maas@' /home/ubuntu/.ssh/authorized_keys || cat ~maas/.ssh/id_rsa.pub | tee -a /home/ubuntu/.ssh/authorized_keys
+printf "%s,%s %s %s\n" "node0.maas" "10.14.4.1" $(awk '{print $1 " " $2}' /etc/ssh/ssh_host_ecdsa_key.pub) | tee -a ~maas/.ssh/known_hosts
 chown -R ubuntu:ubuntu /home/ubuntu
 
 maas admin tags new name=virtual || true

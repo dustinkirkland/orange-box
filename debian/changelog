@@ -2,6 +2,9 @@ orange-box (1.89) unreleased; urgency=medium
 
   * usr/bin/orange-box-bootstrap-juju:
     - go back to --upload-tools, please keep this!
+  * usr/bin/orange-box-add-virtual-nodes:
+    - use ~maas rather than hard coding to /home/maas
+      + note that maas 1.7 has created a home directory in /var/lib/maas
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 29 Oct 2014 09:58:53 -0500
 
